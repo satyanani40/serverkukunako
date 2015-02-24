@@ -1,0 +1,379 @@
+<div navbar></div>
+<div class="container">
+    <div class="col-sm-4 colpadding">
+        <div class="panel panel-default" style="opacity:0.90">
+            <div class="media panel-heading" style="background-color:#fff">
+                <h5 style="margin-top:10px;margin-bottom:4px;">
+                    <strong>
+                        Basic Account Settings
+                    </strong>
+                </h5>
+            </div>
+            <div class="panel-body">
+                <label style="opacity:0.70;margin-left:2px">
+                    Username
+                </label>
+                <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
+                    <div class="row username_section">
+                        <div class="col-sm-9">
+                            <h5 style="opacity:0.90">
+                                {{ user.username }}
+                            </h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <button style="margin-top:7px" class="pull-right edit_name btn btn-xs btn-primary">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row name_edit_section" style="margin-top:5px;">
+                        <div class="col-sm-12">
+                            <h6 style="opacity:0.60">
+                                Your public username is the same as your Storyboard address:
+                            </h6>
+                            <h6 style="opacity:0.80">
+                                For example:&nbsp;
+                                <a href="">
+                                    <strong>
+                                        www.theweber.in/suryamuppalla
+                                    </strong>
+                                </a>
+                            </h6>
+                            <span>
+                                <div class="row">
+                                    <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                        <h6>Username:</h6>
+                                    </div>
+                                    <div class="col-sm-8 colpadding">
+                                        <input type="text" ng-model="u_username" placeholder="{{ user.username }}"
+                                           class="form-control input-sm" />
+                                    </div>
+                                </div>
+                            </span>
+                            <span>
+                                <div class="row" style="margin-top:5px;">
+                                    <div class="col-sm-offset-4 colpadding col-sm-2 ">
+                                        <button ng-click="updateUsername()" class="btn btn-xs btn-success">
+                                            Update
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-2 colpadding">
+                                        <button class="btn btn-xs btn-default">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <label style="opacity:0.70;margin-left:2px">
+                    Edit First name and Last name
+                </label>
+                <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <h5 style="opacity:0.90">
+                                {{ user.name.first }} {{ user.name.last }}
+                            </h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <button style="margin-top:7px;display:none;"
+                                    class="pull-right btn btn-xs btn-primary">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-sm-4 colpadding">
+                                <h6 class="pull-right" >First name</h6>
+                            </div>
+                            <div class="col-sm-8 colpadding">
+                                <input type="text" class="input-sm form-control" placeholder="enter first name"
+                                        ng-model = edit_first_name />
+                            </div>
+                        </div>
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-sm-4 colpadding">
+                                <h6 class="pull-right">Last name</h6>
+                            </div>
+                            <div class="col-sm-8 colpadding">
+                                <input type="text" class="input-sm form-control" placeholder="enter last name"
+                                        ng-model = edit_last_name />
+                            </div>
+                        </div>
+                        <div class="row" style="">
+                            <div class="col-sm-offset-4 col-sm-5 colpadding">
+                                <button ng-click="updateFirstLastName()" class="btn btn-xs btn-success">
+                                    Update
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <label style="opacity:0.70;margin-left:2px">
+                    Password
+                </label>
+                <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
+                    <div class="row password_section">
+                        <div class="col-sm-9">
+                            <h5 style="opacity:0.90">Password updated a month ago</h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <button style="margin-top:7px" class="pull-right edit_password btn btn-xs btn-primary">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row password_edit_section" style="margin-top:5px;">
+                        <div class="col-sm-12">
+                            <h6 style="opacity:0.60">
+                                Your Password is very confidential, Please Follow the rules while updating the password:
+                            </h6>
+                            <span>
+                                <form name="myForm">
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>Old password:</h6>
+                                        </div>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="text" placeholder="old password"
+                                               class="form-control input-sm" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>New password:</h6>
+                                        </div>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="password" id="pw1" name="pw1" class="form-control input-sm" placeholder="enter new password"
+                                                   ng-model="pw1" ng-required="" ng-minlength="8" ng-maxlength="20" />
+                                            <span ng-show="myForm.pw1.$error.required && myForm.pw1.$dirty"
+                                                  style="color:red;font-size:11px;">
+                                                required
+                                            </span>
+                                            <span ng-show="!myForm.pw1.$error.required && (myForm.pw1.$error.minlength || myForm.pw1.$error.maxlength) && myForm.pw1.$dirty"
+                                                  style="color:red;font-size:11px;">
+                                                Passwords must be between 8 and 20 characters.
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>Re-enter new password:</h6>
+                                        </div>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="password" id="pw2" name="pw2"  class="form-control input-sm" placeholder="Re-enter new password"
+                                                   ng-model="pw2" ng-required="" pw-check="pw1" />
+                                            <div class="msg-block" ng-show="myForm.$error">
+                                                <span class="msg-error" ng-show="myForm.pw2.$error.pwmatch" style="color:red;font-size:11px;">
+                                                    Passwords don't match.
+                                                </span>
+                                            </div>
+                                            <span ng-show="myForm.pw2.$error.required && myForm.pw2.$dirty" style="color:red">
+                                                Please confirm your password.
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                            <span>
+                                <div class="row" style="margin-top:5px;">
+                                    <div class="col-sm-offset-5 colpadding col-sm-2 ">
+                                        <button class="btn btn-xs btn-success">
+                                            Save changes
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-2 colpadding ">
+                                        <button class="btn btn-xs btn-default">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <label style="opacity:0.70;margin-left:2px">
+                    Email
+                </label>
+                <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
+                    <div class="row username_section">
+                        <div class="col-sm-12">
+                            <h5>
+                                <a style="text-decoration:none;color:#333;cursor: no-drop;opacity:0.60;">
+                                    <strong>
+                                        suryamuppalla@gmail.com
+                                    </strong>
+                                </a>
+                            </h5>
+                            <h6 style="opacity:0.60">
+                                Your email can't be changed, because this is unique.
+                            </h6>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-5 colpadding">
+        <div class="panel panel-default" style="opacity:0.90">
+            <div class="media panel-heading" style="background-color:#fff">
+                <h5 style="margin-top:10px">
+                    <strong>
+                        Account
+                    </strong>
+                </h5>
+                <h5>
+                    Change your basic account, language and location settings
+                </h5>
+            </div>
+            <div class="panel-body">
+                <label style="opacity:0.70;margin-left:2px">
+                    Profile Picture
+                </label>
+                <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="thumbnail" style="margin-bottom:0px;">
+                                <img src="{{ user.picture.large }}">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <a class="change_picture" style="cursor:pointer;">
+                                Change Profile Picture
+                            </a>
+                            <div class="row picture_edit_section" style="margin-top:5px;">
+                                <div class="col-sm-12">
+                                    <span>
+                                        <h6 style="opacity:0.70">
+                                            <strong>
+                                                Note:&nbsp;
+                                            </strong>
+                                            Image should be less than 700px, Should be JPEG, PNG, GIF.
+                                        </h6>
+                                    </span>
+                                    <span>
+                                        <input type="file" file-model="myFile" class="btn btn-sm btn-default" />
+                                    </span>
+                                    <span>
+                                        <input style="margin-top:5px" ng-click="uploadFile()"
+                                               type="submit" value="Update" class="btn btn-xs btn-success" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <label style="opacity:0.70;margin-left:2px">
+                    Interests
+                </label>
+                <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
+                    <div class="row interest_section">
+                        <div class="col-sm-9">
+                            <h6>
+                                Playing chess, cricket, football, hockey, carroms,
+                                 temple run, candy crush..
+                            </h6>
+                        </div>
+                        <div class="col-sm-3 interest_button">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary btn-xs"
+                                    data-toggle="modal" data-target="#myModal">
+                              Add Interest
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<div chatbar></div>
+
+
+<style>
+    .username_section .edit_name{
+        display:none;
+    }
+
+    .username_section:hover .edit_name{
+        display:block;
+
+    }
+    .name_edit_section{
+        display:none;
+    }
+
+    .password_section .edit_password{
+        display:none;
+    }
+
+    .password_section:hover .edit_password{
+        display:block;
+
+    }
+    .password_edit_section{
+        display:none;
+    }
+    .picture_edit_section{
+        display:none;
+    }
+
+</style>
+
+<script>
+    // jQuery
+    $(document).ready(
+    function(){
+        $(".edit_name").click(function () {
+
+            if($('.name_edit_section').is(':visible')){
+               $('.name_edit_section').fadeOut('fast');
+            }
+            else{
+               $('.name_edit_section').fadeIn('slow');
+            }
+        });
+
+    });
+
+    $(document).ready(
+    function(){
+        $(".change_picture").click(function () {
+
+            if($('.picture_edit_section').is(':visible')){
+               $('.picture_edit_section').fadeOut('fast');
+            }
+            else{
+               $('.picture_edit_section').fadeIn('slow');
+            }
+        });
+
+    });
+    $(document).ready(
+    function(){
+        $(".edit_password").click(function () {
+
+            if($('.password_edit_section').is(':visible')){
+               $('.password_edit_section').fadeOut('fast');
+            }
+            else{
+               $('.password_edit_section').fadeIn('slow');
+            }
+        });
+
+    });
+</script>

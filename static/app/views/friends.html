@@ -1,0 +1,87 @@
+<div navbar></div>
+<div class="container">
+    <div class="col-md-3" wb-affix="150">
+		<div class="thumbnail">
+            <div class="itemsContainer">
+                <div class="image">
+                    <a href="">
+                        <img class="img-rounded" style="width:;" src="{{user.picture.large}}" />
+                    </a>
+                </div>
+            </div>
+			<div class="caption text-center">
+				<h3 style="text-transform: capitalize;">{{user.name.first}} {{user.name.last}}</h3>
+				@{{user.username}}
+			</div>
+		</div>
+		<div class="list-group">
+			<a href="#" ng-repeat="interest in user.interests" class="list-group-item">{{interest}}</a>
+			<a href="#" class="list-group-item"><span class="badge badge-primary">38</span>Morbi leo risus</a>
+		</div>
+		<div class="panel panel-default">
+			<div class="clearfix panel-heading">Friends({{user.friends.length}})</div>
+
+			<a ng-repeat="friend in friends" href="#/profile/{{friend._id}}">
+				<img data-placement="top-right" style="width:80px"
+                     data-content="{{friend.location.city}}, {{friend.location.state}}"
+                     title="{{friend.name.first}} {{friend.name.last}}"
+                     data-trigger="hover" bs-popover src="{{friend.picture.thumbnail}}">
+			</a>
+		</div>
+	</div>
+    <div class="col-md-6 " style="min-height:auto">
+        <div class="row">
+           <div class="panel panel-default">
+               <div class="panel-heading">
+                   <div class="row">
+                       <div class="col-sm-6">
+                           <h5 style="opacity:0.70">
+                               Friends -&nbsp;
+                                   <label class="">
+                                       <a href="" style="">
+                                           {{user.friends.length}}
+                                       </a>
+                                   </label>
+                               </span>
+                           </h5>
+                       </div>
+                       <div class="col-sm-5 pull-right">
+                           <div class="right-inner-addon">
+                                <i class="fa fa-search" style="opacity:0.70"></i>
+                                <input type="search" class="form-control input-sm"
+                                       placeholder="Search Friends" />
+                           </div>
+                       </div>
+                   </div>
+               </div>
+               <div class="panel-body">
+                   <div ng-repeat="friend in friends" class="row pad-top">
+                        <div class="jumbotron"
+                             style="padding:5px 10px;background-color:#fff;margin-bottom:10px;">
+                            <div class="row" style="">
+                                <div class="col-sm-2">
+                                    <img src="{{ friend.picture.thumbnail }}"
+                                         style="width:80px;border-radius:4px">
+                                </div>
+                                <div class="col-sm-6 colpadding">
+                                    <h5>
+                                        <a href="">
+                                            {{ friend.name.first }} {{ friend.name.last }}
+                                        </a>
+                                    </h5>
+                                </div>
+                                <div class="col-sm-3">
+                                    <a href="" style="margin-top:15px"
+                                       class="btn btn-default btn-sm pull-right">
+                                        Unfriend
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                   </div>
+               </div>
+           </div>
+        </div>
+    </div>
+</div>
+<div chatbar></div>

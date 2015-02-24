@@ -1,0 +1,143 @@
+<div navbar></div>
+<div class="container">
+	<div class="col-md-3 colpadding" wb-affix="150">
+		<div class="thumbnail">
+            <div class="itemsContainer">
+                <div class="image">
+                    <a href="">
+                        <img class="img-rounded" style="width:;" src="{{user.picture.large}}" />
+                    </a>
+                </div>
+            </div>
+			<div class="caption text-center">
+				<h3 style="text-transform: capitalize;">{{user.name.first}} {{user.name.last}}</h3>
+				@{{user.username}}
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h5 style="margin:1px 0px 1px 0px">
+					About
+					<a href="" class="pull-right">
+						<h6 style="margin-top:0px">
+							See all
+						</h6>
+					</a>
+				</h5>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-12">
+						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80" class="about-edit">
+							<i class="glyphicon glyphicon-check" style="opacity:0.65"></i>&nbsp;
+							Iam interested in:
+						</h5>
+						<h6 style="margin-top:1px">
+							<a href="" style="line-height:1.2em;color:">
+
+									Playing Chess
+
+							</a>,&nbsp;
+							<a href="" style="line-height:1.2em;color:">
+
+									Foot Ball
+
+							</a>
+							<a href="" style="line-height:1.2em;color:">
+
+									Cricket
+
+							</a>,&nbsp;
+							<a href="" style="line-height:1.2em;color:">
+									Temple Run
+
+							</a>
+						</h6>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80">
+							<i class="glyphicon glyphicon-folder-open" style="opacity:0.65"></i>&nbsp;
+							Studied at:
+						</h5>
+						<h6 style="margin-top:1px">
+							<a href="" style="line-height:1.2em;color:">
+
+									Velagapudi Ramakrishna Siddhartha Engineering College
+
+							</a>
+						</h6>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80">
+							<i class="glyphicon glyphicon-home" style="opacity:0.65"></i>&nbsp;
+							Lives in:
+						</h5>
+						<h6 style="margin-top:1px">
+							<a href="" style="line-height:1.2em;color:">
+								Hyderabad, Talangana State
+							</a>
+						</h6>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="clearfix panel-heading">Friends({{user.friends.length}})</div>
+                <a ng-repeat="friend in friends" href="#/profile/{{friend._id}}">
+                    <img data-placement="top-right" style="width:65px"
+                         data-content="{{friend.location.city}}, {{friend.location.state}}"
+                         title="{{friend.name.first}} {{friend.name.last}}" data-trigger="hover" bs-popover src="{{friend.picture.thumbnail}}">
+                </a>
+		</div>
+	</div>
+	<div class="col-md-6 colpadding" style="min-height:2000px">
+		<form role="form" class="post-to-timeline panel panel-default panel-body clearfix">
+			<textarea ng-model="new_post" class="form-control"
+                      style="height: 70px;margin-bottom: 10px;resize: none;" placeholder="Whats happening?" required></textarea>
+			<div class="row">
+				<div class="col-sm-6">
+					<a class="btn btn-sm btn-default"><i class="glyphicon glyphicon-camera"></i></a>
+					<a class="btn btn-sm btn-default"><i class="glyphicon glyphicon-facetime-video"></i></a>
+					<a class="btn btn-sm btn-default"><i class="glyphicon glyphicon-map-marker"></i></a>
+				</div>
+				<div class="col-sm-2 pull-right">
+					<button ng-click="submit_post()" type="submit" class="btn btn-success btn-block btn-sm">Post</button>
+				</div>
+			</div>
+		</form>
+		<!--<div class="well clearfix">
+			<h3 style="text-align: center">
+					Import your Contacts from your Email to find your friends on Weber!
+					</h3>
+			<button class="btn btn-success btn-sm pull-right">Import</button>
+		</div>-->
+		<div infinite-scroll='infinitePosts.nextPage()' infinite-scroll-disabled='infinitePosts.busy' infinite-scroll-distance='0'>
+			<div class="media panel panel-default" ng-repeat="post in infinitePosts.posts">
+				<div class="media-body panel-heading">
+					<a class="pull-left" style="padding: 5px;" href="#/profile/{{UserService.get(post.author)._id}}">
+						<img style="width:35px" class="media-object img-circle" src="{{UserService.get(post.author).picture.thumbnail}}" alt="">
+					</a>
+					<strong>
+						<a href="#/profile/{{UserService.get(post.author)._id}}" style="color:#E04836">
+							{{UserService.get(post.author).name.first}} {{UserService.get(post.author).name.last}}
+						</a>
+					</strong>&nbsp;wrote on his story.
+					<br>
+					<small class="text-muted">
+                        <span class="glyphicon glyphicon-time" style="color:#2F5168"></span>
+						<span am-time-ago="post._created"></span></small>
+					<br>
+				</div>
+				<p class="panel-body">{{post.content}}</p>
+			</div>
+			<div ng-show='infinitePosts.busy'>Loading data...</div>
+			<div ng-show='infinitePosts.end'>You Reached the end!</div>
+		</div>
+	</div>
+</div>
+
+<div chatbar></div>
