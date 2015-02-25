@@ -18,9 +18,9 @@ body {
     width:100%;
     position:absolute;
     z-index:41;
-    -webkit-box-shadow:0 0 10px rgba(0,0,0,0.4);
+    /*-webkit-box-shadow:0 0 10px rgba(0,0,0,0.4);
     -moz-box-shadow:0 0 10px rgba(0,0,0,0.4);
-    box-shadow:0 0 10px rgba(0,0,0,0.4)
+    box-shadow:0 0 10px rgba(0,0,0,0.4)*/
 }
 
 .highlighted{

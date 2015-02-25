@@ -18,16 +18,16 @@ angular.module('weberApp')
 				username: $scope.formData.firstname+$scope.formData.lastname
 			}).then(function(response) {
 				console.log(response.data);
-				$location.path('/email_details/'+response.data)
+				$location.path('/email_details/'+response.data);
 			}, function(error) {
 				$scope.error = error;
-				$alert({
+				/*$alert({
 					title: 'Registration Failed: ',
 					content: error.data.error,
 					placement: 'top',
 					type: 'danger',
 					show: true
-				});
+				});*/
 			});
 		};
 	}).directive('validPasswordC', function () {
@@ -46,7 +46,6 @@ angular.module('weberApp')
 			restrict: 'E',
 			replace: true,
 			link: function (scope, element, attrs) {
-				console.log("-------------------")
 				element.click(function(){
 				   var html ='<image src="http://www.safeway.com/CMS/assets/media/images/styleimages/pleasewait.gif" style="width:;">';
 				   var e =$compile(html)(scope);

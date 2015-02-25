@@ -72,21 +72,21 @@
                     Edit First name and Last name
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-                    <div class="row">
+                    <div class="row first_last_name_section">
                         <div class="col-sm-9">
                             <h5 style="opacity:0.90">
                                 {{ user.name.first }} {{ user.name.last }}
                             </h5>
                         </div>
                         <div class="col-sm-3">
-                            <button style="margin-top:7px;display:none;"
-                                    class="pull-right btn btn-xs btn-primary">
+                            <button style="margin-top:7px;"
+                                    class="pull-right edit_first_last_name btn btn-xs btn-primary">
                                 Edit
                             </button>
                         </div>
                     </div>
-                    <div class="">
-                        <div class="row" style="padding-bottom:10px;">
+                    <div class="first_last_name_edit_section">
+                        <div class="row " style="padding-bottom:10px;">
                             <div class="col-sm-4 colpadding">
                                 <h6 class="pull-right" >First name</h6>
                             </div>
@@ -185,9 +185,9 @@
                             </span>
                             <span>
                                 <div class="row" style="margin-top:5px;">
-                                    <div class="col-sm-offset-5 colpadding col-sm-2 ">
+                                    <div class="col-sm-offset-4 colpadding col-sm-2 ">
                                         <button class="btn btn-xs btn-success">
-                                            Save changes
+                                            Save
                                         </button>
                                     </div>
                                     <div class="col-sm-2 colpadding ">
@@ -332,6 +332,20 @@
         display:none;
     }
 
+
+
+    .first_last_name_section .edit_first_last_name{
+        display:none;
+    }
+    .first_last_name_section:hover .edit_first_last_name{
+        display:block;
+
+    }
+    .first_last_name_edit_section{
+        display:none;
+    }
+
+
 </style>
 
 <script>
@@ -363,6 +377,23 @@
         });
 
     });
+
+
+    $(document).ready(
+    function(){
+        $(".edit_first_last_name").click(function () {
+
+            if($('.first_last_name_edit_section').is(':visible')){
+               $('.first_last_name_edit_section').fadeOut('fast');
+            }
+            else{
+               $('.first_last_name_edit_section').fadeIn('slow');
+            }
+        });
+
+    });
+
+
     $(document).ready(
     function(){
         $(".edit_password").click(function () {

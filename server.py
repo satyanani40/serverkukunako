@@ -130,6 +130,8 @@ def login():
 def forgotpassword():
     accounts = app.data.driver.db['people']
     user = accounts.find_one({'email': request.json['email']})
+    user_name = user['username']
+    user_randome_string = user['random_string']
     if not user:
         response = jsonify(error = 'Your Email does not exist in our database')
         response.status_code = 401
@@ -144,12 +146,20 @@ def forgotpassword():
                        "To complete your Weber registration, Follow this link:<br>\
                         <br><p style='color:red;border:1px solid #dcdcdc;padding:10px;" \
                        "width:800px;text-align:center;font-size:14px;'>" \
-                       "http://127.0.0.1:8000/#/confirm_account/users/</p>\
+                       "http://127.0.0.1:8000/#/users/"+user_name+"/change_password_link/"+user_randome_string+"</p>\
                         <br><br><br><br>\
                         Thanks,<br>The Weber Team\
                         </p>"
         mail.send(msg)
         return "recovery email link has been sent to providing email"
+
+@app.route('/changepassword', methods=['POST', 'GET'])
+def changepassword():
+    accounts = app.data.driver.db['people']
+    user = accounts.find_one({'username': request.json['user_name']})
+    if user:
+        password = generate_password_hash(request.json['password'])
+        return password
 
 
 @app.route('/getsearch')

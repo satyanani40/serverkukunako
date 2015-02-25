@@ -16,8 +16,9 @@ angular.module('weberApp')
                 'Authorization':$auth.getToken()
 			}
 		}).success(function(user_id) {
-			var passReq = Restangular.one("people", JSON.parse(user_id)).get().then(function(result) {
+			var passReq = Restangular.one("people", JSON.parse(user_id)).get({seed:Math.random()}).then(function(result) {
               $scope.user = result;
+
             });
 
             $scope.updateUsername = function() {
@@ -29,6 +30,7 @@ angular.module('weberApp')
 			};
 
 			$scope.updateFirstLastName = function() {
+
                 $scope.user.patch({
                     'name':{
                         'first':$scope.edit_first_name,
