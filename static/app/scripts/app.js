@@ -74,10 +74,10 @@ angular
 					}
 				}
 			})
-			.when('/search', {
+			/*.when('/search/:query?', {
 				templateUrl: '/static/app/views/search_engine.html',
 
-			})
+			})*/
 			.when('/profile/:username', {
 				templateUrl: '/static/app/views/userprofile.html',
 				controller: 'UserprofileCtrl',
@@ -95,7 +95,7 @@ angular
 				templateUrl: '/static/app/views/start_search.html',
 				controller: 'WeberSearchCtrl',
 			})
-			.when('/matchme', {
+			.when('/matchme/:query?', {
 				templateUrl: '/static/app/views/search.html',
 				controller: 'WeberSearchCtrl',
 				resolve: {

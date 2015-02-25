@@ -7,6 +7,7 @@ angular.module('weberApp')
         templateUrl: "/static/app/views/chat.html",
         controller:function ($scope, $auth, CurrentUser1,$http,$window,
         $document, Restangular,ChatActivity) {
+
             $http.get('/api/me', {
                     headers: {
                         'Content-Type': 'application/json'
@@ -38,7 +39,7 @@ angular.module('weberApp')
                             }
                         });
 
-                         socket.on('receive_messages', function(msg) {
+                        socket.on('receive_messages', function(msg) {
 
                               new_message = {}
                               if(user._id == msg.senderid){
@@ -74,7 +75,7 @@ angular.module('weberApp')
                                 }else if(!(details.minimize)){
 
                                     $scope.chatnotifcation = null;
-                                    $scope.chatdivnotification = null;
+                                    $scope.chatdivnotification = [];
 
                                          new_message = {
                                               sender :{
@@ -96,24 +97,20 @@ angular.module('weberApp')
                                          }
 
                                 }else if(details.minimize){
-                                    //$scope.chatdivnotification = 'new_Message';
-                                    console.log('chatdiv notifications===========')
+
                                     $scope.chatdivnotification.push({ id:msg.senderid,
                                                                       message: true
                                                                      });
-                                    console.log($scope.chatdivnotification)
-
-
                                 }else{}
 
                               }
 
-                              var data = $scope.chatactivity.pushMessage(new_message);
-                              $scope.$apply(function(){
-                                $scope.loadedMessages = data;
-                              });
+                                  var data = $scope.chatactivity.pushMessage(new_message);
+                                  $scope.$apply(function(){
+                                    $scope.loadedMessages = data;
+                                  });
 
-                         });
+                        });
 
                         $scope.send_message = function(receiverid){
 
@@ -122,7 +119,7 @@ angular.module('weberApp')
                            document.getElementById('send_'+receiverid).value = null;
                            var temp = $scope.chatactivity.sendMessage(receiverid,text);
 
-                       }
+                        }
                         var getValue = function(){
                             return $window.sessionStorage.length;
                         }
@@ -156,44 +153,47 @@ angular.module('weberApp')
                         }
 
 
-                        $scope.newchatdiv = function(id, name, height,minimize,maximize){
+                        $scope.newchatdiv = function(kwargs){
 
-                            height = typeof height !== 'undefined' ? height : 'auto';
-                            minimize = typeof minimize !== 'undefined' ? minimize : false;
-                            maximize = typeof maximize !== 'undefined' ? maximize : true;
+                            console.log('keyword arguments')
+                            console.log(kwargs)
+                            var checkid = null;
+                            checkid = $window.sessionStorage.getItem(kwargs.id);
+                            if(checkid == null){
+                                var json = {};
+                                Restangular.one('people',kwargs.id).get({seed: Math.random()})
+                                        .then(function(data){
 
-                            var json = {};
-                           console.log("=======chatusers=======")
-                           console.log($scope.chatusers)
-                            for(k in $scope.chatusers){
-                                if($scope.chatusers[k] != null
-                                            && typeof $scope.chatusers[k]._id != undefined
-                                            && $scope.chatusers[k].name != undefined
-                                            && $scope.chatusers[k].picture != undefined
-                                            && $scope.chatusers[k]._id == id){
+                                  json = {
+                                              name:data.name.first,
+                                              id: data._id,
+                                              image:data.picture.medium,
+                                              minimize:kwargs.minimize,
+                                              maximize:kwargs.maximize,
+                                              right:0,
+                                              height:kwargs.height
+                                  }
 
-                                    json = {
-                                      name:$scope.chatusers[k].name.first,
-                                      id: id,
-                                      image:$scope.chatusers[k].picture.medium,
-                                      minimize:minimize,
-                                      maximize:maximize,
-                                      right:0,
-                                      height:height
-                                    }
-                                }
-                            }
+                                 $window.sessionStorage.setItem(kwargs.id, JSON.stringify(json));
+                                  display_divs();
+                                 socket.emit('connect', {data: kwargs.id});
 
-                            $window.sessionStorage.setItem(id, JSON.stringify(json));
-                            display_divs();
-                            socket.emit('connect', {data: id});
-                            if(json.maximize){
-                                $scope.chatactivity.loadMessages(user._id, id);
-                                $scope.loadedMessages =  $scope.chatactivity.messages;
-                            }
+                                 if(json.maximize){
+                                    $scope.chatactivity.loadMessages(user._id,kwargs.id);
+                                    $scope.loadedMessages =  $scope.chatactivity.messages;
+                                 }
+                                });
+                             }else{
+                                display_divs();
+                                socket.emit('connect', {data: kwargs.id});
 
+                                 if(JSON.parse(checkid).maximize){
+                                    $scope.chatactivity.loadMessages(user._id,kwargs.id);
+                                    $scope.loadedMessages =  $scope.chatactivity.messages;
+                                 }
 
-                        }
+                             }
+                        };
 
                         $scope.close_div = function(id){
                           $window.sessionStorage.removeItem(id);
@@ -203,13 +203,15 @@ angular.module('weberApp')
                         $scope.minimize = function(id){
                             var name = JSON.parse($window.sessionStorage.getItem(id)).name
                             $window.sessionStorage.removeItem(id);
-                            $scope.newchatdiv(id, name,'40px',true,false);
+                            $scope.newchatdiv({id:id, name:name,height:'40px',matchmediv:false,
+                                                    minimize:true,maximize:false});
                         }
                         $scope.maximize = function(id){
-                            $scope.chatdivnotification = null;
+                            $scope.chatdivnotification = [];
                             var name = JSON.parse($window.sessionStorage.getItem(id)).name
                             $window.sessionStorage.removeItem(id);
-                            $scope.newchatdiv(id, name, 'auto',false,true);
+                            $scope.newchatdiv({id:id, name:name,height:'auto',
+                                                            minimize:false,maximize:true});
                         }
 
                         $scope.MessageNotifcations = function(){
@@ -217,6 +219,7 @@ angular.module('weberApp')
                             console.log('notifications sections')
                             console.log($scope.chatactivity)
                         }
+
                         $scope.loadLatestMessages = function(){
                             $scope.chatactivity.loadLatestMessages();
                             console.log('message sections')
@@ -230,10 +233,7 @@ angular.module('weberApp')
                         $scope.checknotific = function(id){
                                for(k in $scope.chatdivnotification){
 
-                                   console.log('========================')
-                                   console.log($scope.chatdivnotification[k].id)
-                                   console.log(id)
-                                  if($scope.chatdivnotification[k].id == id && $scope.chatdivnotification[k].message == true){
+                                   if($scope.chatdivnotification[k].id == id && $scope.chatdivnotification[k].message == true){
                                      console.log('==========two divs equesl=======')
                                      console.log($scope.chatdivnotification[k].message)
                                      return true
@@ -247,19 +247,35 @@ angular.module('weberApp')
                             $scope.MessageNotifcations();
 
 
+
                     });
             });
 
 	    }
     }
+
 }).directive("addchatdiv", function($compile){
 	return function(scope, element, attrs){
 		element.bind("click", function(){
 
-		     scope.newchatdiv(element[0].id, element[0].name);
+             scope.newchatdiv({id:element[0].name, height:'auto',
+                               minimize:false, maximize:true,
+                              });
 		     scope.makeMessagesSeen(element[0].id);
              scope.$apply()
 
 		});
 	};
+})
+.directive("matchmechatdiv", function($compile){
+	return function(scope, element, attrs){
+		element.bind("click", function(){
+             scope.newchatdiv({id:element[0].name, height:'auto',
+                               minimize:false, maximize:true,
+                              });
+             scope.makeMessagesSeen(element[0].id);
+             scope.$apply()
+		});
+	};
 });
+

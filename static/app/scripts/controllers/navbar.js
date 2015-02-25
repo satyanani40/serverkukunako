@@ -17,15 +17,15 @@ angular.module('weberApp')
                              $location,$http,Restangular,ChatActivity,
                              SearchActivity,FriendsNotific,friendsActivity) {
 
-            //this is the testing part of the search bar in navbar
+               //this is the testing part of the search bar in navbar
 
-            var searchFriends = Restangular.all('people').getList();
+           /* var searchFriends = Restangular.all('people').getList();
 
             searchFriends.then(function(database_friends){
 
                 $scope.friends1 = database_friends;
 
-            });
+            });*/
 
 
 
@@ -105,7 +105,9 @@ angular.module('weberApp')
 
 				Restangular.one('people',JSON.parse(user_id)).get({seed: Math.random()}).then(function(user) {
 				$scope.currentUser = user;
-				$scope.searchActivity = new SearchActivity(user);
+
+				//$scope.searchActivity = new SearchActivity(user);
+
 				var requested_peoples = [];
 				var accepted_peoples = [];
 
@@ -130,7 +132,6 @@ angular.module('weberApp')
 								}
 							}
 
-							console.log(accepted_peoples.length)
 
 							if(requested_peoples.length+accepted_peoples.length > 0){
 
@@ -204,6 +205,7 @@ angular.module('weberApp')
 									'notifications': user.notifications
 								}
 								).then(function(data){
+								    console.log('updated accept notifications')
 								});
 									var params = '{"_id": {"$in":["'+(reqnotific).join('", "') + '"'+']}}'
 									Restangular.all('people').getList({
@@ -224,26 +226,7 @@ angular.module('weberApp')
 							});
 						});
 					}
-  				$scope.confirmrequest = function(id){
-					$http.get('/api/me', {
-						headers: {
-							'Content-Type': 'application/json',
-							'Authorization': $auth.getToken()
-						}
-					}).success(function(user_id) {
-						Restangular.one('people',JSON.parse(user_id)).get({seed: Math.random()}).then(function(user) {
-							var isInRequests = true;
-							if(isInRequests){
-								Restangular.one('people',id).get({seed: Math.random()}).then(function(profileuser){
-									var friendsactivity = new friendsActivity(user,profileuser)
-									console.log('comes to add friend')
-									$scope.acceptfrnd = friendsactivity.accept_request();
 
-								});
-							}
-						});
-					});
-  				}
 			});
 		});
 	}

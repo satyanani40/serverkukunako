@@ -13,33 +13,11 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="input-group input-group-md">
-                                    <input type="text" ng-click="toggleMenu($event);" ng-model="query" class="form-control" placeholder="Search Friends or anything in weber" />
+                                    <input type="text" class="form-control" placeholder="Search Friends or anything in weber" />
                                     <div class="input-group-btn">
                                         <button type="submit" class="btn">Search</button>
                                     </div><!-- /btn-group -->
                                 </div><!-- /input-group -->
-
-                                <div class="panel panel-default"ng-show="menuOpened" style="width:540px;position:absolute;">
-                                    <div class="panel-body" style="padding:0px;">
-                                        <div class="" style="margin-bottom:0px;"
-                                               ng-repeat="friend in friends1 | filter:query | orderBy: 'name.first' | limitTo : 5 ">
-                                            <a style="" href="/#/profile/{{ friend._id }}"
-                                               class="list-group-item search_a">
-                                                <div class="row">
-                                                    <div class="col-sm-1">
-                                                        <img src="{{ friend.picture.large }}"
-                                                             style="width:40px">
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <h5 style="opacity:0.75;">
-                                                            {{friend.name.first}} {{ friend.name.last }}
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
                             </div><!-- /.col-xs-12 -->
                         </div><!-- /.row -->
                     </form>
@@ -51,8 +29,10 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right" ng-if="isAuthenticated()">
+                    <li><a href="#/matchme">Match Me</a></li>
+                    <li><a href="#/friends">Friends</a></li>
                     <li>
-                        <a ng-click="noteMenu($event); getNewNotifcations()" style="cursor:pointer">
+                        <a ng-click="toggle = !toggle; getNewNotifcations()" style="cursor:pointer">
                             <i class="glyphicon glyphicon-globe" style="font-size:17px;opacity:0.70;">
 
                             </i>
@@ -64,17 +44,15 @@
 
                         </a>
 
-                        <div class="panel panel-default arrow_box box-shadowpanel" ng-show="noteOpened"
-                             style="position:absolute;width:500px;right:-100px;">
+                        <div class="panel panel-default" ng-show="toggle"
+                             style="position:absolute;width:500px;right:0px;">
                             <div class="panel-body" style="padding-top:2px">
                                 <div class="row"
                                      style="border-bottom:1px solid #E7E5E5;">
                                     <div class="col-sm-12">
-                                        <h6>
-                                            <strong>
-                                                Notifications
-                                            </strong>
-                                        </h6>
+                                        <h5>
+                                            Friends Requests
+                                        </h5>
                                     </div>
                                 </div>
 
@@ -99,12 +77,10 @@
                                         </h6>-->
                                     </div>
                                     <div class="col-sm-2">
-                                        <friends>
-                                            <button style="margin-top:10px"
-                                                class="btn btn-sm btn-default" ng-click="confirmrequest('{{ requestedPeople._id }}')">
-                                            Confirm Friend
-                                            </button>
-                                        </friends>
+                                        <acceptreject>
+                                            <button ng-click="acceptrequest('{{requestedPeople._id}}','navbarview')" class="btn btn-primary">accept request</button>
+                                            <button ng-click="rejectrequest('{{requestedPeople._id}}','navbarview')" class="btn btn-primary">reject request</button>
+                                        </acceptreject>
                                     </div>
                                 </div>
 
@@ -135,8 +111,6 @@
                             </div>
                         </div>
                     </li>
-                    <li><a href="#/matchme">Match Me</a></li>
-                    <li><a href="#/friends">Friends</a></li>
                     <li>
                         <a href="" bs-dropdown="dropdown" style="padding-top: 11px; padding-bottom: 11px;">
                             <img style="width:28px; border: 2px solid; margin-right: 5px;" class="img-circle" src="{{currentUser.picture.thumbnail}}" alt="">{{currentUser.username}} <span class="caret"></span>
