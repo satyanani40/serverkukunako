@@ -261,7 +261,7 @@ angular.module('weberApp')
              scope.newchatdiv({id:element[0].name, height:'auto',
                                minimize:false, maximize:true,
                               });
-		     scope.makeMessagesSeen(element[0].id);
+		     scope.makeMessagesSeen(element[0].name);
              scope.$apply()
 
 		});
@@ -273,7 +273,7 @@ angular.module('weberApp')
              scope.newchatdiv({id:element[0].name, height:'auto',
                                minimize:false, maximize:true,
                               });
-             scope.makeMessagesSeen(element[0].id);
+             scope.makeMessagesSeen(element[0].name);
              scope.$apply()
 		});
 	};

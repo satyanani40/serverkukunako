@@ -26,10 +26,11 @@ angular.module('weberApp')
             function get_match_results(query){
                 $scope.search = query;
                 var matchResults = new MatchMeResults();
+
                 matchResults.getMatchResults($scope.search,combine_ids($scope.search.split(" ")))
                     .then(function() {
-                        $scope.matchmeresults = matchResults;
 
+                        $scope.matchmeresults = matchResults;
 
                         var currentuserobj = new CurrentUser();
                         currentuserobj.getUserId()
@@ -38,7 +39,8 @@ angular.module('weberApp')
                                 currentuserobj.getCUserDetails(currentuserobj.userId)
                                 .then(function(user){
                                    $scope.searchActivity = new SearchActivity(user)
-                                   $scope.searchActivity.addSearchText($scope.search,
+
+                                   $scope.searchActivity.getOraddSearch($scope.search,
                                     matchResults.total_matches,
                                     matchResults.matchedids,
                                     $scope.search.split(" "));
@@ -65,6 +67,7 @@ angular.module('weberApp')
                             currentuserobj.getCUserDetails(currentuserobj.userId)
                                 .then(function(user){
                                    $scope.searchActivity = new SearchActivity(user)
+                                   $scope.searchActivity.getPreviousSearch();
                                 });
                         }
                     });
