@@ -60,6 +60,7 @@
 			</a>
 		</div>
 	</div>
+
 	<div class="col-md-7 colpadding" style="min-height:2000px">
 		<div infinite-scroll='infinitePosts.nextPage()' infinite-scroll-disabled='infinitePosts.busy'
 			 infinite-scroll-distance='1'>
@@ -70,7 +71,9 @@
 							 src="{{UserService.get(post.author).picture.thumbnail}}" alt="">
 					</a>
 					<strong>
+						<a href="#/profile/{{ UserService.get(post.author)._id }}">
 						{{UserService.get(post.author).name.first}} {{UserService.get(post.author).name.last}}
+						</a>
 					</strong>
 					wrote on his story.
 					<br>

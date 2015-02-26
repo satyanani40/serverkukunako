@@ -49,39 +49,49 @@
                            <div class="right-inner-addon">
                                 <i class="fa fa-search" style="opacity:0.70"></i>
                                 <input type="search" class="form-control input-sm"
-                                       placeholder="Search Friends" />
+                                       placeholder="Search Friends" ng-model="searchText" ng-minlength="0"/>
                            </div>
                        </div>
                    </div>
                </div>
                <div class="panel-body">
-                   <div ng-repeat="friend in friends" class="row pad-top">
+                   <div ng-repeat="friend in filtered = (friends | filter:searchText)" class="row pad-top"
+
+
+                           >
                         <div class="jumbotron"
                              style="padding:5px 10px;background-color:#fff;margin-bottom:10px;">
                             <div class="row" style="">
-                                <div class="col-sm-2">
-                                    <img src="{{ friend.picture.thumbnail }}"
-                                         style="width:80px;border-radius:4px">
-                                </div>
-                                <div class="col-sm-6 colpadding">
-                                    <h5>
-                                        <a href="">
-                                            {{ friend.name.first }} {{ friend.name.last }}
+
+
+                                    <div class="col-sm-2">
+                                        <a href="#/profile/{{ friend._id}}">
+                                            <img src="{{ friend.picture.thumbnail }}"
+                                                 style="width:80px;border-radius:4px">
                                         </a>
-                                    </h5>
-                                </div>
-                                <div class="col-sm-3">
-                                    <a href="" style="margin-top:15px"
+                                    </div>
+                                    <div class="col-sm-6 colpadding">
+                                        <h5>
+                                            <a href="#/profile/{{ friend._id}}">
+                                                {{ friend.name.first }} {{ friend.name.last }}
+                                            </a>
+                                        </h5>
+                                    </div>
+
+
+                                <div class="col-sm-3"  >
+                                    <button friendsunfriend ng-click="friendsunfrnd('{{ friend._id }}')" style="margin-top:15px"
                                        class="btn btn-default btn-sm pull-right">
                                         Unfriend
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                    </div>
+                    <div ng-show="!filtered.length">No Friends Found</div>
                </div>
            </div>
         </div>
     </div>
 </div>
-<div chatbar></div>
+<div  chatbar></div>

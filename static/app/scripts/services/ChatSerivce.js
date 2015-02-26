@@ -15,7 +15,7 @@ angular.module('weberApp')
 
             if (this.currentuser.friends.length !== 0) {
                 var params = '{"_id": {"$in":["'+(this.currentuser.friends).join('", "') + '"'+']}}';
-                var data = Restangular.all('people').getList({where :params});
+                var data = Restangular.all('people').getList({where :params, seed: Math.random()});
                 return data;
             }
 
@@ -25,12 +25,6 @@ angular.module('weberApp')
             var currentdate = new Date();
             this.receiverid = receiverid;
 
-            /*var datetime = "Last Sync: " + currentdate.getDate() + "/"
-                + (currentdate.getMonth()+1)  + "/"
-                + currentdate.getFullYear() + " @ "
-                + currentdate.getHours() + ":"
-                + currentdate.getMinutes() + ":"
-                + currentdate.getSeconds();*/
 
             return Restangular.all('messages').post({
                 'sender':this.currentuser._id,

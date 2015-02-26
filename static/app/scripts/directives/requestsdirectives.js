@@ -436,4 +436,65 @@ angular.module('weberApp')
 
         }
     };
+})
+.directive('friendsunfriend', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity,$route) {
+    return {
+        restrict: 'A',
+        replace: true,
+        controller:function($scope, $element, $attrs, $transclude){
+
+            $scope.friendsunfrnd = function(id){
+
+
+                html = '<image src="/static/app/images/loader.gif" alt="no image found" style="position:absolute">';
+                $element.html(html);
+                $compile($element.contents())($scope);
+
+               var currentuserobj = new CurrentUser();
+               currentuserobj.getUserId().then(function(){
+                   currentuserobj.getCUserDetails(currentuserobj.userId).then(function(user){
+                        var user_obj = Restangular.one('people', id);
+		                user_obj.get({ seed : Math.random() }).then(function(profileuser) {
+
+                            var f_status = $scope.checkInFriends(user, profileuser);
+
+                            if(f_status.pf_status && f_status.cf_status){
+                                friendsactivity = new friendsActivity(user,profileuser)
+                                $scope.temps = friendsactivity.unfriend();
+                                $scope.temps.then(function(data){
+                                    html ='<b>deleted</cancelrequest>';
+                                    e =$compile(html)($scope);
+                                    $element.replaceWith(e);
+                                });
+                            }else if(f_status.pf_status){
+                                friendsactivity = new friendsActivity(user,profileuser)
+                                $scope.temps = friendsactivity.remove_pfriends();
+                                $scope.temps.then(function(data){
+                                    html ='<b>deleted</b>';
+                                    e =$compile(html)($scope);
+                                    $element.replaceWith(e);
+                                });
+
+                            }else if(f_status.cf_status){
+                                friendsactivity = new friendsActivity(user,profileuser)
+                                $scope.temps = friendsactivity.remove_cfriends();
+                                $scope.temps.then(function(data){
+                                    html ='<b>deleted</b>';
+                                    e =$compile(html)($scope);
+                                    $element.replaceWith(e);
+                                });
+
+                            }else{
+                                console.log('nothing to done')
+                            }
+
+		                });
+                   });
+               });
+
+
+            }
+
+        }
+    };
 });

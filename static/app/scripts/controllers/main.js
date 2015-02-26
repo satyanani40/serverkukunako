@@ -30,17 +30,20 @@ angular.module('weberApp')
 					});
 				}
 				$scope.submit_post = function(){
+					console.log($scope.new_post)
+					if($scope.new_post){
+						$http({
+							url: '/similarwords',
+							method: "GET",
+							params: {new_post: $scope.new_post}
+						})
+						.success(function(similarwords) {
 
-					$http({
-						url: '/similarwords',
-						method: "GET",
-						params: {new_post: $scope.new_post}
-					})
-					.success(function(similarwords) {
+						$scope.infinitePosts.addPost($scope.new_post,similarwords);
+						$scope.new_post = '';
+						});
+					}
 
-					$scope.infinitePosts.addPost($scope.new_post,similarwords);
-					$scope.new_post = '';
-					});
 				};
 			});
 		});
