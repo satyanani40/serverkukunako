@@ -7,17 +7,14 @@
  * # WeberSearchCtrl
  * Controller of the weberApp
  */
+
 angular.module('weberApp')
 		.controller('WeberSearchCtrl', function($scope, $auth, Restangular,
 	 										InfinitePosts, $alert, $http,
 	 										CurrentUser, UserService,CurrentUser1,
 	 										SearchActivity, $routeParams, MatchMeResults) {
 		$scope.UserService = UserService;
-
-
 		$scope.searching = function(){
-
-
 
         	function combine_ids(ids) {
    				return (ids.length ? "\"" + ids.join("\",\"") + "\"" : "");

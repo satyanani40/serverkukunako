@@ -3,6 +3,7 @@
     <div class="row">
         <div class="col-md-3 colpadding">
             <div class="panel panel-default"  ng-if="isAuthenticated()">
+                {{ currentUser.username }}
                 <div class="panel-heading">
                     <span class="fa fa-search" style="opacity:0.60;font-size:16px"></span>&nbsp;
                     <strong>Surya</strong>
@@ -95,10 +96,15 @@
                                                 <span am-time-ago="post._created">{{ rs._updated }}</span>
                                             </small>
 
-                                            <a  class="btn btn-sm btn-default pull-right" name="{{rs.author._id}}"
+                                            <a  ng-if="rs.author._id != currentUser._id" class="btn btn-sm btn-default pull-right" name="{{rs.author._id}}"
                                              matchmechatdiv>
                                                 Chat
                                             </a>
+                                            <a  ng-if="rs.author._id == currentUser._id" class="btn btn-sm btn-default pull-right"
+                                            >
+                                                Posted by you
+                                            </a>
+
 
                                         </span>
                                         <br>

@@ -17,26 +17,16 @@ import urllib2, random
 from views import get_search
 from weberdb import WeberDB
 from flask.ext.socketio import SocketIO, emit, join_room, leave_room
-
-
-
 from flask import Flask
 from flask_mail import Mail, Message
-
-
-
-
 
 class TokenAuth(TokenAuth):
 	def check_auth(self, token, allowed_roles, resource, method):
 		accounts = app.data.driver.db['people']
 		return accounts.find_one({'token': token})
 
-
 app = Eve(__name__,static_url_path='/static')
 app.debug = True,
-
-
 app.config.update(
 	DEBUG=True,
 	#EMAIL SETTINGS
@@ -63,10 +53,6 @@ def create_token(user):
 def parse_token(req):
     token = req.headers.get('Authorization').split()[1]
     return jwt.decode(token, TOKEN_SECRET)
-
-
-
-
 
 def login_required(f):
     @wraps(f)
@@ -409,7 +395,7 @@ def join_into_room(id):
 
 
 app.threaded=True
-socketio.run(app,host='127.0.0.1',port=8000)
+socketio.run(app,host='192.168.0.100',port=8000)
 
 # server sent events section
 """from redis import Redis
