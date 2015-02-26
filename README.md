@@ -1,2 +1,2 @@
-# web_login
-login authentications
+# sample_login
+authentications of regi

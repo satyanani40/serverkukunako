@@ -278,14 +278,59 @@ body {
     border
 }
 
+
+
+.message_box {
+	position: relative;
+	background: #ffffff;
+	border: 4px solid #ffffff;
+
+	-webkit-box-shadow: 3px 6px 16px -6px rgba(28, 50, 50, 0.72);
+	-moz-box-shadow:    3px 6px 16px -6px rgba(28, 50, 50, 0.72);
+	box-shadow:         3px 6px 16px -6px rgba(28, 50, 50, 0.72);
+}
+.message_box:after, .message_box:before {
+	bottom: 100%;
+	right:1%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.message_box:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-bottom-color: #ffffff;
+	border-width: 7px;
+	margin-left: -7px;
+}
+.message_box:before {
+	border-color: rgba(255, 255, 255, 0);
+	border-bottom-color: #ffffff;
+	border-width: 13px;
+	margin-left: -13px;
+}
+
+
+
+
+
+
+
 .arrow_box {
 	position: relative;
 	background: #ffffff;
 	border: 4px solid #ffffff;
+
+	-webkit-box-shadow: 3px 6px 16px -6px rgba(28, 50, 50, 0.72);
+	-moz-box-shadow:    3px 6px 16px -6px rgba(28, 50, 50, 0.72);
+	box-shadow:         3px 6px 16px -6px rgba(28, 50, 50, 0.72);
 }
 .arrow_box:after, .arrow_box:before {
 	bottom: 100%;
-	right:22%;
+	right:1%;
 	border: solid transparent;
 	content: " ";
 	height: 0;

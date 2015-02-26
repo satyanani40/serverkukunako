@@ -35,12 +35,12 @@ angular.module('weberApp')
 
 
               $scope.menuOpened = false;
-              $scope.noteOpened = false;
+              $scope.messageOpened = false;
 
-              $scope.noteMenu = function(event) {
+              $scope.messageMenu = function(event) {
 
 
-                $scope.noteOpened = !($scope.noteOpened);
+                $scope.messageOpened = !($scope.messageOpened);
                 event.stopPropagation();
 
               };
@@ -63,8 +63,8 @@ angular.module('weberApp')
                       $scope.$apply();
                   }
 
-                  if ($scope.noteOpened) {
-                      $scope.noteOpened = false;
+                  if ($scope.messageOpened) {
+                      $scope.messageOpened = false;
 
                 // You should let angular know about the update that you have made, so that it can refresh the UI
                       $scope.$apply();

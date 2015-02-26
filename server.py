@@ -17,16 +17,26 @@ import urllib2, random
 from views import get_search
 from weberdb import WeberDB
 from flask.ext.socketio import SocketIO, emit, join_room, leave_room
+
+
+
 from flask import Flask
 from flask_mail import Mail, Message
+
+
+
+
 
 class TokenAuth(TokenAuth):
 	def check_auth(self, token, allowed_roles, resource, method):
 		accounts = app.data.driver.db['people']
 		return accounts.find_one({'token': token})
 
+
 app = Eve(__name__,static_url_path='/static')
 app.debug = True,
+
+
 app.config.update(
 	DEBUG=True,
 	#EMAIL SETTINGS
@@ -53,6 +63,10 @@ def create_token(user):
 def parse_token(req):
     token = req.headers.get('Authorization').split()[1]
     return jwt.decode(token, TOKEN_SECRET)
+
+
+
+
 
 def login_required(f):
     @wraps(f)
@@ -139,6 +153,8 @@ def forgotpassword():
         mail.send(msg)
         return "recovery email link has been sent to providing email"
 
+
+
 @app.route('/changepassword', methods=['POST', 'GET'])
 def changepassword():
     accounts = app.data.driver.db['people']
@@ -146,6 +162,19 @@ def changepassword():
     if user:
         password = generate_password_hash(request.json['password'])
         return password
+
+
+@app.route('/settingschangepassword', methods=['POST', 'GET'])
+def settingschangepassword():
+    accounts = app.data.driver.db['people']
+    user = accounts.find_one({'username': request.json['user_name']})
+    get_hash_new_password = generate_password_hash(request.json['new_password'])
+    print "======================================"
+    print get_hash_new_password
+    if check_password_hash(user['password'], request.json['old_password']):
+        return get_hash_new_password
+    else:
+        return "your current password is incorrect, Please check it"
 
 
 @app.route('/getsearch')
@@ -395,7 +424,7 @@ def join_into_room(id):
 
 
 app.threaded=True
-socketio.run(app,host='192.168.0.100',port=8000)
+socketio.run(app,host='127.0.0.1',port=8000)
 
 # server sent events section
 """from redis import Redis

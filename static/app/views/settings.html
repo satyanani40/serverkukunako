@@ -131,73 +131,70 @@
                         </div>
                     </div>
                     <div class="row password_edit_section" style="margin-top:5px;">
-                        <div class="col-sm-12">
-                            <h6 style="opacity:0.60">
-                                Your Password is very confidential, Please Follow the rules while updating the password:
-                            </h6>
-                            <span>
-                                <form name="myForm">
-                                    <div class="row">
-                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                            <h6>Old password:</h6>
-                                        </div>
-                                        <div class="col-sm-8 colpadding">
-                                            <input type="text" placeholder="old password"
-                                               class="form-control input-sm" />
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                            <h6>New password:</h6>
-                                        </div>
-                                        <div class="col-sm-8 colpadding">
-                                            <input type="password" id="pw1" name="pw1" class="form-control input-sm" placeholder="enter new password"
-                                                   ng-model="pw1" ng-required="" ng-minlength="8" ng-maxlength="20" />
-                                            <span ng-show="myForm.pw1.$error.required && myForm.pw1.$dirty"
-                                                  style="color:red;font-size:11px;">
-                                                required
-                                            </span>
-                                            <span ng-show="!myForm.pw1.$error.required && (myForm.pw1.$error.minlength || myForm.pw1.$error.maxlength) && myForm.pw1.$dirty"
-                                                  style="color:red;font-size:11px;">
-                                                Passwords must be between 8 and 20 characters.
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                            <h6>Re-enter new password:</h6>
-                                        </div>
-                                        <div class="col-sm-8 colpadding">
-                                            <input type="password" id="pw2" name="pw2"  class="form-control input-sm" placeholder="Re-enter new password"
-                                                   ng-model="pw2" ng-required="" pw-check="pw1" />
-                                            <div class="msg-block" ng-show="myForm.$error">
-                                                <span class="msg-error" ng-show="myForm.pw2.$error.pwmatch" style="color:red;font-size:11px;">
-                                                    Passwords don't match.
-                                                </span>
+                            <div class="col-sm-12">
+                                <settingschangepassword>
+                                    <h6 style="opacity:0.60">
+                                        Your Password is very confidential, Please Follow the rules while updating the password:
+                                    </h6>
+                                    <span>
+                                        <form name="myForm">
+                                            <div class="row">
+                                                <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                                    <h6>Old password:</h6>
+                                                </div>
+                                                <div class="col-sm-8 colpadding">
+                                                    <input type="text" placeholder="old password" ng-model="old_password"
+                                                       class="form-control input-sm" required />
+                                                </div>
                                             </div>
-                                            <span ng-show="myForm.pw2.$error.required && myForm.pw2.$dirty" style="color:red">
-                                                Please confirm your password.
-                                            </span>
+
+                                            <div class="row">
+                                                <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                                    <h6>New password:</h6>
+                                                </div>
+                                                <div class="col-sm-8 colpadding">
+                                                    <input type="password" id="pw1" name="pw1" class="form-control input-sm" placeholder="enter new password"
+                                                           ng-model="pw1" ng-required="" ng-minlength="8" ng-maxlength="20" />
+                                                    <span ng-show="myForm.pw1.$error.required && myForm.pw1.$dirty"
+                                                          style="color:red;font-size:11px;">
+                                                        required
+                                                    </span>
+                                                    <span ng-show="!myForm.pw1.$error.required && (myForm.pw1.$error.minlength || myForm.pw1.$error.maxlength) && myForm.pw1.$dirty"
+                                                          style="color:red;font-size:11px;">
+                                                        Passwords must be between 8 and 20 characters.
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                                    <h6>Re-enter new password:</h6>
+                                                </div>
+                                                <div class="col-sm-8 colpadding">
+                                                    <input type="password" id="pw2" name="pw2"  class="form-control input-sm" placeholder="Re-enter new password"
+                                                           ng-model="pw2" ng-required="" pw-check="pw1" />
+                                                    <div class="msg-block" ng-show="myForm.$error">
+                                                        <span class="msg-error" ng-show="myForm.pw2.$error.pwmatch" style="color:red;font-size:11px;">
+                                                            Passwords don't match.
+                                                        </span>
+                                                    </div>
+                                                    <span ng-show="myForm.pw2.$error.required && myForm.pw2.$dirty" style="color:red">
+                                                        Please confirm your password.
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </span>
+                                    <span>
+                                        <div class="row" style="margin-top:5px;">
+                                            <div class="col-sm-offset-4 colpadding col-sm-2 ">
+                                                <button ng-click="updatechangepassword()" class="btn btn-xs btn-success">
+                                                    Save
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
-                            </span>
-                            <span>
-                                <div class="row" style="margin-top:5px;">
-                                    <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                        <button class="btn btn-xs btn-success">
-                                            Save
-                                        </button>
-                                    </div>
-                                    <div class="col-sm-2 colpadding ">
-                                        <button class="btn btn-xs btn-default">
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </div>
-                            </span>
-                        </div>
+                                    </span>
+                                </settingschangepassword>
+                            </div>
                     </div>
                 </div>
 
@@ -281,8 +278,7 @@
                     <div class="row interest_section">
                         <div class="col-sm-9">
                             <h6>
-                                Playing chess, cricket, football, hockey, carroms,
-                                 temple run, candy crush..
+                                <a>{{ user.interests }}</a>
                             </h6>
                         </div>
                         <div class="col-sm-3 interest_button">
@@ -293,6 +289,8 @@
                             </button>
                         </div>
                     </div>
+                    <input type="text" ng-model="interests">
+                    <input type="button" value="update" ng-click="updateInterests()">
                 </div>
 
 

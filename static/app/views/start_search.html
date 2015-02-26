@@ -64,12 +64,13 @@
                     <form class="form-horizontal" method="post"  name="signupForm" ng-submit="searching()">
                         <div class="form-group" style="margin-bottom:2px">
                             <div class="col-sm-12">
-                                <input class="form-control"  type="text"  name="q" autocomplete ng-model="search"
+                                <input class="form-control"  type="text"  ng-model="query"  autocomplete
                                                 placeholder="Search anything in Weber" ng-keyup="getSuggestions()"  autofocus  required/>
                             </div>
                             <div class="col-sm-4 col-sm-offset-4">
-                                <input ng-click = "registerUser()" type="submit" style="margin-top:10px" value="Weber Search"
-                                       class="btn btn-normal btn-md btn-block" >
+                                <a href="/#/matchme/{{ query }}"   style="margin-top:10px" class="btn btn-default btn-sm btn-block" >
+                                    Search Weber
+                                </a>
                             </div>
                         </div>
                     </form>

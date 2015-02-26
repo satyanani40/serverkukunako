@@ -1,5 +1,5 @@
 <div navbar></div>
-<div class="container" >
+<div class="container" checkinfunctions>
 	<div class="col-md-3 colpadding" wb-affix="150">
 		<div class="thumbnail">
 			<img class="img-rounded" style="width: 100%;" src="{{profileuser.picture.medium}}">
@@ -54,7 +54,7 @@
 			<div class="clearfix panel-heading">Friends({{profileuser.friends.length}})</div>
 
 			<a ng-repeat="friend in friends" href="#/profile/{{friend._id}}">
-				<img data-placement="top-right" style="width:70px" data-content="{{friend.location.city}}, {{friend.location.state}}"
+				<img data-placement="top-right" style="width:65px" data-content="{{friend.location.city}}, {{friend.location.state}}"
 						 title="{{friend.name.first}} {{friend.name.last}}"
 						 data-trigger="hover" bs-popover src="{{friend.picture.thumbnail}}">
 			</a>

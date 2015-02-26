@@ -1,4 +1,4 @@
-<div  checkinfunctions class="navbar navbar-inverse navbar-fixed-top" role="navigation" bs-navbar>
+<div  class="navbar navbar-inverse navbar-fixed-top" role="navigation" bs-navbar>
         <div class="container" style="width:;">
 
             <div class="navbar-header">
@@ -32,6 +32,42 @@
                     <li><a href="#/matchme">Match Me</a></li>
                     <li><a href="#/friends">Friends</a></li>
                     <li>
+                        <a ng-click="messageMenu($event)" style="cursor:pointer">
+                            <i class="glyphicon glyphicon-envelope" style="font-size:17px;opacity:0.70;">
+
+                            </i>
+
+                                <label class="label label-danger" ng-if="newnotific"
+                                       style="position:absolute;font-size:10px;top: 5px;right: 0px;">
+                                        {{ newnotific }}
+                                </label>
+
+                        </a>
+
+                        <div class="panel panel-default message_box box-shadowpanel"
+                             ng-show="messageOpened" style="position:absolute;width:450px;right:0px;">
+                            <div class="panel-body" style="padding:0px;">
+                                <div class="" style="margin-bottom:0px;"
+                                       ng-repeat="friend in friends | filter:query | orderBy: 'name.first' | limitTo : 5 ">
+                                    <a style="" href="/#/profile/{{ friend._id }}"
+                                       class="list-group-item search_a">
+                                        <div class="row">
+                                            <div class="col-sm-1">
+                                                <img src="{{ friend.picture.large }}"
+                                                     style="width:40px">
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <h5 style="opacity:0.75;">
+                                                    {{friend.name.first}} {{ friend.name.last }}
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
                         <a ng-click="toggle = !toggle; getNewNotifcations()" style="cursor:pointer">
                             <i class="glyphicon glyphicon-globe" style="font-size:17px;opacity:0.70;">
 
@@ -44,7 +80,7 @@
 
                         </a>
 
-                        <div class="panel panel-default" ng-show="toggle"
+                        <div class="panel panel-default arrow_box" ng-show="toggle"
                              style="position:absolute;width:500px;right:0px;">
                             <div class="panel-body" style="padding-top:2px">
                                 <div class="row"

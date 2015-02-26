@@ -99,7 +99,7 @@ angular.module('weberApp')
 
             element.click(function(){
 
-                html = '<image src="/static/app/images/loader.gif" alt="no image found" style="position:absolute">';
+                html = '<image src="/static/app/images/pleasewait.gif" alt="no image found" style="position:absolute">';
                 element.html(html);
                 $compile(element.contents())($scope);
                 var currentuserobj = new CurrentUser();
@@ -165,7 +165,7 @@ angular.module('weberApp')
         link: function ($scope, $element, attrs) {
 
             $element.click(function(){
-                html = '<image src="/static/app/images/loader.gif" alt="no image found" style="position:absolute">';
+                html = '<image src="/static/app/images/pleasewait.gif" alt="no image found" style="position:absolute">';
                 $element.html(html);
                 $compile($element.contents())($scope);
 
@@ -241,7 +241,7 @@ angular.module('weberApp')
                     $routeParams.username = id;
 
 
-                html = '<image src="/static/app/images/loader.gif" alt="no image found" style="position:absolute">';
+                html = '<image src="/static/app/images/pleasewait.gif" alt="no image found" style="position:absolute">';
                 $element.html(html);
                 $compile($element.contents())($scope);
 
@@ -287,7 +287,7 @@ angular.module('weberApp')
                     console.log('yes in nav bar view')
                     $routeParams.username = id;
                 }
-                html = '<image src="/static/app/images/loader.gif" alt="no image found" style="position:absolute">';
+                html = '<image src="/static/app/images/pleasewait.gif" alt="no image found" style="position:absolute">';
                 $element.html(html);
                 $compile($element.contents())($scope);
                 var currentuserobj = new CurrentUser();
@@ -385,7 +385,7 @@ angular.module('weberApp')
         link: function ($scope, element, attrs) {
 
             element.click(function(){
-                html = '<image src="/static/app/images/loader.gif" alt="no image found" style="position:absolute">';
+                html = '<image src="/static/app/images/pleasewait.gif" alt="no image found" style="position:absolute">';
                 element.html(html);
                 $compile(element.contents())($scope);
 

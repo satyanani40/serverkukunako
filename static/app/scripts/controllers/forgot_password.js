@@ -54,7 +54,7 @@ angular.module('weberApp')
                 console.log(user_name+password_random_string);
 
                 $scope.passwordButton = function(){
-                    var html ='<image src="http://www.safeway.com/CMS/assets/media/images/styleimages/pleasewait.gif" style="width:;">';
+                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
                     $element.html(html);
                     $compile($element.contents())($scope);
 

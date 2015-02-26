@@ -18,7 +18,7 @@ angular.module('weberApp')
 				username: $scope.formData.firstname+$scope.formData.lastname
 			}).then(function(response) {
 				console.log(response.data);
-				$location.path('/email_details/'+response.data);
+				$location.path('/email_details/'+$scope.formData.email);
 			}, function(error) {
 				$scope.error = error;
 				/*$alert({
@@ -47,7 +47,7 @@ angular.module('weberApp')
 			replace: true,
 			link: function (scope, element, attrs) {
 				element.click(function(){
-				   var html ='<image src="http://www.safeway.com/CMS/assets/media/images/styleimages/pleasewait.gif" style="width:;">';
+				   var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
 				   var e =$compile(html)(scope);
 				   element.replaceWith(e);
 				});
