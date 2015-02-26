@@ -1,5 +1,5 @@
 <div navbar></div>
-<div class="container" >
+<div class="container" checkinfunctions>
 	<div class="col-md-3 colpadding" wb-affix="150">
 		<div class="thumbnail">
 			<img class="img-rounded" style="width: 100%;" src="{{profileuser.picture.medium}}">
@@ -54,13 +54,12 @@
 			<div class="clearfix panel-heading">Friends({{profileuser.friends.length}})</div>
 
 			<a ng-repeat="friend in friends" href="#/profile/{{friend._id}}">
-				<img data-placement="top-right" style="width:70px" data-content="{{friend.location.city}}, {{friend.location.state}}"
+				<img data-placement="top-right" style="width:65px" data-content="{{friend.location.city}}, {{friend.location.state}}"
 						 title="{{friend.name.first}} {{friend.name.last}}"
 						 data-trigger="hover" bs-popover src="{{friend.picture.thumbnail}}">
 			</a>
 		</div>
 	</div>
-
 	<div class="col-md-7 colpadding" style="min-height:2000px">
 		<div infinite-scroll='infinitePosts.nextPage()' infinite-scroll-disabled='infinitePosts.busy'
 			 infinite-scroll-distance='1'>
@@ -71,9 +70,7 @@
 							 src="{{UserService.get(post.author).picture.thumbnail}}" alt="">
 					</a>
 					<strong>
-						<a href="#/profile/{{ UserService.get(post.author)._id }}">
 						{{UserService.get(post.author).name.first}} {{UserService.get(post.author).name.last}}
-						</a>
 					</strong>
 					wrote on his story.
 					<br>

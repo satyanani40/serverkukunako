@@ -26,7 +26,7 @@ angular.module('weberApp')
                             });
                          }
 
-						var socket = io.connect('http://192.168.0.102:8000');
+						var socket = io.connect('http://127.0.0.1:8000');
 
 						socket.on('connect', function() {
 							socket.emit('connect', {data: user._id});
@@ -261,7 +261,7 @@ angular.module('weberApp')
              scope.newchatdiv({id:element[0].name, height:'auto',
                                minimize:false, maximize:true,
                               });
-		     scope.makeMessagesSeen(element[0].name);
+		     scope.makeMessagesSeen(element[0].id);
              scope.$apply()
 
 		});
@@ -273,7 +273,7 @@ angular.module('weberApp')
              scope.newchatdiv({id:element[0].name, height:'auto',
                                minimize:false, maximize:true,
                               });
-             scope.makeMessagesSeen(element[0].name);
+             scope.makeMessagesSeen(element[0].id);
              scope.$apply()
 		});
 	};

@@ -49,7 +49,7 @@
                                                 placeholder="Search anything in Weber" ng-keyup="getSuggestions()"  autofocus  required/>
                             </div>
                             <div class="col-sm-4 col-sm-offset-4">
-                                <a href="/#/matchme/{{ query }}"   style="margin-top:10px" class="btn btn-normal btn-md btn-block" >
+                                <a href="/#/matchme/{{ query }}"   style="margin-top:10px" class="btn btn-default btn-sm btn-block" >
                                     Search Weber
                                 </a>
                             </div>
@@ -95,15 +95,10 @@
                                                 <span am-time-ago="post._created">{{ rs._updated }}</span>
                                             </small>
 
-                                            <a  ng-if="rs.author._id != currentUser._id" class="btn btn-sm btn-default pull-right" name="{{rs.author._id}}"
+                                            <a  class="btn btn-sm btn-default pull-right" name="{{rs.author._id}}"
                                              matchmechatdiv>
                                                 Chat
                                             </a>
-                                            <a  ng-if="rs.author._id == currentUser._id" class="btn btn-sm btn-default pull-right"
-                                            >
-                                                Posted by you
-                                            </a>
-
 
                                         </span>
                                         <br>
@@ -157,8 +152,7 @@
                                                 <span am-time-ago="post._created">{{ rs._updated }}</span>
                                             </small>
 
-                                            <a  class="btn btn-sm btn-default pull-right" name="{{name._id}}"
-                                             matchmechatdiv>
+                                            <a href="" class="btn btn-sm btn-default pull-right">
                                                 Chat
                                             </a>
                                         </span>
@@ -175,4 +169,4 @@
 
     </div>
 </div>
-<div  chatbar></div>
+<div   chatbar></div>

@@ -88,7 +88,7 @@
 		<div class="panel panel-default">
 			<div class="clearfix panel-heading">Friends({{user.friends.length}})</div>
                 <a ng-repeat="friend in friends" href="#/profile/{{friend._id}}">
-                   <img data-placement="top-right" style="width:65px"
+                    <img data-placement="top-right" style="width:65px"
                          data-content="{{friend.location.city}}, {{friend.location.state}}"
                          title="{{friend.name.first}} {{friend.name.last}}" data-trigger="hover" bs-popover src="{{friend.picture.thumbnail}}">
                 </a>
@@ -105,7 +105,11 @@
 					<a class="btn btn-sm btn-default"><i class="glyphicon glyphicon-map-marker"></i></a>
 				</div>
 				<div class="col-sm-2 pull-right">
-					<button ng-click="submit_post()" type="submit" class="btn btn-success btn-block btn-sm">Post</button>
+					<replacepostbutton>
+						<button ng-click="submit_post()" type="submit" class="btn btn-success btn-block btn-sm">
+							Post
+						</button>
+					</replacepostbutton>
 				</div>
 			</div>
 		</form>
@@ -140,4 +144,4 @@
 	</div>
 </div>
 
-<div  chatbar></div>
+<div chatbar></div>

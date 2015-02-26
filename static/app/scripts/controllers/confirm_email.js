@@ -18,12 +18,17 @@ angular.module('weberApp')
               console.log($scope.user.random_string);
 
               if(element == $scope.user.random_string){
+                if($scope.user.email_confirmed==true){
+                    $scope.user_email_confirmed = "your email is already activated"
+                }
+                else{
                     $scope.user.patch({
                         'email_confirmed':true
                     }).then(function(response){
                         console.log(response);
                         $location.path('/login');
-                    })
+                    });
+                }
 
               }
               else{
