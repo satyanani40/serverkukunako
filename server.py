@@ -33,13 +33,16 @@ class TokenAuth(TokenAuth):
 		return accounts.find_one({'token': token})
 
 
+
+
 app = Eve(__name__,static_url_path='/static')
 app.debug = True,
 
 
+
 app.config.update(
 	DEBUG=True,
-	#EMAIL SETTINGS
+    #EMAIL SETTINGS
 	MAIL_SERVER='smtp.gmail.com',
 	MAIL_PORT=465,
 	MAIL_USE_SSL=True,
@@ -424,7 +427,7 @@ def join_into_room(id):
 
 
 app.threaded=True
-socketio.run(app,host='127.0.0.1',port=8000)
+socketio.run(app, host='192.168.0.105', port=8000)
 
 # server sent events section
 """from redis import Redis
