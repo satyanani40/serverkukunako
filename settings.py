@@ -375,4 +375,4 @@ DOMAIN = {
     'people_searchActivity':people_searchActivity,
     'people_posts':people_posts,
     'messages':messages
-   }
+}

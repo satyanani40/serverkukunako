@@ -17,9 +17,6 @@ import urllib2, random
 from views import get_search
 from weberdb import WeberDB
 from flask.ext.socketio import SocketIO, emit, join_room, leave_room
-
-
-
 from flask import Flask
 from flask_mail import Mail, Message
 
