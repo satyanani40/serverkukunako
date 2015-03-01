@@ -16,14 +16,15 @@ angular.module('weberApp')
         controller:function ($scope, $auth, CurrentUser, $alert,
                              $location,$http,Restangular,ChatActivity,
                              SearchActivity,FriendsNotific,friendsActivity) {
-        var params = '{"username":1,"name":{"first":1,"last":1}}';
+
+        var params = '{"username":1,"email":1,"name":{"first":1,"last":1}}';
+
         var searchFriends = Restangular.all('people').getList({
-            projection : params
+            projection : params,
         });
 
         searchFriends.then(function(database_people){
             $scope.searchPeoples = database_people;
-            console.log($scope.searchPeoples)
         });
 
         $scope.searchP = function(){
@@ -33,7 +34,8 @@ angular.module('weberApp')
                     if(
                     (($scope.searchPeoples[i]).name.first+
                     ($scope.searchPeoples[i]).username+
-                    ($scope.searchPeoples[i]).name.last)
+                    ($scope.searchPeoples[i]).name.last+
+                    ($scope.searchPeoples[i].email))
                     .toString().search($scope.searchPeople) > -1
                     ){
                         $scope.filtered.push($scope.searchPeoples[i])

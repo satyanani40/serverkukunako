@@ -21,7 +21,11 @@ angular.module('weberApp')
 		            user_obj.get({ seed : Math.random() }).then(function(profileuser) {
 		                $scope.profileuser = profileuser;
                         $scope.currentuser = user;
-                        $scope.infinitePosts = new InfinitePosts(user_obj);
+
+                        var loadPostIds = []
+                        loadPostIds.push(profileuser._id)
+                        loadPostIds = "[\"" + loadPostIds.join("\",\"") + "\"]";
+                        $scope.infinitePosts = new InfinitePosts(user_obj, loadPostIds);
 
 			            if ( $scope.profileuser.friends.length !== 0) {
                             var params = '{"_id": {"$in":["'+($scope.profileuser.friends).join('", "') + '"'+']}}'

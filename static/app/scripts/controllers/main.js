@@ -19,7 +19,12 @@ angular.module('weberApp')
 		}).success(function(user_id) {
 			Restangular.one('people',JSON.parse(user_id)).get({seed:Math.random()}).then(function(user) {
 				$scope.user = user;
-				$scope.infinitePosts = new InfinitePosts(user);
+
+				var loadPostIds = angular.copy(user.friends)
+                loadPostIds.push(user._id)
+                loadPostIds = "[\"" + loadPostIds.join("\",\"") + "\"]";
+
+				$scope.infinitePosts = new InfinitePosts(user, loadPostIds);
 
                 if (user.friends.length !== 0) {
 
