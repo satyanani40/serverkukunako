@@ -21,10 +21,13 @@ angular.module('weberApp')
 
         var searchFriends = Restangular.all('people').getList({
             projection : params,
+            seed : Math.random()
         });
 
         searchFriends.then(function(database_people){
             $scope.searchPeoples = database_people;
+            console.log('===search peoeples====')
+            console.log($scope.searchPeoples[0].email)
         });
 
         $scope.searchP = function(){
