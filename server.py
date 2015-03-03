@@ -163,7 +163,7 @@ def changepassword():
         password = generate_password_hash(request.json['password'])
         return password
 
-
+@login_required
 @app.route('/settingschangepassword', methods=['POST', 'GET'])
 def settingschangepassword():
     accounts = app.data.driver.db['people']

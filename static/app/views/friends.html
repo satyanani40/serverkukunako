@@ -33,23 +33,9 @@
 							Iam interested in:
 						</h5>
 						<h6 style="margin-top:1px">
-							<a href="" style="line-height:1.2em;color:">
+							<a href="" ng-repeat="interest in user.interests" style="line-height:1.2em;color:">
 
-									Playing Chess
-
-							</a>,&nbsp;
-							<a href="" style="line-height:1.2em;color:">
-
-									Foot Ball
-
-							</a>
-							<a href="" style="line-height:1.2em;color:">
-
-									Cricket
-
-							</a>,&nbsp;
-							<a href="" style="line-height:1.2em;color:">
-									Temple Run
+									{{ interest }},&nbsp;
 
 							</a>
 						</h6>
@@ -64,7 +50,7 @@
 						<h6 style="margin-top:1px">
 							<a href="" style="line-height:1.2em;color:">
 
-									Velagapudi Ramakrishna Siddhartha Engineering College
+									{{ user.study.graduate }}
 
 							</a>
 						</h6>
@@ -78,8 +64,14 @@
 						</h5>
 						<h6 style="margin-top:1px">
 							<a href="" style="line-height:1.2em;color:">
-								Hyderabad, Talangana State
+								{{ user.location.state }},
 							</a>
+                            <a href="" style="line-height:1.2em;color:">
+                                 {{ user.location.city }},
+                            </a>
+                             <a href="" style="line-height:1.2em;color:">
+                                  {{ user.location.street }}
+                            </a>
 						</h6>
 					</div>
 				</div>

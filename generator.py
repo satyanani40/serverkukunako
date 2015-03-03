@@ -24,9 +24,13 @@ for raw_user in users:
     user['password_test']  = user['password']
     user['email_confirmed'] = True
     user['interests'] = []
+    user['study'] = {
+        'intermediate':"",
+        'graduate':""
+    }
+    user['movies'] = []
     user['notifications'] = []
     user['accept_notifications'] = []
-    user['interests'] = []
     user['password'] = generate_password_hash(user['password'])
     user['role'] = 'test'
     r = requests.post(url, data=json.dumps(user), headers=headers)

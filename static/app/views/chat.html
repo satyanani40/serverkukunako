@@ -66,69 +66,112 @@
         <div ng-repeat="previousdiv in previousdivs" class="col-md-3 colpadding chat_divs"
              style="right:{{ previousdiv.right}}px;height:{{ previousdiv.height}}"
              wb-affix="150">
-            <div class="well" style="border: 1px solid #C2C0C0;padding:0px;margin-bottom:0px;">
-                <div class="panel-heading" style="border-bottom:1px solid #dcdcdc;background-color:#c9dce4">
-                    <div class="row">
-                        <div class="col-sm-9">
-                            <a href="/#/profile/{{ previousdiv.id }}">
-                                {{ previousdiv.name }}
-                            </a>
 
-                            <label class="label label-danger" ng-if="checknotific(previousdiv.id)">new message</label>
-                        </div>
-                        <div class="col-sm-3">
-                            <span>
-                                <a ng-click="close_div('{{ previousdiv.id}}')"
-                                   class="pull-right" style="color:#888;cursor:pointer;">
-                                    <i class="fa fa-close"></i>
+
+            <div class="panel panel-primary" style="margin-bottom:0px;">
+					<div class="panel-heading">
+						<div class="row">
+                            <div class="col-sm-9">
+                                <a href="/#/profile/{{ previousdiv.id }}" style="color:#fff;">
+                                    {{ previousdiv.name }}
                                 </a>
-                                <div ng-if="previousdiv.maximize">
-                                    <a   ng-click="minimize('{{ previousdiv.id }}')"
-                                         class="" style="color:#888;cursor:pointer;">
-                                        <i class="fa fa-toggle-down"></i>
+
+                                <label class="label label-danger" ng-if="checknotific(previousdiv.id)">new message</label>
+                            </div>
+                            <div class="col-sm-3">
+                                <span>
+                                    <a ng-click="close_div('{{ previousdiv.id}}')"
+                                       class="pull-right" style="color:#888;cursor:pointer;">
+                                        <i class="fa fa-close" style="color:#fff;"></i>
                                     </a>
-                                </div>
-                                <div  ng-if="previousdiv.minimize">
-                                    <a  ng-click="maximize('{{ previousdiv.id }}')"
-                                        class="" style="color:#888;cursor:pointer;">
-                                        <i class="fa fa-toggle-up"></i>
-                                    </a>
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-body messages-scroll" style="height:230px;">
-                    <div class="row" ng-repeat="message in loadedMessages"
-                                 ng-if="message.sender._id == previousdiv.id || message.receiver._id == previousdiv.id">
-                        <div class="col-sm-3 colpadding" style="width:45px;">
-
-                        <img class="img-responsive user-photo" style="width:40px"
-                             src="{{ message.sender.picture.medium }}">
-
-                        </div><!-- /col-sm-1 -->
-
-                        <div class="col-sm-9 colpadding">
-                            <div class="panel panel-default">
-                                <div class="panel-body" style="border-bottom:none !important;">
-                                <span class="text-muted">
-                                    {{ message.message }}
+                                    <div ng-if="previousdiv.maximize">
+                                        <a   ng-click="minimize('{{ previousdiv.id }}')"
+                                             class="" style="color:#888;cursor:pointer;">
+                                            <i class="fa fa-toggle-down" style="color:#fff;"></i>
+                                        </a>
+                                    </div>
+                                    <div  ng-if="previousdiv.minimize">
+                                        <a  ng-click="maximize('{{ previousdiv.id }}')"
+                                            class="" style="color:#888;cursor:pointer;">
+                                            <i class="fa fa-toggle-up" style="color:#fff;"></i>
+                                        </a>
+                                    </div>
                                 </span>
                             </div>
-                            </div><!-- /panel panel-default -->
-                        </div><!-- /col-sm-5 -->
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    <div class="input-group">
-                        <input id="send_{{ previousdiv.id }}" type="text" class="form-control input-sm" placeholder="Type your message here..." />
-                        <span class="input-group-btn">
-                            <button class="btn btn-normal btn-sm" id="btn-chat" ng-click="send_message('{{ previousdiv.id }}')">
-                                Send</button>
-                        </span>
-                    </div>
-                </div>
-            </div>
+                        </div>
+					</div>
+					<div class="panel-collapse" id="collapseOne">
+						<div class="panel-body messages-scroll" style="height:320px;">
+							<ul class="chat">
+								<li class="left clearfix">
+                                    <span class="chat-img pull-left">
+                                        <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                                    </span>
+									<div class="chat-body clearfix">
+										<div class="header">
+											<strong class="primary-font">Jack Sparrow</strong>  <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
+										</div>
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+										</p>
+									</div>
+								</li>
+								<li class="right clearfix">
+                                    <span class="chat-img pull-right">
+                                        <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+                                    </span>
+									<div class="chat-body clearfix">
+										<div class="header">
+											<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>13 mins ago</small>
+											<strong class="pull-right primary-font">Bhaumik Patel</strong>
+										</div>
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+										</p>
+									</div>
+								</li>
+								<li class="left clearfix">
+                                    <span class="chat-img pull-left">
+                                        <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                                    </span>
+									<div class="chat-body clearfix">
+										<div class="header">
+											<strong class="primary-font">Jack Sparrow</strong>  <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>14 mins ago</small>
+										</div>
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+										</p>
+									</div>
+								</li>
+								<li class="right clearfix">
+                                    <span class="chat-img pull-right">
+                                        <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+                                    </span>
+									<div class="chat-body clearfix">
+										<div class="header">
+											<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>15 mins ago</small>
+											<strong class="pull-right primary-font">Bhaumik Patel</strong>
+										</div>
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+										</p>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="panel-footer" style="padding:10px 15px;">
+							<div class="row">
+                                <div class="col-sm-12">
+                                    <input id="btn-input" type="text" class="form-control input-sm"
+                                           placeholder="Type your message here..." />
+                                </div>
+                            </div>
+						</div>
+					</div>
+				</div>
+
         </div>
 
 

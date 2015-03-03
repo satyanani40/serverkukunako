@@ -46,9 +46,68 @@
 
 			</div>
 		</div>
-		<div class="list-group">
-			<a href="#" ng-repeat="interest in profileuser.interests" class="list-group-item am-slide-top">{{interest}}</a>
-			<a href="#" class="list-group-item"><span class="badge badge-primary">38</span>Morbi leo risus</a>
+        <div class="panel panel-default">
+			<div class="panel-heading">
+				<h5 style="margin:1px 0px 1px 0px">
+					About
+					<a href="" class="pull-right">
+						<h6 style="margin-top:0px">
+							See all
+						</h6>
+					</a>
+				</h5>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-12">
+						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80" class="about-edit">
+							<i class="glyphicon glyphicon-check" style="opacity:0.65"></i>&nbsp;
+							Iam interested in:
+						</h5>
+						<h6 style="margin-top:1px">
+							<a href="" ng-repeat="interest in friend.interests" style="line-height:1.2em;color:">
+
+									{{ interest }},&nbsp;
+
+							</a>
+						</h6>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80">
+							<i class="glyphicon glyphicon-folder-open" style="opacity:0.65"></i>&nbsp;
+							Studied at:
+						</h5>
+						<h6 style="margin-top:1px">
+							<a href="" style="line-height:1.2em;color:">
+
+									{{ friend.study.graduate }}
+
+							</a>
+						</h6>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80">
+							<i class="glyphicon glyphicon-home" style="opacity:0.65"></i>&nbsp;
+							Lives in:
+						</h5>
+						<h6 style="margin-top:1px">
+							<a href="" style="line-height:1.2em;color:">
+								{{ friend.location.state }},
+							</a>
+                            <a href="" style="line-height:1.2em;color:">
+                                 {{ friend.location.city }},
+                            </a>
+                             <a href="" style="line-height:1.2em;color:">
+                                  {{ friend.location.street }}
+                            </a>
+						</h6>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="panel panel-default">
 			<div class="clearfix panel-heading">Friends({{profileuser.friends.length}})</div>

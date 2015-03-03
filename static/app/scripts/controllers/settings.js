@@ -21,27 +21,6 @@ angular.module('weberApp')
 
             });
 
-            $scope.updateUsername = function() {
-                $scope.user.patch({
-                    'username':$scope.u_username
-                }).then(function(response){
-                    $route.reload();
-                })
-			};
-
-			$scope.updateFirstLastName = function() {
-
-                $scope.user.patch({
-                    'name':{
-                        'first':$scope.edit_first_name,
-                        'last':$scope.edit_last_name
-                    }
-                }).then(function(response){
-                    $route.reload();
-                })
-			};
-
-
 			$scope.uploadFile = function(){
 				var file = $scope.myFile;
 				console.log('file is ' + JSON.stringify(file));
@@ -49,39 +28,73 @@ angular.module('weberApp')
 				fileUpload.uploadFileToUrl(file, uploadUrl,$scope.user);
                 $route.reload();
 			};
-
-			$scope.updateEmail = function() {
-                $scope.user.patch({
-                    'email':$scope.u_email
-                }).then(function(response){
-                    $route.reload();
-                });
-			};
-
-			$scope.updatePassword = function() {
-                $scope.user.patch({
-                    'password_test':$scope.u_password
-                }).then(function(response){
-                    $route.reload();
-                });
-			};
-
-            $scope.updateInterests = function() {
-                var data = ($scope.interests.toString()).split(",");
-
-                for(var k in data){
-                    $scope.user.interests.push(data[k]);
-                }
-
-                $scope.user.patch({
-                    'interests':$scope.user.interests
-                }).then(function(response){
-                    $route.reload();
-                });
-			};
-
 		});
 	})
+	.directive('settingschangeusername', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
+        return {
+            restrict: 'E',
+            replace: true,
+            link: function (scope, element, attrs) {
+                console.log("=====call settingschangeusername======")
+            },
+            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+
+                $scope.updateUsername = function(){
+                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
+                    $element.html(html);
+                    $compile($element.contents())($scope);
+
+                    $scope.user.patch({
+                        'username':$scope.u_username
+                    }).then(function(response){
+
+                        console.log("===after patch=====");
+                        console.log(response);
+                        html = '<h6><b>your username has been updated</b></h6>'
+                        var e =$compile(html)($scope);
+                        $element.replaceWith(e);
+
+                    });
+
+
+                }
+            }
+        };
+    })
+    .directive('settingschangefirstlastname', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
+        return {
+            restrict: 'E',
+            replace: true,
+            link: function (scope, element, attrs) {
+                console.log("=====call settingschangeusername======")
+            },
+            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+
+                $scope.updateFirstLastName = function(){
+                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
+                    $element.html(html);
+                    $compile($element.contents())($scope);
+
+                    $scope.user.patch({
+                        'name':{
+                            'first':$scope.edit_first_name,
+                            'last':$scope.edit_last_name
+                        }
+                    }).then(function(response){
+
+                        console.log("===after patch=====");
+                        console.log(response);
+                        html = '<h6><b>your first and last name has been updated</b></h6>'
+                        var e =$compile(html)($scope);
+                        $element.replaceWith(e);
+
+                    });
+
+
+                }
+            }
+        };
+    })
 	.directive('settingschangepassword', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
         return {
             restrict: 'E',
@@ -145,6 +158,180 @@ angular.module('weberApp')
 
                             });
                         });
+
+
+                }
+            }
+        };
+    })
+    .directive('settingschangeinterests', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
+        return {
+            restrict: 'E',
+            replace: true,
+            link: function (scope, element, attrs) {
+                console.log("=====call settingschangepassword======")
+            },
+            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+
+                $scope.updateInterests = function(){
+                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
+                    $element.html(html);
+                    $compile($element.contents())($scope);
+
+                    var data = ($scope.interests.toString()).split(",");
+
+                    for(var k in data){
+                        $scope.user.interests.push(data[k]);
+                    }
+
+                    $scope.user.patch({
+                        'interests':$scope.user.interests
+                    }).then(function(response){
+
+                        console.log("===after patch=====");
+                        console.log(response);
+                        html = '<h6><b>your interests has been updated</b></h6>'
+                        var e =$compile(html)($scope);
+                        $element.replaceWith(e);
+
+                    });
+
+
+                }
+            }
+        };
+    })
+    .directive('settingschangelocation', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
+        return {
+            restrict: 'E',
+            replace: true,
+            link: function (scope, element, attrs) {
+                console.log("=====call settingschangelocation======")
+            },
+            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+
+                $scope.updatechangelocation = function(){
+                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
+                    $element.html(html);
+                    $compile($element.contents())($scope);
+
+                    $scope.user.patch({
+                        'location':{
+                            'state':$scope.location_state,
+                            'city':$scope.location_city,
+                            'street':$scope.location_street
+                        }
+                    }).then(function(response){
+
+                        console.log("===after patch=====");
+                        console.log(response);
+                        html = '<h6><b>your Location has been updated</b></h6>'
+                        var e =$compile(html)($scope);
+                        $element.replaceWith(e);
+
+                    });
+
+
+                }
+            }
+        };
+    })
+    .directive('settingschangestudy', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
+        return {
+            restrict: 'E',
+            replace: true,
+            link: function (scope, element, attrs) {
+                console.log("=====call settingschangestudy======")
+            },
+            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+
+                $scope.updatechangestudy = function(){
+                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
+                    $element.html(html);
+                    $compile($element.contents())($scope);
+
+                    $scope.user.patch({
+                        'study':{
+                            'intermediate':$scope.study_intermediate,
+                            'graduate':$scope.study_graduate
+                        }
+                    }).then(function(response){
+
+                        console.log("===after patch=====");
+                        console.log(response);
+                        html = '<h6><b>your Study details has been updated</b></h6>'
+                        var e =$compile(html)($scope);
+                        $element.replaceWith(e);
+
+                    });
+
+
+                }
+            }
+        };
+    })
+    .directive('settingschangephone', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
+        return {
+            restrict: 'E',
+            replace: true,
+            link: function (scope, element, attrs) {
+                console.log("=====call settingschangephone======")
+            },
+            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+
+                $scope.updatechangephone = function(){
+                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
+                    $element.html(html);
+                    $compile($element.contents())($scope);
+
+                    $scope.user.patch({
+                        'phone':$scope.phone_number
+                    }).then(function(response){
+
+                        console.log("===after patch=====");
+                        console.log(response);
+                        html = '<h6><b>your Phone number has been updated</b></h6>'
+                        var e =$compile(html)($scope);
+                        $element.replaceWith(e);
+
+                    });
+
+
+                }
+            }
+        };
+    })
+    .directive('settingschangemovies', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
+        return {
+            restrict: 'E',
+            replace: true,
+            link: function (scope, element, attrs) {
+                console.log("=====call settingschangemoovies======")
+            },
+            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+
+                $scope.updatechangemovies = function(){
+                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
+                    $element.html(html);
+                    $compile($element.contents())($scope);
+
+                    var data = ($scope.movies.toString()).split(",");
+
+                    for(var k in data){
+                        $scope.user.movies.push(data[k]);
+                    }
+
+                    $scope.user.patch({
+                        'movies':$scope.user.movies
+                    }).then(function(response){
+
+                        console.log("===after patch=====");
+                        console.log(response);
+                        html = '<h6><b>your Movies has been updated</b></h6>'
+                        var e =$compile(html)($scope);
+                        $element.replaceWith(e);
+
+                    });
 
 
                 }

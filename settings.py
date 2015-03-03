@@ -257,6 +257,12 @@ people = {
                 'type': 'string',
             }
         },
+        'movies':{
+            'type':'list',
+            'schema': {
+                'type': 'string',
+            }
+        },
 
         'study':{
             'type': 'dict',

@@ -135,10 +135,10 @@ angular.module('weberApp')
                         function display_divs(){
                            previous_divs = getData();
                            console.log(getData())
-                           var count = 300;
+                           var count = 270;
                            for(k in previous_divs){
                                 previous_divs[k].right = count;
-                                count = count+300;
+                                count = count+315;
                                 socket.emit('connect', {data: previous_divs[k].id});
                            }
 
