@@ -19,7 +19,12 @@ angular.module('weberApp')
 		}).success(function(user_id) {
 			Restangular.one('people',JSON.parse(user_id)).get({seed:Math.random()}).then(function(user) {
 				$scope.user = user;
-				$scope.infinitePosts = new InfinitePosts(user);
+
+				var loadPostIds = angular.copy(user.friends)
+                loadPostIds.push(user._id)
+                loadPostIds = "[\"" + loadPostIds.join("\",\"") + "\"]";
+
+				$scope.infinitePosts = new InfinitePosts(user, loadPostIds);
 
                 if (user.friends.length !== 0) {
 
@@ -48,24 +53,25 @@ angular.module('weberApp')
             		var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
                     $element.html(html);
                     $compile($element.contents())($scope);
+                    if($scope.new_post){
+                        $http({
+                            url: '/similarwords',
+                            method: "GET",
+                            params: {new_post: $scope.new_post}
+                        })
+                        .success(function(similarwords) {
 
-					$http({
-						url: '/similarwords',
-						method: "GET",
-						params: {new_post: $scope.new_post}
-					})
-					.success(function(similarwords) {
+                            $scope.infinitePosts.addPost($scope.new_post,similarwords);
+                            $scope.new_post = '';
 
-						$scope.infinitePosts.addPost($scope.new_post,similarwords);
-						$scope.new_post = '';
-						
-						console.log("======after submit response=======")
+                            console.log("======after submit response=======")
 
-						html = '<button ng-click="submit_post()" type="submit" class="btn btn-success btn-block btn-sm">Post</button>'
-						var e =$compile(html)($scope);
-						$element.replaceWith(e);
+                            html = '<button ng-click="submit_post()" type="submit" class="btn btn-success btn-block btn-sm">Post</button>'
+                            var e =$compile(html)($scope);
+                            $element.replaceWith(e);
 
-					});
+                        });
+                    }
 				};
             }
         };

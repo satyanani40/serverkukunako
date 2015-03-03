@@ -10,7 +10,8 @@ MONGO_DBNAME = 'test'
 
 
 URL_PREFIX = 'api'
-
+ELASTICSEARCH_URL = 'http://127.0.0.1:8000'
+ELASTICSEARCH_INDEX = 'elasticindex'
 
 TOKEN_SECRET = os.environ.get('SECRET_KEY') or 'JWT Token Secret String'
 
@@ -143,6 +144,10 @@ message_schema = {
             'type':'boolean',
             'default':False
         },
+        'timestamp':{
+            'type':'integer',
+            'default': 0
+        },
         'messaged_on':{
             'type':'datetime'
         }
@@ -206,6 +211,9 @@ people = {
         },
 	      'password_test': {
             'type': 'string'
+        },
+        'lastmessageseen': {
+            'type': 'datetime'
         },
         'role': {
             'type': 'string',
@@ -352,13 +360,32 @@ people_posts = {
     'datasource': {"source": "posts"}
 }
 
+
+items = {
+        'schema': {
+            'uri': {'type': 'string', 'unique': True},
+            'name': {'type': 'string'},
+            'firstcreated': {'type': 'datetime'},
+            'category': {
+                'type': 'string',
+                'mapping': {'type': 'string', 'index': 'not_analyzed'}
+            },
+        },
+        'datasource': {
+            'backend': 'elastic',
+            'projection': {'firstcreated': 1, 'name': 1},
+            'default_sort': [('firstcreated', -1)]
+        }
+}
+
 # The DOMAIN dict explains which resources will be available and how they will
 # be accessible to the API consumer.
 DOMAIN = {
+    'items':items,
     'people': people,
     'posts': posts,
     'searchActivity': searchActivity,
     'people_searchActivity':people_searchActivity,
     'people_posts':people_posts,
     'messages':messages
-   }
+}

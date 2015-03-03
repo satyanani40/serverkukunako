@@ -18,8 +18,13 @@ angular.module('weberApp')
                         this.user = user;
                         $scope.chatdivnotification = [];
 
-                         $scope.chatactivity = new ChatActivity(user);
-                        //namespace = 'chat';
+                        $scope.chatactivity = new ChatActivity(user);
+
+                        $scope.loadLatestMessages = function(){
+                            console.log('load message')
+                            $scope.chatactivity.loadLatestMessages();
+                        }
+
                          if(user.friends.length !== 0){
                             $scope.chatactivity.getChatFriends().then(function(data){
                                 $scope.chatusers = data;
@@ -179,8 +184,8 @@ angular.module('weberApp')
                                  socket.emit('connect', {data: kwargs.id});
 
                                  if(json.maximize){
-                                    $scope.chatactivity.loadMessages(user._id,kwargs.id);
-                                    $scope.loadedMessages =  $scope.chatactivity.messages;
+                                   $scope.chatactivity.loadMessages(user._id,kwargs.id);
+                                    $scope.loadedMessages = $scope.chatactivity.messages;
                                  }
                                 });
                              }else{
@@ -200,6 +205,10 @@ angular.module('weberApp')
                           display_divs();
                         }
 
+                         $scope.MessageNotifcations = function(){
+                           $scope.chatactivity.getMessageNotifcations();
+                         }
+
                         $scope.minimize = function(id){
                             var name = JSON.parse($window.sessionStorage.getItem(id)).name
                             $window.sessionStorage.removeItem(id);
@@ -214,19 +223,10 @@ angular.module('weberApp')
                                                             minimize:false,maximize:true});
                         }
 
-                        $scope.MessageNotifcations = function(){
-                            $scope.chatactivity.getMessageNotifcations();
-                            console.log('notifications sections')
-                            console.log($scope.chatactivity)
-                        }
-
-                        $scope.loadLatestMessages = function(){
-                            $scope.chatactivity.loadLatestMessages();
-                            console.log('message sections')
-                            console.log($scope.chatactivity)
-                        }
 
                         $scope.makeMessagesSeen = function(senderid){
+                            console.log('make message seen')
+                            console.log(senderid)
                             $scope.chatactivity.makeMessagesSeen(senderid);
                         }
 
@@ -245,9 +245,6 @@ angular.module('weberApp')
                             display_divs();
                             loadintodivs();
                             $scope.MessageNotifcations();
-
-
-
                     });
             });
 
@@ -261,7 +258,7 @@ angular.module('weberApp')
              scope.newchatdiv({id:element[0].name, height:'auto',
                                minimize:false, maximize:true,
                               });
-		     scope.makeMessagesSeen(element[0].id);
+		     scope.makeMessagesSeen(element[0].name);
              scope.$apply()
 
 		});
@@ -273,7 +270,7 @@ angular.module('weberApp')
              scope.newchatdiv({id:element[0].name, height:'auto',
                                minimize:false, maximize:true,
                               });
-             scope.makeMessagesSeen(element[0].id);
+             scope.makeMessagesSeen(element[0].name);
              scope.$apply()
 		});
 	};

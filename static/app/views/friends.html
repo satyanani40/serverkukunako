@@ -1,4 +1,5 @@
 <div navbar></div>
+
 <div class="container">
     <div class="col-md-3" wb-affix="150">
 		<div class="thumbnail">
@@ -106,13 +107,13 @@
                            <div class="right-inner-addon">
                                 <i class="fa fa-search" style="opacity:0.70"></i>
                                 <input type="search" class="form-control input-sm"
-                                       placeholder="Search Friends" />
+                                       placeholder="Search Friends" ng-model="searchFriend"/>
                            </div>
                        </div>
                    </div>
                </div>
                <div class="panel-body">
-                   <div ng-repeat="friend in friends" class="row pad-top">
+                   <div ng-repeat=" friend in data = (friends |  filter : searchFriend )" class="row pad-top" >
                         <div class="jumbotron"
                              style="padding:5px 10px;background-color:#fff;margin-bottom:10px;">
                             <div class="row" style="">
@@ -122,20 +123,25 @@
                                 </div>
                                 <div class="col-sm-6 colpadding">
                                     <h5>
-                                        <a href="">
+                                        <a href="#/profile/{{ friend._id }}">
                                             {{ friend.name.first }} {{ friend.name.last }}
                                         </a>
                                     </h5>
                                 </div>
                                 <div class="col-sm-3">
-                                    <a href="" style="margin-top:15px"
-                                       class="btn btn-default btn-sm pull-right">
+                                    <!--<a matchmeunfriend  style="margin-top:15px"
+                                       class="btn btn-default btn-sm pull-right" ng-click="matchmeunfriend('{{ friend._id }}')">
                                         Unfriend
-                                    </a>
+                                    </a>-->
+                                    <unaddfriend>
+                        	            <button ng-click="friendunfriend('{{ friend._id }}')" class="btn btn-primary">unfriend</button>
+						            </unaddfriend>
                                 </div>
                             </div>
                         </div>
+
                    </div>
+                   <div ng-if="data.length == 0">no data found</div>
                </div>
            </div>
         </div>

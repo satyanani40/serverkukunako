@@ -13,87 +13,95 @@ angular.module('weberApp')
         restrict: 'A', //This menas that it will be used as an attribute and NOT as an element. I don't like creating custom HTML elements
         replace: true,
         templateUrl: "/static/app/views/navbar.html",
-        controller:function ($scope, $auth, CurrentUser, $alert,
+        controller:function ($scope, $auth, CurrentUser, $alert,$rootScope,
                              $location,$http,Restangular,ChatActivity,
                              SearchActivity,FriendsNotific,friendsActivity) {
 
-               //this is the testing part of the search bar in navbar
+        var params = '{"username":1,"email":1,"name":{"first":1,"last":1}}';
 
-           /* var searchFriends = Restangular.all('people').getList();
+        var searchFriends = Restangular.all('people').getList({
+            projection : params,
+            seed : Math.random()
+        });
 
-            searchFriends.then(function(database_friends){
+        searchFriends.then(function(database_people){
+            $scope.searchPeoples = database_people;
+            console.log('===search peoeples====')
+            console.log($scope.searchPeoples[0].email)
+        });
 
-                $scope.friends1 = database_friends;
+        $scope.searchP = function(){
+            $scope.filtered = []
+            if($scope.searchPeoples && $scope.searchPeople){
+                for(var i = 0 ; i < $scope.searchPeoples.length; i++){
+                    if(
+                    (($scope.searchPeoples[i]).name.first+
+                    ($scope.searchPeoples[i]).username+
+                    ($scope.searchPeoples[i]).name.last+
+                    ($scope.searchPeoples[i].email))
+                    .toString().search($scope.searchPeople) > -1
+                    ){
+                        $scope.filtered.push($scope.searchPeoples[i])
+                    }
+                }
+            }
+        }
 
-            });*/
+          $scope.menuOpened = false;
+          $scope.messageOpened = false;
 
-
-
-              $scope.filterFunction = function(element) {
-                return element.name.match(/^Ma/) ? true : false;
-              };
-
-
-              $scope.menuOpened = false;
-              $scope.messageOpened = false;
-
-              $scope.messageMenu = function(event) {
-
-
-                $scope.messageOpened = !($scope.messageOpened);
-                event.stopPropagation();
-
-              };
-
-
-              $scope.toggleMenu = function(event) {
-                  $scope.menuOpened = !($scope.menuOpened);
-
-              // Important part in the implementation
-              // Stopping event propagation means window.onclick won't get called when someone clicks
-              // on the menu div. Without this, menu will be hidden immediately
-                  event.stopPropagation();
-              };
-
-              window.onclick = function() {
-                  if ($scope.menuOpened) {
-                      $scope.menuOpened = false;
-
-                // You should let angular know about the update that you have made, so that it can refresh the UI
-                      $scope.$apply();
-                  }
-
-                  if ($scope.messageOpened) {
-                      $scope.messageOpened = false;
-
-                // You should let angular know about the update that you have made, so that it can refresh the UI
-                      $scope.$apply();
-                  }
-
-              };
-            //####################ending part of testing part###########
+          $scope.messageMenu = function(event) {
 
 
+            $scope.messageOpened = !($scope.messageOpened);
+            event.stopPropagation();
+
+          };
 
 
+          $scope.toggleMenu = function(event) {
+              $scope.menuOpened = !($scope.menuOpened);
 
- 			$scope.dropdown = [{
-				"text": "Settings",
-				"href": "#/settings"
-			},{
-				"text": "Logout",
-				"click": "logout()"
-			}];
+          // Important part in the implementation
+          // Stopping event propagation means window.onclick won't get called when someone clicks
+          // on the menu div. Without this, menu will be hidden immediately
+              event.stopPropagation();
+          };
 
-			$scope.logout = function() {
-				//CurrentUser.reset();
-				$auth.logout();
-				$location.path("/login");
-			};
+          window.onclick = function() {
+              if ($scope.menuOpened) {
+                  $scope.menuOpened = false;
 
-			$scope.isAuthenticated = function() {
-				return $auth.isAuthenticated();
-			};
+            // You should let angular know about the update that you have made, so that it can refresh the UI
+                  $scope.$apply();
+              }
+
+              if ($scope.messageOpened) {
+                  $scope.messageOpened = false;
+
+            // You should let angular know about the update that you have made, so that it can refresh the UI
+                  $scope.$apply();
+              }
+
+          };
+
+        $scope.dropdown = [{
+            "text": "Settings",
+            "href": "#/settings"
+        },{
+            "text": "Logout",
+            "click": "logout()"
+        }];
+
+        $scope.logout = function() {
+            //CurrentUser.reset();
+            $auth.logout();
+            $location.path("/login");
+        };
+
+        $scope.isAuthenticated = function() {
+            return $auth.isAuthenticated();
+        };
 
 
 			$http.get('/api/me', {
@@ -106,7 +114,25 @@ angular.module('weberApp')
 				Restangular.one('people',JSON.parse(user_id)).get({seed: Math.random()}).then(function(user) {
 				$scope.currentUser = user;
 
-				//$scope.searchActivity = new SearchActivity(user);
+                console.log('========datetime==========')
+                var today = new Date()
+                console.log(today)
+                 var anotherDate = new Date("Mon, 02 Mar 2000 10:38:01")
+                console.log(anotherDate)
+                anotherDate.setDate(anotherDate.getDate() + 5);
+                console.log(anotherDate)
+
+                if(today > anotherDate){
+                    console.log('createdfirst')
+                }else{
+                    console.log('created last')
+
+                }
+                // chat activity
+
+
+
+
 
 				var requested_peoples = [];
 				var accepted_peoples = [];
@@ -116,7 +142,6 @@ angular.module('weberApp')
 					notific.then(function(data){
 
 							accepted_peoples = [];
-
 							var currentuser = data
 							var k = null;
 							for (k in currentuser.notifications){

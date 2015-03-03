@@ -84,14 +84,25 @@ angular.module('weberApp')
 		});
 	})
 	.factory('InfinitePosts', function($http, Restangular, $alert, $timeout) {
-		var InfinitePosts = function(user_obj) {
+		var InfinitePosts = function(user_obj,authorIds) {
 			this.posts = [];
 			this.user_obj = user_obj;
 			this.busy = false;
 			this.page = 1;
+			this.loadPostIds = authorIds;
 			this.end = false;
+            this.params = '{"author": {"$in":'+this.loadPostIds+'}}';
 
-			this.user_obj.all('posts').getList({
+			/*Restangular.all('posts').getList({
+                where: params
+			}).then(function(data){
+			    console.log('=========getting================')
+			    console.log(data);
+			});*/
+
+
+			Restangular.all('posts').getList({
+			    where : this.params,
 				max_results: 10,
 				page: this.page,
 				sort: '[("_created",-1)]'
@@ -135,7 +146,8 @@ angular.module('weberApp')
 			if (this.busy | this.end) return;
 			this.busy = true;
 
-			this.user_obj.all('posts').getList({
+			Restangular.all('posts').getList({
+			    where : this.params,
 				max_results: 10,
 				page: this.page,
 				sort: '[("_created",-1)]'
