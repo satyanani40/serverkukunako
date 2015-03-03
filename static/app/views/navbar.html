@@ -8,6 +8,7 @@
                 </a>
             </div>
             <div class="navbar-collapse collapse">
+
                 <div class="col-sm-6">
                     <form role="form" style="margin-top: 8px;">
                         <div class="row">
@@ -24,10 +25,11 @@
                     </form>
 
                 </div>
+
                 <div ng-repeat="temp in filtered">
                     <a href="#/profile/{{ temp._id }}">{{ temp.name.first }}</a>
-
                 </div>
+
                 <ul class="nav navbar-nav pull-right" ng-if="!isAuthenticated()">
                     <li data-match-route="/login"><a href="#/login">Login</a>
                     </li>
@@ -38,14 +40,14 @@
                     <li><a href="#/matchme">Match Me</a></li>
                     <li><a href="#/friends">Friends</a></li>
                     <li>
-                        <a ng-click="messageMenu($event)" style="cursor:pointer">
+                        <a ng-click="messageMenu($event);loadLatestMessages()" style="cursor:pointer">
                             <i class="glyphicon glyphicon-envelope" style="font-size:17px;opacity:0.70;">
 
                             </i>
 
-                                <label class="label label-danger" ng-if="newnotific"
+                                <label class="label label-danger" ng-if="chatactivity.messageNotifc.length"
                                        style="position:absolute;font-size:10px;top: 5px;right: 0px;">
-                                        {{ newnotific }}
+                                        {{ chatactivity.messageNotifc.length }}
                                 </label>
 
                         </a>
@@ -54,18 +56,21 @@
                              ng-show="messageOpened" style="position:absolute;width:450px;right:0px;">
                             <div class="panel-body" style="padding:0px;">
                                 <div class="" style="margin-bottom:0px;"
-                                       ng-repeat="friend in friends | filter:query | orderBy: 'name.first' | limitTo : 5 ">
-                                    <a style="" href="/#/profile/{{ friend._id }}"
+                                       ng-repeat="message in chatactivity.latestMessages  | limitTo : 5 ">
+                                    <a style="" href="/#/profile/{{message.sender._id }}"
                                        class="list-group-item search_a">
                                         <div class="row">
                                             <div class="col-sm-1">
-                                                <img src="{{ friend.picture.large }}"
+                                                <img src="{{ message.sender.picture.large }}"
                                                      style="width:40px">
                                             </div>
                                             <div class="col-sm-8">
                                                 <h5 style="opacity:0.75;">
-                                                    {{friend.name.first}} {{ friend.name.last }}
+                                                    {{ message.sender.name.first }} {{ message.sender.name.last }}
                                                 </h5>
+                                            </div>
+                                            <div>
+                                                {{ message.message }}
                                             </div>
                                         </div>
                                     </a>

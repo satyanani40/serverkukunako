@@ -22,23 +22,15 @@ angular.module('weberApp')
         };
 
         ChatActivity.prototype.sendMessage = function(receiverid, text){
-            var currentdate = new Date();
+
             this.receiverid = receiverid;
-
-            /*var datetime = "Last Sync: " + currentdate.getDate() + "/"
-                + (currentdate.getMonth()+1)  + "/"
-                + currentdate.getFullYear() + " @ "
-                + currentdate.getHours() + ":"
-                + currentdate.getMinutes() + ":"
-                + currentdate.getSeconds();*/
-
-            return Restangular.all('messages').post({
+            return Restangular.all('chat/sendmessage').post({
                 'sender':this.currentuser._id,
                 'receiver': this.receiverid,
                 'message': text,
                 'seen': false
-
-
+            }).then(function(data){
+                console.log(data)
             });
         }
 
@@ -127,6 +119,13 @@ angular.module('weberApp')
         ChatActivity.prototype.loadLatestMessages = function(){
             this.latestMessages = [];
             this.messageNotifc = [];
+
+            var params = '{ "$or" : ['+
+                            '{ "$and" : [ { "receiver" : "'+this.currentuser._id+'" }, { "seen" : '+false+' } ] },'+
+                            '{ "$and" : [ { "receiver" : "'+this.currentuser._id+'" }, { "timestamp":{"$gt": '+1425322669+' }}] }'+
+                        ']}';
+
+            console.log(params)
             var where_param = '{"receiver":"'+this.currentuser._id+'"}';
             var sort_param = '[("_created",-1)]';
             var embedded_param = '{"sender":1,"receiver":1}';
@@ -140,14 +139,19 @@ angular.module('weberApp')
                 seed:Math.random()
             }).then(function(data){
                 self.latestMessages.push.apply(self.latestMessages, data);
-            }.bind(self))
+
+
+           }.bind(self))
         }
+
 
         ChatActivity.prototype.makeMessagesSeen = function(senderid){
             var self = this;
             for(k in self.latestMessages){
+                console.log('==========latest messages======')
+                console.log(self.latestMessages[k])
                 if(self.latestMessages[k].sender._id == senderid  &&
-                   self.latestMessages[k].receiver._id == this.currentuser._id &&
+                   self.latestMessages[k].receiver._id == self.currentuser._id &&
                    self.latestMessages[k].seen == false
                    ){
                     console.log('-------------recevied message-----------')
@@ -156,7 +160,7 @@ angular.module('weberApp')
                         {seen:true},{},
                         {
                             'Content-Type': 'application/json',
-                            'If-Match': this.latestMessages[k]._etag,
+                            'If-Match': self.latestMessages[k]._etag,
                             'Authorization': $auth.getToken()
                         }
 				    );

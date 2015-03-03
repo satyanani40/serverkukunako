@@ -13,7 +13,7 @@ angular.module('weberApp')
         restrict: 'A', //This menas that it will be used as an attribute and NOT as an element. I don't like creating custom HTML elements
         replace: true,
         templateUrl: "/static/app/views/navbar.html",
-        controller:function ($scope, $auth, CurrentUser, $alert,
+        controller:function ($scope, $auth, CurrentUser, $alert,$rootScope,
                              $location,$http,Restangular,ChatActivity,
                              SearchActivity,FriendsNotific,friendsActivity) {
 
@@ -114,7 +114,25 @@ angular.module('weberApp')
 				Restangular.one('people',JSON.parse(user_id)).get({seed: Math.random()}).then(function(user) {
 				$scope.currentUser = user;
 
-				//$scope.searchActivity = new SearchActivity(user);
+                console.log('========datetime==========')
+                var today = new Date()
+                console.log(today)
+                 var anotherDate = new Date("Mon, 02 Mar 2000 10:38:01")
+                console.log(anotherDate)
+                anotherDate.setDate(anotherDate.getDate() + 5);
+                console.log(anotherDate)
+
+                if(today > anotherDate){
+                    console.log('createdfirst')
+                }else{
+                    console.log('created last')
+
+                }
+                // chat activity
+
+
+
+
 
 				var requested_peoples = [];
 				var accepted_peoples = [];
@@ -124,7 +142,6 @@ angular.module('weberApp')
 					notific.then(function(data){
 
 							accepted_peoples = [];
-
 							var currentuser = data
 							var k = null;
 							for (k in currentuser.notifications){

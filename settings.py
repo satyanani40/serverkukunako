@@ -144,6 +144,10 @@ message_schema = {
             'type':'boolean',
             'default':False
         },
+        'timestamp':{
+            'type':'integer',
+            'default': 0
+        },
         'messaged_on':{
             'type':'datetime'
         }
@@ -207,6 +211,9 @@ people = {
         },
 	      'password_test': {
             'type': 'string'
+        },
+        'lastmessageseen': {
+            'type': 'datetime'
         },
         'role': {
             'type': 'string',

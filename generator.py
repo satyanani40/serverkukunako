@@ -1,14 +1,19 @@
 import json, requests, urllib2, random
 from werkzeug.security import generate_password_hash
 from loremipsum import generate_paragraph
+import datetime
+import dateutil.parser
+from bson import json_util
+import json
 
 print '---------------------------------fetching users-----------------------'
-url = 'http://192.168.0.104:8000/api/people'
+url = 'http://127.0.0.1:8000/api/people'
 randomuser = urllib2.urlopen('http://api.randomuser.me/?results=10')
 results = json.loads(randomuser.read())
 users=results['results']
 processed_users = []
 headers = {'content-type': 'application/json'}
+dt = datetime.datetime.now()
 
 for raw_user in users:
     user = raw_user['user']
@@ -29,7 +34,7 @@ for raw_user in users:
     user['interests'] = []
     user['password'] = generate_password_hash(user['password'])
     user['role'] = 'test'
-    r = requests.post(url, data=json.dumps(user), headers=headers)
+    r = requests.post(url, data=json.dumps(user, default=json_util.default), headers=headers)
     resp = json.loads(r.content)
     print resp
     processed_users.append({'id': resp['_id'], 'etag': resp['_etag']})

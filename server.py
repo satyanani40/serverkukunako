@@ -13,30 +13,22 @@ from framework.match_me_algorithm import *
 import requests
 #import grequests
 import flask
+import time
 import urllib2, random
 from views import get_search
 from weberdb import WeberDB
 from flask.ext.socketio import SocketIO, emit, join_room, leave_room
 from flask import Flask
 from flask_mail import Mail, Message
-
-
-
-
+from bson import json_util
 
 class TokenAuth(TokenAuth):
 	def check_auth(self, token, allowed_roles, resource, method):
 		accounts = app.data.driver.db['people']
 		return accounts.find_one({'token': token})
 
-
-
-
 app = Eve(__name__,static_url_path='/static')
 app.debug = True,
-
-
-
 app.config.update(
 	DEBUG=True,
     #EMAIL SETTINGS
@@ -46,7 +38,6 @@ app.config.update(
 	MAIL_USERNAME = 'suryachowdary93@gmail.com',
 	MAIL_PASSWORD = 'Ssurya@Mmuppalla7'
 	)
-
 mail=Mail(app)
 
 def create_token(user):
@@ -59,14 +50,9 @@ def create_token(user):
     token = jwt.encode(payload, TOKEN_SECRET)
     return token.decode('unicode_escape')
 
-
 def parse_token(req):
     token = req.headers.get('Authorization').split()[1]
     return jwt.decode(token, TOKEN_SECRET)
-
-
-
-
 
 def login_required(f):
     @wraps(f)
@@ -113,10 +99,10 @@ def login():
         response = jsonify(error='you email does not exist, please register with us to login')
         response.status_code = 401
         return response
-    if not user['email_confirmed'] == True:
+    """if not user['email_confirmed'] == True:
         response = jsonify(error='you email is not confirmed please confirm your account')
         response.status_code = 401
-        return response
+        return response"""
     if not user or not check_password_hash(user['password'], request.json['password']):
         response = jsonify(error='Wrong Email or Password')
         response.status_code = 401
@@ -207,6 +193,7 @@ def signup():
     accounts = app.data.driver.db['people']
     user_email = accounts.find_one({'email': request.json['email']})
     if not user_email:
+        dt = datetime.now()
         user = {
             'email' :request.json['email'],
             'username':request.json['username'],
@@ -232,7 +219,7 @@ def signup():
             'accept_notifications':[],
             'born' : "",
             'gender' : "",
-            '_created':time.strftime('%Y-%m-%d %H:%M:%S'),
+            'lastmessageseen' : dt.strftime('%Y-%m-%dT%H:%M:%SZ'),
             'location' : {
                 'city' : "",
                 'state' : "",
@@ -241,6 +228,7 @@ def signup():
             'friends' : [],
             'notifications':[]
         }
+
         accounts.insert(user)
         user_id = str(user['_id'])
         user_random_string = str(user['random_string'])
@@ -265,7 +253,25 @@ def signup():
         response.status_code = 401
         return response
 
+@app.route('/api/chat/sendmessage', methods=['POST'])
+def sendmessage():
+    ts = int(time.time())
+    if not request.json['sender'] or not request.json['receiver']\
+            or not request.json['message']:
+        return False
 
+    accounts = app.data.driver.db['messages']
+    message = {
+        'sender':request.json['sender'],
+        'receiver': request.json['receiver'],
+        'seen' : False,
+        'message' : request.json['message'],
+        'timestamp': ts
+    }
+    data = accounts.insert(message)
+    if data:
+        return json.dumps({'status': 'ok','data':data}, default=json_util.default)
+    return json.dumps({'status':'failed','data':0})
 
 import string
 import random
