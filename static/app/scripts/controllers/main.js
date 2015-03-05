@@ -34,45 +34,21 @@ angular.module('weberApp')
 						$scope.friends = friend;
 					});
 				}
+
+				$scope.submit_post = function(){
+
+					$http({
+						url: '/similarwords',
+						method: "GET",
+						params: {new_post: $scope.new_post}
+					})
+					.success(function(similarwords) {
+
+					$scope.infinitePosts.addPost($scope.new_post,similarwords);
+					$scope.new_post = '';
+					});
+				};
 			});
 		});
 	})
-	.directive('replacepostbutton', function ($compile, CurrentUser, Restangular) {
-        return {
-            restrict: 'E',
-            replace: true,
-            link: function (scope, element, attrs) {
-            	console.log("====replace button====")
-            },
-            controller:function($scope, $http, $element, $attrs, $transclude, $routeParams){
-
-            	$scope.submit_post = function(){
-            	
-            		console.log("===after post button clicked====")
-
-            		var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
-                    $element.html(html);
-                    $compile($element.contents())($scope);
-                    if($scope.new_post){
-                        $http({
-                            url: '/similarwords',
-                            method: "GET",
-                            params: {new_post: $scope.new_post}
-                        })
-                        .success(function(similarwords) {
-
-                            $scope.infinitePosts.addPost($scope.new_post,similarwords);
-                            $scope.new_post = '';
-
-                            console.log("======after submit response=======")
-
-                            html = '<button ng-click="submit_post()" type="submit" class="btn btn-success btn-block btn-sm">Post</button>'
-                            var e =$compile(html)($scope);
-                            $element.replaceWith(e);
-
-                        });
-                    }
-				};
-            }
-        };
-    });
+	;

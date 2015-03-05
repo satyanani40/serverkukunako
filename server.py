@@ -155,7 +155,7 @@ def settingschangepassword():
     accounts = app.data.driver.db['people']
     user = accounts.find_one({'username': request.json['user_name']})
     get_hash_new_password = generate_password_hash(request.json['new_password'])
-    print "======================================"
+    print "=================settings change password====================="
     print get_hash_new_password
     if check_password_hash(user['password'], request.json['old_password']):
         return get_hash_new_password

@@ -14,7 +14,7 @@
                     Username
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-                    <settingschangeusername>
+
                         <div class="row username_section">
                             <div class="col-sm-9">
                                 <h5 style="opacity:0.90">
@@ -27,6 +27,7 @@
                                 </button>
                             </div>
                         </div>
+                    <settingschangeusername>
                         <div class="row name_edit_section" style="margin-top:5px;">
                             <div class="col-sm-12">
                                 <h6 style="opacity:0.60">
@@ -74,7 +75,7 @@
                     Edit First name and Last name
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-                    <settingschangefirstlastname>
+
                         <div class="row first_last_name_section">
                             <div class="col-sm-9">
                                 <h5 style="opacity:0.90">
@@ -88,6 +89,7 @@
                                 </button>
                             </div>
                         </div>
+                    <settingschangefirstlastname>
                         <div class="first_last_name_edit_section">
                             <div class="row " style="padding-bottom:10px;">
                                 <div class="col-sm-4 colpadding">
@@ -148,7 +150,7 @@
                                                 </div>
                                                 <div class="col-sm-8 colpadding">
                                                     <input type="text" placeholder="old password" ng-model="old_password"
-                                                       class="form-control input-sm" required />
+                                                       class="form-control input-sm" />
                                                 </div>
                                             </div>
 
@@ -158,7 +160,7 @@
                                                 </div>
                                                 <div class="col-sm-8 colpadding">
                                                     <input type="password" id="pw1" name="pw1" class="form-control input-sm" placeholder="enter new password"
-                                                           ng-model="pw1" ng-required="" ng-minlength="8" ng-maxlength="20" />
+                                                           ng-model="pw1" ng-required="" />
                                                     <span ng-show="myForm.pw1.$error.required && myForm.pw1.$dirty"
                                                           style="color:red;font-size:11px;">
                                                         required
@@ -211,7 +213,7 @@
                             <h5>
                                 <a style="text-decoration:none;color:#333;cursor: no-drop;opacity:0.60;">
                                     <strong>
-                                        suryamuppalla@gmail.com
+                                        {{ user.email }}
                                     </strong>
                                 </a>
                             </h5>

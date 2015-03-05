@@ -17,7 +17,7 @@ angular.module('weberApp')
                              $location,$http,Restangular,ChatActivity,
                              SearchActivity,FriendsNotific,friendsActivity) {
 
-        var params = '{"username":1,"email":1,"name":{"first":1,"last":1}}';
+        var params = '{"username":1,"email":1,"name":{"first":1,"last":1},"picture":{"large":1,"medium":1,"thumbnail":1}}';
 
         var searchFriends = Restangular.all('people').getList({
             projection : params,

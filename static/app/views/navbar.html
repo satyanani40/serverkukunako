@@ -3,11 +3,11 @@
 
             <div class="navbar-header">
                 <a class="navbar-brand" href="/#/home" ng-if="isAuthenticated()"
-                     style="padding:5px;font-size:20px;font-family: 'Open sans',Arial,sans-serif;">
-                  <h2 style="font-family: 'Open sans',Arial,sans-serif;font-weight:400;margin-top:0px;">
-                      <img src="http://www.websoc.in/images/logo.png">
+                     style="padding:7px;font-size:20px;font-family: 'Open sans',Arial,sans-serif;">
+                  <h3 style="font-family: 'Open sans',Arial,sans-serif;font-weight:400;margin-top:0px;">
+                      <img src="http://www.websoc.in/images/logo.png" style="width: 33px;">
                       <span style="margin-left: -7px;color:#fff;">eber</span>
-                  </h2>
+                  </h3>
                 </a>
             </div>
             <div class="navbar-collapse collapse">
@@ -23,14 +23,31 @@
                                         <button type="submit" class="btn">Search</button>
                                     </div><!-- /btn-group -->
                                 </div><!-- /input-group -->
+                                <div class="" style="width:540px;position:absolute;">
+                                    <div class="list-group" style="padding:0px;">
+                                        <div class="" style="margin-bottom:0px;"
+                                                ng-repeat="temp in filtered | limitTo : 5 ">
+                                            <a style="" href="#/profile/{{ temp._id }}"
+                                               class="list-group-item search_a">
+                                                <div class="row">
+                                                    <div class="col-sm-2" style="padding-right:0px;">
+                                                        <img src="{{ temp.picture.thumbnail }}" class=""
+                                                             style="width:55px;border-radius:50%;">
+                                                    </div>
+                                                    <div class="col-sm-8 colpadding">
+                                                        <h5 style="opacity:0.75;margin-left:-10px;">
+                                                            {{ temp.name.first }} {{ temp.name.last }}
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div><!-- /.col-xs-12 -->
                         </div><!-- /.row -->
                     </form>
 
-                </div>
-
-                <div ng-repeat="temp in filtered">
-                    <a href="#/profile/{{ temp._id }}">{{ temp.name.first }}</a>
                 </div>
 
                 <ul class="nav navbar-nav pull-right" ng-if="!isAuthenticated()">

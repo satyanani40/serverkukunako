@@ -40,21 +40,32 @@ angular.module('weberApp')
             controller:function($scope, $http, $route, $element, $attrs, $transclude){
 
                 $scope.updateUsername = function(){
-                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
-                    $element.html(html);
-                    $compile($element.contents())($scope);
 
-                    $scope.user.patch({
-                        'username':$scope.u_username
-                    }).then(function(response){
+                    var Get_User_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                    Get_User_details.then(function(response){
+                        $scope.user = response;
 
-                        console.log("===after patch=====");
-                        console.log(response);
-                        html = '<h6><b>your username has been updated</b></h6>'
-                        var e =$compile(html)($scope);
-                        $element.replaceWith(e);
+                        $scope.user.username = $scope.u_username;
+
+                        $scope.user.patch({
+                            'username':$scope.u_username
+                        }).then(function(response){
+                            // this callback will be called asynchronously
+                            // when the response is available
+
+                            console.log("===after patch=====");
+                            console.log(response);
+                            var html = '<h6><b>your username has been changed</b></h6>'
+                            var e =$compile(html)($scope);
+                            $element.replaceWith(e);
+
+                        });
 
                     });
+
+
+
+
 
 
                 }
@@ -71,22 +82,32 @@ angular.module('weberApp')
             controller:function($scope, $http, $route, $element, $attrs, $transclude){
 
                 $scope.updateFirstLastName = function(){
-                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
-                    $element.html(html);
-                    $compile($element.contents())($scope);
 
-                    $scope.user.patch({
-                        'name':{
-                            'first':$scope.edit_first_name,
-                            'last':$scope.edit_last_name
-                        }
-                    }).then(function(response){
 
-                        console.log("===after patch=====");
-                        console.log(response);
-                        html = '<h6><b>your first and last name has been updated</b></h6>'
-                        var e =$compile(html)($scope);
-                        $element.replaceWith(e);
+
+                    var Get_2_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                    Get_2_details.then(function(response){
+                        $scope.user = response;
+
+                        $scope.user.name.first = $scope.edit_first_name;
+                        $scope.user.name.last = $scope.edit_last_name;
+
+                        $scope.user.patch({
+                            'name':{
+                                'first':$scope.edit_first_name,
+                                'last':$scope.edit_last_name
+                            }
+                        }).then(function(response){
+                            // this callback will be called asynchronously
+                            // when the response is available
+
+                            console.log("===after patch=====");
+                            console.log(response);
+                            var html = '<h6><b>your first and last name has been changed</b></h6>'
+                            var e =$compile(html)($scope);
+                            $element.replaceWith(e);
+
+                        });
 
                     });
 
@@ -105,9 +126,7 @@ angular.module('weberApp')
             controller:function($scope, $http, $route, $element, $attrs, $transclude){
 
                 $scope.updatechangepassword = function(){
-                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
-                    $element.html(html);
-                    $compile($element.contents())($scope);
+
 
                     $http.post('/settingschangepassword',
                         {
@@ -136,9 +155,8 @@ angular.module('weberApp')
                         console.log("=======get hashed password====")
                         console.log($scope.get_hash_new_password)
 
-                        var Update_Password = Restangular.one('people', $scope.user.username).get({seed:Math.random()});
-
-                        Update_Password.then(function(response){
+                        var Get_password_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                        Get_password_details.then(function(response){
                             $scope.user = response;
 
                             console.log("=====user details===");

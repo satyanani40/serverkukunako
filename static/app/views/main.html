@@ -10,7 +10,9 @@
                 </div>
             </div>
 			<div class="caption text-center">
-				<h3 style="text-transform: capitalize;">{{user.name.first}} {{user.name.last}}</h3>
+				<h3 style="text-transform: capitalize;">
+                    {{user.name.first}} {{user.name.last}}
+                </h3>
 				@{{user.username}}
 			</div>
 		</div>
@@ -97,11 +99,9 @@
 					<a class="btn btn-sm btn-default"><i class="glyphicon glyphicon-map-marker"></i></a>
 				</div>
 				<div class="col-sm-2 pull-right">
-					<replacepostbutton>
-						<button ng-click="submit_post()" type="submit" class="btn btn-success btn-block btn-sm">
-							Post
-						</button>
-					</replacepostbutton>
+                    <button ng-click="submit_post()" type="submit" class="btn btn-success btn-block btn-sm">
+                        Post
+                    </button>
 				</div>
 			</div>
 		</form>
@@ -112,8 +112,10 @@
 			<button class="btn btn-success btn-sm pull-right">Import</button>
 		</div>-->
 		<div infinite-scroll='infinitePosts.nextPage()' infinite-scroll-disabled='infinitePosts.busy' infinite-scroll-distance='0'>
-			<div class="media panel panel-default" ng-repeat="post in infinitePosts.posts">
-				<div class="media-body panel-heading">
+			<div class="media panel panel-default" ng-repeat="post in infinitePosts.posts"
+                 style="border: 1px solid #E4E4E4;">
+				<div class="media-body panel-body"
+                     style="border:1px solid #ECEAEA;padding:10px;">
 					<a class="pull-left" style="padding: 5px;" href="#/profile/{{UserService.get(post.author)._id}}">
 						<img style="width:35px" class="media-object img-circle" src="{{UserService.get(post.author).picture.thumbnail}}" alt="">
 					</a>
@@ -128,7 +130,9 @@
 						<span am-time-ago="post._created"></span></small>
 					<br>
 				</div>
-				<p class="panel-body">{{post.content}}</p>
+				<p class="panel-body" style="text-align:justify;">
+                    {{post.content}}
+                </p>
 			</div>
 			<div ng-show='infinitePosts.busy'>Loading data...</div>
 			<div ng-show='infinitePosts.end'>You Reached the end!</div>
