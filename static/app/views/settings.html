@@ -14,110 +14,104 @@
                     Username
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-
-                        <div class="row username_section">
-                            <div class="col-sm-9">
-                                <h5 style="opacity:0.90">
-                                    {{ user.username }}
-                                </h5>
-                            </div>
-                            <div class="col-sm-3">
-                                <button style="margin-top:7px" class="pull-right edit_name btn btn-xs btn-primary">
-                                    Edit
-                                </button>
-                            </div>
+                    <div class="row username_section">
+                        <div class="col-sm-9">
+                            <h5 style="opacity:0.90">
+                                {{ user.username }}
+                            </h5>
                         </div>
-                    <settingschangeusername>
-                        <div class="row name_edit_section" style="margin-top:5px;">
-                            <div class="col-sm-12">
-                                <h6 style="opacity:0.60">
-                                    Your public username is the same as your Storyboard address:
-                                </h6>
-                                <h6 style="opacity:0.80">
-                                    For example:&nbsp;
-                                    <a href="">
-                                        <strong>
-                                            www.theweber.in/suryamuppalla
-                                        </strong>
-                                    </a>
-                                </h6>
-                                <span>
-                                    <div class="row">
-                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                            <h6>Username:</h6>
-                                        </div>
-                                        <div class="col-sm-8 colpadding">
-                                            <input type="text" ng-model="u_username" placeholder="{{ user.username }}"
-                                               class="form-control input-sm" />
-                                        </div>
-                                    </div>
-                                </span>
-                                <span>
-                                    <div class="row" style="margin-top:5px;">
-                                        <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                            <button ng-click="updateUsername()" class="btn btn-xs btn-success">
-                                                Update
-                                            </button>
-                                        </div>
-                                        <div class="col-sm-2 colpadding">
-                                            <button class="btn btn-xs btn-default">
-                                                Cancel
-                                            </button>
-                                        </div>
-                                    </div>
-                                </span>
-                            </div>
+                        <div class="col-sm-3">
+                            <button style="margin-top:7px" class="pull-right edit_name btn btn-xs btn-primary">
+                                Edit
+                            </button>
                         </div>
-                    </settingschangeusername>
+                    </div>
+                    <div class="row name_edit_section" style="margin-top:5px;">
+                        <div class="col-sm-12">
+                            <h6 style="opacity:0.60">
+                                Your public username is the same as your Storyboard address:
+                            </h6>
+                            <h6 style="opacity:0.80">
+                                For example:&nbsp;
+                                <a href="">
+                                    <strong>
+                                        www.theweber.in/suryamuppalla
+                                    </strong>
+                                </a>
+                            </h6>
+                            <span>
+                                <div class="row">
+                                    <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                        <h6>Username:</h6>
+                                    </div>
+                                    <div class="col-sm-8 colpadding">
+                                        <input type="text" ng-model="u_username" placeholder="{{ user.username }}"
+                                           class="form-control input-sm" />
+                                    </div>
+                                </div>
+                            </span>
+                            <span>
+                                <div class="row" style="margin-top:5px;">
+                                    <div class="col-sm-offset-4 colpadding col-sm-2 ">
+                                        <button ng-click="updateUsername()" class="btn btn-xs edit_name btn-success">
+                                            Update
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-2 colpadding">
+                                        <button class="btn btn-xs btn-default">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 <label style="opacity:0.70;margin-left:2px">
                     Edit First name and Last name
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-
-                        <div class="row first_last_name_section">
-                            <div class="col-sm-9">
-                                <h5 style="opacity:0.90">
-                                    {{ user.name.first }} {{ user.name.last }}
-                                </h5>
+                    <div class="row first_last_name_section">
+                        <div class="col-sm-9">
+                            <h5 style="opacity:0.90">
+                                {{ user.name.first }} {{ user.name.last }}
+                            </h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <button style="margin-top:7px;"
+                                    class="pull-right edit_first_last_name btn btn-xs btn-primary">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="first_last_name_edit_section">
+                        <div class="row " style="padding-bottom:10px;">
+                            <div class="col-sm-4 colpadding">
+                                <h6 class="pull-right" >First name</h6>
                             </div>
-                            <div class="col-sm-3">
-                                <button style="margin-top:7px;"
-                                        class="pull-right edit_first_last_name btn btn-xs btn-primary">
-                                    Edit
+                            <div class="col-sm-8 colpadding">
+                                <input type="text" class="input-sm form-control" placeholder="enter first name"
+                                        ng-model = edit_first_name />
+                            </div>
+                        </div>
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-sm-4 colpadding">
+                                <h6 class="pull-right">Last name</h6>
+                            </div>
+                            <div class="col-sm-8 colpadding">
+                                <input type="text" class="input-sm form-control" placeholder="enter last name"
+                                        ng-model = edit_last_name />
+                            </div>
+                        </div>
+                        <div class="row" style="">
+                            <div class="col-sm-offset-4 col-sm-5 colpadding">
+                                <button ng-click="updateFirstLastName()" class="btn edit_first_last_name btn-xs btn-success">
+                                    Update
                                 </button>
                             </div>
                         </div>
-                    <settingschangefirstlastname>
-                        <div class="first_last_name_edit_section">
-                            <div class="row " style="padding-bottom:10px;">
-                                <div class="col-sm-4 colpadding">
-                                    <h6 class="pull-right" >First name</h6>
-                                </div>
-                                <div class="col-sm-8 colpadding">
-                                    <input type="text" class="input-sm form-control" placeholder="enter first name"
-                                            ng-model = edit_first_name />
-                                </div>
-                            </div>
-                            <div class="row" style="padding-bottom:10px;">
-                                <div class="col-sm-4 colpadding">
-                                    <h6 class="pull-right">Last name</h6>
-                                </div>
-                                <div class="col-sm-8 colpadding">
-                                    <input type="text" class="input-sm form-control" placeholder="enter last name"
-                                            ng-model = edit_last_name />
-                                </div>
-                            </div>
-                            <div class="row" style="">
-                                <div class="col-sm-offset-4 col-sm-5 colpadding">
-                                    <button ng-click="updateFirstLastName()" class="btn btn-xs btn-success">
-                                        Update
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </settingschangefirstlastname>
+                    </div>
                 </div>
 
 
@@ -137,70 +131,68 @@
                         </div>
                     </div>
                     <div class="row password_edit_section" style="margin-top:5px;">
-                            <div class="col-sm-12">
-                                <settingschangepassword>
-                                    <h6 style="opacity:0.60">
-                                        Your Password is very confidential, Please Follow the rules while updating the password:
-                                    </h6>
-                                    <span>
-                                        <form name="myForm">
-                                            <div class="row">
-                                                <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                                    <h6>Old password:</h6>
-                                                </div>
-                                                <div class="col-sm-8 colpadding">
-                                                    <input type="text" placeholder="old password" ng-model="old_password"
-                                                       class="form-control input-sm" />
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                                    <h6>New password:</h6>
-                                                </div>
-                                                <div class="col-sm-8 colpadding">
-                                                    <input type="password" id="pw1" name="pw1" class="form-control input-sm" placeholder="enter new password"
-                                                           ng-model="pw1" ng-required="" />
-                                                    <span ng-show="myForm.pw1.$error.required && myForm.pw1.$dirty"
-                                                          style="color:red;font-size:11px;">
-                                                        required
-                                                    </span>
-                                                    <span ng-show="!myForm.pw1.$error.required && (myForm.pw1.$error.minlength || myForm.pw1.$error.maxlength) && myForm.pw1.$dirty"
-                                                          style="color:red;font-size:11px;">
-                                                        Passwords must be between 8 and 20 characters.
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                                    <h6>Re-enter new password:</h6>
-                                                </div>
-                                                <div class="col-sm-8 colpadding">
-                                                    <input type="password" id="pw2" name="pw2"  class="form-control input-sm" placeholder="Re-enter new password"
-                                                           ng-model="pw2" ng-required="" pw-check="pw1" />
-                                                    <div class="msg-block" ng-show="myForm.$error">
-                                                        <span class="msg-error" ng-show="myForm.pw2.$error.pwmatch" style="color:red;font-size:11px;">
-                                                            Passwords don't match.
-                                                        </span>
-                                                    </div>
-                                                    <span ng-show="myForm.pw2.$error.required && myForm.pw2.$dirty" style="color:red">
-                                                        Please confirm your password.
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </span>
-                                    <span>
-                                        <div class="row" style="margin-top:5px;">
-                                            <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                                <button ng-click="updatechangepassword()" class="btn btn-xs btn-success">
-                                                    Save
-                                                </button>
-                                            </div>
+                        <div class="col-sm-12">
+                            <h6 style="opacity:0.60">
+                                Your Password is very confidential, Please Follow the rules while updating the password:
+                            </h6>
+                            <span>
+                                <form name="myForm">
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>Old password:</h6>
                                         </div>
-                                    </span>
-                                </settingschangepassword>
-                            </div>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="text" placeholder="old password"
+                                               class="form-control input-sm" ng-model="old_password" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>New password:</h6>
+                                        </div>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="password" id="pw1" name="pw1" class="form-control input-sm" placeholder="enter new password"
+                                                   ng-model="pw1" ng-required="" ng-minlength="8" ng-maxlength="20" />
+                                            <span ng-show="myForm.pw1.$error.required && myForm.pw1.$dirty"
+                                                  style="color:red;font-size:11px;">
+                                                required
+                                            </span>
+                                            <span ng-show="!myForm.pw1.$error.required && (myForm.pw1.$error.minlength || myForm.pw1.$error.maxlength) && myForm.pw1.$dirty"
+                                                  style="color:red;font-size:11px;">
+                                                Passwords must be between 8 and 20 characters.
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>Re-enter new password:</h6>
+                                        </div>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="password" id="pw2" name="pw2"  class="form-control input-sm" placeholder="Re-enter new password"
+                                                   ng-model="pw2" ng-required="" pw-check="pw1" />
+                                            <div class="msg-block" ng-show="myForm.$error">
+                                                <span class="msg-error" ng-show="myForm.pw2.$error.pwmatch" style="color:red;font-size:11px;">
+                                                    Passwords don't match.
+                                                </span>
+                                            </div>
+                                            <span ng-show="myForm.pw2.$error.required && myForm.pw2.$dirty" style="color:red">
+                                                Please confirm your password.
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                            <span>
+                                <div class="row" style="margin-top:5px;">
+                                    <div class="col-sm-offset-4 colpadding col-sm-2 ">
+                                        <button ng-click="updatePassword()" class="btn edit_password btn-xs btn-success">
+                                            Update
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -213,7 +205,7 @@
                             <h5>
                                 <a style="text-decoration:none;color:#333;cursor: no-drop;opacity:0.60;">
                                     <strong>
-                                        {{ user.email }}
+                                        suryamuppalla@gmail.com
                                     </strong>
                                 </a>
                             </h5>
@@ -297,24 +289,22 @@
                         </div>
                     </div>
                     <div class="interests_edit_section">
-                        <settingschangeinterests>
-                            <div class="row" style="padding-bottom:10px;">
-                                <div class="col-sm-4 colpadding">
-                                    <h6 class="pull-right">Add Interests</h6>
-                                </div>
-                                <div class="col-sm-8 colpadding">
-                                    <input type="text" class="input-sm form-control"
-                                           placeholder="Cricket, Chess, Carroms etc.." ng-model = interests />
-                                </div>
+                        <div class="row" style="padding-bottom:10px;">
+                            <div class="col-sm-4 colpadding">
+                                <h6 class="pull-right">Add Interests</h6>
                             </div>
-                            <div class="row" style="">
-                                <div class="col-sm-offset-4 col-sm-5 colpadding">
-                                    <button ng-click="updateInterests()" class="btn btn-xs btn-success">
-                                        Update
-                                    </button>
-                                </div>
+                            <div class="col-sm-8 colpadding">
+                                <input type="text" class="input-sm form-control"
+                                       placeholder="Cricket, Chess, Carroms etc.." ng-model = interests />
                             </div>
-                        </settingschangeinterests>
+                        </div>
+                        <div class="row" style="">
+                            <div class="col-sm-offset-4 col-sm-5 colpadding">
+                                <button ng-click="updateInterests()" class="btn edit_interests btn-xs btn-success">
+                                    Update
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -322,7 +312,6 @@
                     My Location
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-                    <settingschangelocation>
                         <div class="row location_section">
                             <div class="col-sm-9">
                                 <h5 style="opacity:0.90">
@@ -375,7 +364,7 @@
                                 <span>
                                     <div class="row" style="margin-top:5px;">
                                         <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                            <button ng-click="updatechangelocation()" class="btn btn-xs btn-success">
+                                            <button ng-click="updatechangelocation()" class="btn edit_location btn-xs btn-success">
                                                 Save
                                             </button>
                                         </div>
@@ -383,7 +372,6 @@
                                 </span>
                             </div>
                         </div>
-                    </settingschangelocation>
                 </div>
 
 
@@ -391,7 +379,6 @@
                     Studies
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-                    <settingschangestudy>
                         <div class="row study_section">
                             <div class="col-sm-9">
                                 <h5 style="opacity:0.90">
@@ -434,7 +421,7 @@
                                 <span>
                                     <div class="row" style="margin-top:5px;">
                                         <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                            <button ng-click="updatechangestudy()" class="btn btn-xs btn-success">
+                                            <button ng-click="updatechangestudy()" class="btn edit_study btn-xs btn-success">
                                                 Save
                                             </button>
                                         </div>
@@ -442,14 +429,12 @@
                                 </span>
                             </div>
                         </div>
-                    </settingschangestudy>
                 </div>
 
                 <label style="opacity:0.70;margin-left:2px">
                     Phone Number
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-                    <settingschangephone>
                         <div class="row phone_section">
                             <div class="col-sm-9">
                                 <h5 style="opacity:0.90">
@@ -483,7 +468,7 @@
                                 <span>
                                     <div class="row" style="margin-top:2px;">
                                         <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                            <button ng-click="updatechangephone()" class="btn btn-xs btn-success">
+                                            <button ng-click="updatechangephone()" class="btn edit_phone btn-xs btn-success">
                                                 Save
                                             </button>
                                         </div>
@@ -491,14 +476,12 @@
                                 </span>
                             </div>
                         </div>
-                    </settingschangephone>
                 </div>
 
                 <label style="opacity:0.70;margin-left:2px">
                     Movies
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-                    <settingschangemovies>
                         <div class="row movies_section">
                             <div class="col-sm-9">
                                 <h5 style="opacity:0.90">
@@ -534,7 +517,7 @@
                                 <span>
                                     <div class="row" style="margin-top:2px;">
                                         <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                            <button ng-click="updatechangemovies()" class="btn btn-xs btn-success">
+                                            <button ng-click="updatechangemovies()" class="btn edit_movies btn-xs btn-success">
                                                 Save
                                             </button>
                                         </div>
@@ -542,7 +525,6 @@
                                 </span>
                             </div>
                         </div>
-                    </settingschangemovies>
                 </div>
 
 
@@ -559,22 +541,17 @@
     .username_section .edit_name{
         display:none;
     }
-
     .username_section:hover .edit_name{
         display:block;
-
     }
     .name_edit_section{
         display:none;
     }
-
     .password_section .edit_password{
         display:none;
     }
-
     .password_section:hover .edit_password{
         display:block;
-
     }
     .password_edit_section{
         display:none;
@@ -582,87 +559,60 @@
     .picture_edit_section{
         display:none;
     }
-
-
-
     .first_last_name_section .edit_first_last_name{
         display:none;
     }
     .first_last_name_section:hover .edit_first_last_name{
         display:block;
-
     }
     .first_last_name_edit_section{
         display:none;
     }
-
-
-
     .interests_section .edit_interests{
         display:none;
     }
     .interests_section:hover .edit_interests{
         display:block;
-
     }
     .interests_edit_section{
         display:none;
     }
-
-
-
     .location_section .edit_location{
         display:none;
     }
-
     .location_section:hover .edit_location{
         display:block;
-
     }
     .location_edit_section{
         display:none;
     }
-
-
     .study_section .edit_study{
         display:none;
     }
-
     .study_section:hover .edit_study{
         display:block;
-
     }
     .study_edit_section{
         display:none;
     }
-
-
     .phone_section .edit_phone{
         display:none;
     }
-
     .phone_section:hover .edit_phone{
         display:block;
-
     }
     .phone_edit_section{
         display:none;
     }
-
-
-
     .movies_section .edit_movies{
         display:none;
     }
-
     .movies_section:hover .edit_movies{
         display:block;
-
     }
     .movies_edit_section{
         display:none;
     }
-
 </style>
 
 <script>
@@ -670,7 +620,6 @@
     $(document).ready(
     function(){
         $(".edit_name").click(function () {
-
             if($('.name_edit_section').is(':visible')){
                $('.name_edit_section').fadeOut('fast');
             }
@@ -678,13 +627,10 @@
                $('.name_edit_section').fadeIn('slow');
             }
         });
-
     });
-
     $(document).ready(
     function(){
         $(".change_picture").click(function () {
-
             if($('.picture_edit_section').is(':visible')){
                $('.picture_edit_section').fadeOut('fast');
             }
@@ -692,14 +638,10 @@
                $('.picture_edit_section').fadeIn('slow');
             }
         });
-
     });
-
-
     $(document).ready(
     function(){
         $(".edit_first_last_name").click(function () {
-
             if($('.first_last_name_edit_section').is(':visible')){
                $('.first_last_name_edit_section').fadeOut('fast');
             }
@@ -707,14 +649,10 @@
                $('.first_last_name_edit_section').fadeIn('slow');
             }
         });
-
     });
-
-
     $(document).ready(
     function(){
         $(".edit_interests").click(function () {
-
             if($('.interests_edit_section').is(':visible')){
                $('.interests_edit_section').fadeOut('fast');
             }
@@ -722,13 +660,10 @@
                $('.interests_edit_section').fadeIn('slow');
             }
         });
-
     });
-
     $(document).ready(
     function(){
         $(".edit_location").click(function () {
-
             if($('.location_edit_section').is(':visible')){
                $('.location_edit_section').fadeOut('fast');
             }
@@ -736,14 +671,10 @@
                $('.location_edit_section').fadeIn('slow');
             }
         });
-
     });
-
-
     $(document).ready(
     function(){
         $(".edit_study").click(function () {
-
             if($('.study_edit_section').is(':visible')){
                $('.study_edit_section').fadeOut('fast');
             }
@@ -751,13 +682,10 @@
                $('.study_edit_section').fadeIn('slow');
             }
         });
-
     });
-
     $(document).ready(
     function(){
         $(".edit_phone").click(function () {
-
             if($('.phone_edit_section').is(':visible')){
                $('.phone_edit_section').fadeOut('fast');
             }
@@ -765,13 +693,10 @@
                $('.phone_edit_section').fadeIn('slow');
             }
         });
-
     });
-
     $(document).ready(
     function(){
         $(".edit_movies").click(function () {
-
             if($('.movies_edit_section').is(':visible')){
                $('.movies_edit_section').fadeOut('fast');
             }
@@ -779,14 +704,10 @@
                $('.movies_edit_section').fadeIn('slow');
             }
         });
-
     });
-
-
     $(document).ready(
     function(){
         $(".edit_password").click(function () {
-
             if($('.password_edit_section').is(':visible')){
                $('.password_edit_section').fadeOut('fast');
             }
@@ -794,6 +715,5 @@
                $('.password_edit_section').fadeIn('slow');
             }
         });
-
     });
 </script>

@@ -31,6 +31,11 @@ for raw_user in users:
     user['password_test']  = user['password']
     user['email_confirmed'] = True
     user['interests'] = []
+    user['movies'] = []
+    user['study'] = {
+        'intermediate':"",
+        'graduate':""
+    }
     user['notifications'] = []
     user['accept_notifications'] = []
     user['interests'] = []

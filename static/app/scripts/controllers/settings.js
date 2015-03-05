@@ -21,6 +21,52 @@ angular.module('weberApp')
 
             });
 
+            $scope.updateUsername = function() {
+
+                var Get_User_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                    Get_User_details.then(function(response){
+                    $scope.user = response;
+
+                    $scope.user.username = $scope.u_username;
+                    console.log("=========before patch========")
+
+                    $scope.user.patch({
+
+                        'username':$scope.u_username
+
+                    }).then(function(response){
+
+                        console.log("=====after patch========")
+                        console.log(response)
+                    });
+                });
+			};
+
+			$scope.updateFirstLastName = function() {
+
+			    var Get_first_last_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                    Get_first_last_details.then(function(response){
+                    $scope.user = response;
+
+                    $scope.user.name.first = $scope.edit_first_name;
+                    $scope.user.name.last = $scope.edit_last_name;
+
+                    console.log("=========before patch========")
+
+                    $scope.user.patch({
+                        'name':{
+                            'first':$scope.edit_first_name,
+                            'last':$scope.edit_last_name
+                        }
+                    }).then(function(response){
+
+                        console.log("=====after patch========")
+                        console.log(response)
+                    });
+                });
+			};
+
+
 			$scope.uploadFile = function(){
 				var file = $scope.myFile;
 				console.log('file is ' + JSON.stringify(file));
@@ -28,211 +74,103 @@ angular.module('weberApp')
 				fileUpload.uploadFileToUrl(file, uploadUrl,$scope.user);
                 $route.reload();
 			};
-		});
-	})
-	.directive('settingschangeusername', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
-        return {
-            restrict: 'E',
-            replace: true,
-            link: function (scope, element, attrs) {
-                console.log("=====call settingschangeusername======")
-            },
-            controller:function($scope, $http, $route, $element, $attrs, $transclude){
 
-                $scope.updateUsername = function(){
+			$scope.updateEmail = function() {
 
-                    var Get_User_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
-                    Get_User_details.then(function(response){
-                        $scope.user = response;
+			    var Get_first_last_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                    Get_first_last_details.then(function(response){
+                    $scope.user = response;
 
-                        $scope.user.username = $scope.u_username;
+                    $scope.user.username = $scope.u_username;
+                    console.log("=========before patch========")
 
-                        $scope.user.patch({
-                            'username':$scope.u_username
-                        }).then(function(response){
-                            // this callback will be called asynchronously
-                            // when the response is available
+                    $scope.user.patch({
+                        'email':$scope.u_email
+                    }).then(function(response){
 
-                            console.log("===after patch=====");
-                            console.log(response);
-                            var html = '<h6><b>your username has been changed</b></h6>'
-                            var e =$compile(html)($scope);
-                            $element.replaceWith(e);
-
-                        });
-
+                        console.log("=====after patch========")
+                        console.log(response)
                     });
+                });
+			};
 
+			$scope.updatePassword = function() {
+			    console.log("==========update password=========")
+			    console.log($scope.user.username)
 
-
-
-
-
-                }
-            }
-        };
-    })
-    .directive('settingschangefirstlastname', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
-        return {
-            restrict: 'E',
-            replace: true,
-            link: function (scope, element, attrs) {
-                console.log("=====call settingschangeusername======")
-            },
-            controller:function($scope, $http, $route, $element, $attrs, $transclude){
-
-                $scope.updateFirstLastName = function(){
-
-
-
-                    var Get_2_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
-                    Get_2_details.then(function(response){
-                        $scope.user = response;
-
-                        $scope.user.name.first = $scope.edit_first_name;
-                        $scope.user.name.last = $scope.edit_last_name;
-
-                        $scope.user.patch({
-                            'name':{
-                                'first':$scope.edit_first_name,
-                                'last':$scope.edit_last_name
-                            }
-                        }).then(function(response){
-                            // this callback will be called asynchronously
-                            // when the response is available
-
-                            console.log("===after patch=====");
-                            console.log(response);
-                            var html = '<h6><b>your first and last name has been changed</b></h6>'
-                            var e =$compile(html)($scope);
-                            $element.replaceWith(e);
-
-                        });
-
-                    });
-
-
-                }
-            }
-        };
-    })
-	.directive('settingschangepassword', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
-        return {
-            restrict: 'E',
-            replace: true,
-            link: function (scope, element, attrs) {
-                console.log("=====call settingschangepassword======")
-            },
-            controller:function($scope, $http, $route, $element, $attrs, $transclude){
-
-                $scope.updatechangepassword = function(){
-
-
-                    $http.post('/settingschangepassword',
-                        {
-                            user_name:$scope.user.username,
-                            old_password:$scope.old_password,
-                            new_password:$scope.pw1
-                        }).
-                        success(function(data, status, headers, config) {
-                            // this callback will be called asynchronously
-                            // when the response is available
-                            console.log("====return data====")
-                            console.log(data)
-                            $scope.get_hash_new_password = data;
-                            //html = '<b>Successfully updated your password</b>'
-                            //var e =$compile(html)($scope);
-                            //$element.replaceWith(e);
-                        }).
-                        error(function(error) {
-                            // called asynchronously if an error occurs
-                            // or server returns response with an error status.
-                            html = '<b>Sorry!! please try again</b>'
-                            var e =$compile(html)($scope);
-                            $element.replaceWith(e);
-                        });
+			    $http.post('/settingschangepassword',
+                    {
+                        user_name:$scope.user.username,
+                        old_password:$scope.old_password,
+                        new_password:$scope.pw1
+                    }).
+                    success(function(data, status, headers, config) {
+                        console.log("====return data====")
+                        console.log(data)
+                        $scope.get_hash_new_password = data;
 
                         console.log("=======get hashed password====")
                         console.log($scope.get_hash_new_password)
 
                         var Get_password_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+
                         Get_password_details.then(function(response){
-                            $scope.user = response;
+                        $scope.user = response;
 
-                            console.log("=====user details===");
-                            console.log($scope.user);
-                            $scope.user.patch({
-                                'password':$scope.get_hash_new_password,
-                                'password_test':$scope.pw1
-                            }).then(function(response){
-                                // this callback will be called asynchronously
-                                // when the response is available
+                        console.log("=====user details===");
+                        console.log($scope.user);
+                        $scope.user.patch({
+                            'password':$scope.get_hash_new_password,
+                            'password_test':$scope.pw1
+                        }).then(function(response){
+                            // this callback will be called asynchronously
+                            // when the response is available
 
-                                console.log("===after patch=====");
-                                console.log(response);
-                                html = '<h6><b>your password has been changed</b></h6>'
-                                var e =$compile(html)($scope);
-                                $element.replaceWith(e);
-
-                            });
+                            console.log("===after patch=====");
+                            console.log(response);
                         });
+                    });
 
 
-                }
-            }
-        };
-    })
-    .directive('settingschangeinterests', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
-        return {
-            restrict: 'E',
-            replace: true,
-            link: function (scope, element, attrs) {
-                console.log("=====call settingschangepassword======")
-            },
-            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+                });
 
-                $scope.updateInterests = function(){
-                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
-                    $element.html(html);
-                    $compile($element.contents())($scope);
+
+			};
+
+			$scope.updateInterests = function() {
+
+			    var Get_interests_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                    Get_interests_details.then(function(response){
+                    $scope.user = response;
+                    console.log("=========before patch========")
 
                     var data = ($scope.interests.toString()).split(",");
 
                     for(var k in data){
                         $scope.user.interests.push(data[k]);
                     }
-
+                    $scope.user.interests = $scope.user.interests;
                     $scope.user.patch({
                         'interests':$scope.user.interests
                     }).then(function(response){
 
-                        console.log("===after patch=====");
+                        console.log("===after interests patch=====");
                         console.log(response);
-                        html = '<h6><b>your interests has been updated</b></h6>'
-                        var e =$compile(html)($scope);
-                        $element.replaceWith(e);
 
                     });
+                });
+			};
 
+			$scope.updatechangelocation = function() {
 
-                }
-            }
-        };
-    })
-    .directive('settingschangelocation', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
-        return {
-            restrict: 'E',
-            replace: true,
-            link: function (scope, element, attrs) {
-                console.log("=====call settingschangelocation======")
-            },
-            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+			    var Get_location_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                    Get_location_details.then(function(response){
+                    $scope.user = response;
+                    console.log("=========before patch========")
 
-                $scope.updatechangelocation = function(){
-                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
-                    $element.html(html);
-                    $compile($element.contents())($scope);
-
+                    $scope.user.location.state = $scope.location_state;
+                    $scope.user.location.city = $scope.location_city;
+                    $scope.user.location.street = $scope.location_street;
                     $scope.user.patch({
                         'location':{
                             'state':$scope.location_state,
@@ -241,33 +179,22 @@ angular.module('weberApp')
                         }
                     }).then(function(response){
 
-                        console.log("===after patch=====");
+                        console.log("===after location patch=====");
                         console.log(response);
-                        html = '<h6><b>your Location has been updated</b></h6>'
-                        var e =$compile(html)($scope);
-                        $element.replaceWith(e);
 
                     });
+                });
+			};
 
+			$scope.updatechangestudy = function() {
 
-                }
-            }
-        };
-    })
-    .directive('settingschangestudy', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
-        return {
-            restrict: 'E',
-            replace: true,
-            link: function (scope, element, attrs) {
-                console.log("=====call settingschangestudy======")
-            },
-            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+			    var Get_study_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                    Get_study_details.then(function(response){
+                    $scope.user = response;
+                    console.log("=========before patch========")
 
-                $scope.updatechangestudy = function(){
-                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
-                    $element.html(html);
-                    $compile($element.contents())($scope);
-
+                    $scope.user.study.intermediate = $scope.study_intermediate;
+                    $scope.user.study.graduate = $scope.study_graduate;
                     $scope.user.patch({
                         'study':{
                             'intermediate':$scope.study_intermediate,
@@ -275,63 +202,38 @@ angular.module('weberApp')
                         }
                     }).then(function(response){
 
-                        console.log("===after patch=====");
+                        console.log("===after study patch=====");
                         console.log(response);
-                        html = '<h6><b>your Study details has been updated</b></h6>'
-                        var e =$compile(html)($scope);
-                        $element.replaceWith(e);
 
                     });
+                });
+			};
 
+			$scope.updatechangephone = function() {
 
-                }
-            }
-        };
-    })
-    .directive('settingschangephone', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
-        return {
-            restrict: 'E',
-            replace: true,
-            link: function (scope, element, attrs) {
-                console.log("=====call settingschangephone======")
-            },
-            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+			    var Get_phone_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                    Get_phone_details.then(function(response){
+                    $scope.user = response;
+                    console.log("=========before patch========")
 
-                $scope.updatechangephone = function(){
-                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
-                    $element.html(html);
-                    $compile($element.contents())($scope);
-
+                    $scope.user.phone = $scope.phone_number;
                     $scope.user.patch({
                         'phone':$scope.phone_number
                     }).then(function(response){
 
-                        console.log("===after patch=====");
+                        console.log("===after phone number patch=====");
                         console.log(response);
-                        html = '<h6><b>your Phone number has been updated</b></h6>'
-                        var e =$compile(html)($scope);
-                        $element.replaceWith(e);
 
                     });
+                });
+			};
 
+            $scope.updatechangemovies = function() {
 
-                }
-            }
-        };
-    })
-    .directive('settingschangemovies', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
-        return {
-            restrict: 'E',
-            replace: true,
-            link: function (scope, element, attrs) {
-                console.log("=====call settingschangemoovies======")
-            },
-            controller:function($scope, $http, $route, $element, $attrs, $transclude){
-
-                $scope.updatechangemovies = function(){
-                    var html ='<image src="/static/app/images/pleasewait.gif" style="width:;">';
-                    $element.html(html);
-                    $compile($element.contents())($scope);
+			    var Get_interests_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                    Get_interests_details.then(function(response){
+                    $scope.user = response;
+                    console.log("=========before patch========")
 
                     var data = ($scope.movies.toString()).split(",");
 
@@ -339,34 +241,37 @@ angular.module('weberApp')
                         $scope.user.movies.push(data[k]);
                     }
 
+                    $scope.user.movies = $scope.user.movies;
+
                     $scope.user.patch({
                         'movies':$scope.user.movies
                     }).then(function(response){
 
-                        console.log("===after patch=====");
+                        console.log("===after interests patch=====");
                         console.log(response);
-                        html = '<h6><b>your Movies has been updated</b></h6>'
-                        var e =$compile(html)($scope);
-                        $element.replaceWith(e);
 
-                    });
-
-
-                }
-            }
-        };
-    })
-	.directive('pwCheck', [function () {
-        return {
-            require: 'ngModel',
-            link: function (scope, elem, attrs, ctrl) {
-                var firstPassword = '#' + attrs.pwCheck;
-                elem.add(firstPassword).on('keyup', function () {
-                    scope.$apply(function () {
-                        // console.info(elem.val() === $(firstPassword).val());
-                        ctrl.$setValidity('pwmatch', elem.val() === $(firstPassword).val());
                     });
                 });
-            }
+			};
+
+
+
+
+
+
+
+		});
+	}).directive('pwCheck', [function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, elem, attrs, ctrl) {
+            var firstPassword = '#' + attrs.pwCheck;
+            elem.add(firstPassword).on('keyup', function () {
+                scope.$apply(function () {
+                    // console.info(elem.val() === $(firstPassword).val());
+                    ctrl.$setValidity('pwmatch', elem.val() === $(firstPassword).val());
+                });
+            });
         }
-    }]);
+    }
+}]);

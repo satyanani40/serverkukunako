@@ -30,12 +30,9 @@
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-sm-12">
-						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80" class="about-edit">
-							<i class="glyphicon glyphicon-check" style="opacity:0.65"></i>&nbsp;
-							Iam interested in:
-						</h5>
-						<h6 style="margin-top:1px">
-							<a href="" ng-repeat="interest in user.interests" style="line-height:1.2em;color:">
+						<h6 style="margin-bottom:5px;margin-top:0px;opacity:0.80" class="about-edit">
+							interested in:
+                            <a href="" ng-repeat="interest in user.interests" style="line-height:1.2em;color:">
 
 									{{ interest }},&nbsp;
 
@@ -46,15 +43,15 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80">
-							<i class="glyphicon glyphicon-folder-open" style="opacity:0.65"></i>&nbsp;
 							Studied at:
-						</h5>
-						<h6 style="margin-top:1px">
-							<a href="" style="line-height:1.2em;color:">
+                            <a href="" style="line-height:1.2em;color:">
 
 									{{ user.study.graduate }}
 
 							</a>
+						</h5>
+						<h6 style="margin-top:1px">
+
 						</h6>
 					</div>
 				</div>

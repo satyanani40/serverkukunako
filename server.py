@@ -153,7 +153,12 @@ def changepassword():
 @app.route('/settingschangepassword', methods=['POST', 'GET'])
 def settingschangepassword():
     accounts = app.data.driver.db['people']
+    print "--------=======***********user name**********=========-----------"
+    print request.json['user_name']
     user = accounts.find_one({'username': request.json['user_name']})
+    if not user:
+        print "=======************no user found********==========="
+        return "sorry"
     get_hash_new_password = generate_password_hash(request.json['new_password'])
     print "=================settings change password====================="
     print get_hash_new_password
