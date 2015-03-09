@@ -1,5 +1,3 @@
-<div navbar></div>
-
 <div class="container">
     <div class="col-md-3" wb-affix="150">
 		<div class="thumbnail">
@@ -80,8 +78,8 @@
 		</div>
 		<div class="panel panel-default">
 			<div class="clearfix panel-heading">Friends({{user.friends.length}})</div>
-                <a ng-repeat="friend in friends" href="#/profile/{{friend._id}}">
-                    <img data-placement="top-right" style="width:65px"
+                <a ng-repeat="friend in friends | limitTo : 8" href="#/profile/{{friend._id}}">
+                    <img data-placement="top-right" style="width:60px"
                          data-content="{{friend.location.city}}, {{friend.location.state}}"
                          title="{{friend.name.first}} {{friend.name.last}}" data-trigger="hover" bs-popover src="{{friend.picture.thumbnail}}">
                 </a>
@@ -117,24 +115,24 @@
                         <div class="jumbotron"
                              style="padding:5px 10px;background-color:#fff;margin-bottom:10px;">
                             <div class="row" style="">
-                                <div class="col-sm-2">
+                                <div class="col-sm-1">
                                     <img src="{{ friend.picture.thumbnail }}"
-                                         style="width:80px;border-radius:4px">
+                                         style="width:60px;border-radius:4px">
                                 </div>
-                                <div class="col-sm-6 colpadding">
+                                <div class="col-sm-6" style="padding-left:30px;">
                                     <h5>
                                         <a href="#/profile/{{ friend._id }}">
                                             {{ friend.name.first }} {{ friend.name.last }}
                                         </a>
                                     </h5>
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-3 pull-right">
                                     <!--<a matchmeunfriend  style="margin-top:15px"
                                        class="btn btn-default btn-sm pull-right" ng-click="matchmeunfriend('{{ friend._id }}')">
                                         Unfriend
                                     </a>-->
                                     <unaddfriend>
-                        	            <button ng-click="friendunfriend('{{ friend._id }}')" class="btn btn-primary">unfriend</button>
+                        	            <button ng-click="friendunfriend('{{ friend._id }}')" class="btn-sm btn btn-default">unfriend</button>
 						            </unaddfriend>
                                 </div>
                             </div>
@@ -147,4 +145,3 @@
         </div>
     </div>
 </div>
-<div chatbar></div>

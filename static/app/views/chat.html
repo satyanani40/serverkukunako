@@ -1,20 +1,69 @@
-<div class="container">
+<div class="container" ng-init="height = 414; right = 315">
     <div class="row">
         <div class="col-md-3 colpadding side_chat" style=""
               wb-affix="150">
-            <div class="panel" style="margin-bottom:0px;">
+            <div class="panel" style="margin-bottom:0px;min-height:95vh;border:1px solid #DCDCDC;">
                 <div class="panel-heading"
                      style="border-bottom:1px solid #dcdcdc;margin-bottom:9px;">
                     <h5 style="margin:5px 0px;opacity:0.70;">
                         Online Friends
+
+                         <a class="pull-right" ng-click="messageMenu($event);loadLatestMessages()" style="cursor:pointer">
+                            <i class="glyphicon glyphicon-envelope" style="font-size:17px;opacity:0.70;">
+                            </i>
+                                {{ chatactivity.messageNotific.length }}
+                                <label class="label label-danger" ng-if="chatactivity.messageNotifc.length"
+                                       style="position:absolute;font-size:10px;top: 5px;right: 0px;">
+                                        {{ chatactivity.messageNotifc.length }}
+                                </label>
+                        </a>
+
                     </h5>
+
+                    <!-- chating notifications div -->
+                     <div class="panel panel-default message_box box-shadowpanel"
+                             ng-show="messageOpened"
+                             style="top: 45px;z-index:999;position:absolute;width:380px;right:7px;border:1px solid #D0D0D0;">
+                            <div class="panel-heading" style="padding: 2px 15px;">
+                                <h5>Messages</h5>
+                            </div>
+                            <div class="panel-body" style="padding:0px;height:300px;">
+                                <div class="" style="margin-bottom:0px;"
+                                       ng-repeat="message in chatactivity.latestMessages  | limitTo : 5 ">
+                                    <a style="" href="/#/profile/{{message.sender._id }}"
+                                       class="list-group-item search_a">
+                                        <div class="row">
+                                            <div class="col-sm-1">
+                                                <img src="{{ message.sender.picture.large }}"
+                                                     style="width:40px">
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <h5 style="opacity:0.75;">
+                                                    {{ message.sender.name.first }} {{ message.sender.name.last }}
+                                                </h5>
+                                            </div>
+                                            <div>
+                                                {{ message.message }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="panel-footer" style="padding: 2px 15px;">
+                                <a href="" class="">
+                                    <h6 class="text-center">Read more</h6>
+                                </a>
+                            </div>
+                     </div>
+                    <!-- end of chat notifications div -->
                 </div>
-                <div class="panel-body messages-scroll" style="height:220px;padding:0px;">
+
+                <div class="panel-body messages-scroll" style="padding:0px;height:38vh;">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="media" ng-repeat="chatuser in chatusers"
-                                 name="{{chatuser._id}}"
-                                 style="border-bottom:1px solid #F5F5F5;" addchatdiv>
+                            <div  class="media" ng-repeat="chatuser in chatusers"
+                                 ng-click="openchatroom('{{ chatuser._id }}')"
+                                 style="border-bottom:1px solid #F5F5F5;" >
                               <div class="media-left">
                                 <a class="pull-left" style="padding: 0px 7px;">
                                   <img class="media-object" style="width:40px;border-radius:50%;"
@@ -43,12 +92,13 @@
                         Conversations
                     </h5>
                 </div>
-                <div class="panel-body messages-scroll" style="height:220px;padding:0px;">
+                <div class="panel-body messages-scroll" style="padding:0px;height:39vh;">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="media" ng-repeat="chatuser in chatusers"
-                                 name="{{chatuser._id}}"
-                                 style="border-bottom:1px solid #F5F5F5;" addchatdiv>
+                                 ng-click="openchatroom('{{ chatuser._id }}')"
+
+                                 style="border-bottom:1px solid #F5F5F5;" >
                               <div class="media-left">
                                 <a class="pull-left" style="padding: 0px 7px;">
                                   <img class="media-object" style="width:40px;border-radius:50%;"
@@ -56,7 +106,7 @@
                                 </a>
                               </div>
                               <div class="media-body">
-                                <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
+                                <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;" >
                                     {{ chatuser.name.first }} {{ chatuser.name.last }}
                                     <span class="pull-right" style="opacity:0.40;font-size:9px;padding-top:3px;">
                                        11/11/11
@@ -86,109 +136,86 @@
             </div>
         </div>
 
-        <div ng-repeat="previousdiv in previousdivs" class="col-md-3 colpadding chat_divs"
-             style="right:{{ previousdiv.right}}px;height:{{ previousdiv.height}}"
+        <div ng-repeat="chatroom in  chatactivity.messages" class="col-md-3 colpadding chat_divs"
+
+             style="right:{{ right * $index+1 }}px;height:{{ chatroom.details.height}}" chatdivdir
              wb-affix="150">
 
-
             <div class="panel panel-primary" style="margin-bottom:0px;">
-					<div class="panel-heading">
+
+					<div class="panel-heading" ng-click="chatroomdiv('{{ chatroom.id }}')" style="cursor:pointer">
 						<div class="row">
                             <div class="col-sm-9">
-                                <a href="/#/profile/{{ previousdiv.id }}" style="color:#fff;">
-                                    {{ previousdiv.name }}
+                                <a href="/#/profile/{{ chatroom.id }}" style="color:#fff;" >
+                                     {{ chatroom.details.name }}
                                 </a>
 
-                                <label class="label label-danger" ng-if="checknotific(previousdiv.id)">new message</label>
+                                <label class="label label-danger" ng-if="checknotific(chatroom.id)">new message</label>
                             </div>
                             <div class="col-sm-3">
                                 <span>
-                                    <a ng-click="close_div('{{ previousdiv.id}}')"
+                                    <a ng-click="close_div('{{ chatroom.id}}')"
                                        class="pull-right" style="color:#888;cursor:pointer;">
                                         <i class="fa fa-close" style="color:#fff;"></i>
                                     </a>
-                                    <div ng-if="previousdiv.maximize">
-                                        <a   ng-click="minimize('{{ previousdiv.id }}')"
-                                             class="" style="color:#888;cursor:pointer;">
-                                            <i class="fa fa-toggle-down" style="color:#fff;"></i>
-                                        </a>
-                                    </div>
-                                    <div  ng-if="previousdiv.minimize">
-                                        <a  ng-click="maximize('{{ previousdiv.id }}')"
-                                            class="" style="color:#888;cursor:pointer;">
-                                            <i class="fa fa-toggle-up" style="color:#fff;"></i>
-                                        </a>
-                                    </div>
                                 </span>
                             </div>
                         </div>
 					</div>
 					<div class="panel-collapse" id="collapseOne">
-						<div class="panel-body messages-scroll" style="height:320px;">
-							<ul class="chat">
-								<li class="left clearfix">
-                                    <span class="chat-img pull-left">
-                                        <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
-                                    </span>
-									<div class="chat-body clearfix">
-										<div class="header">
-											<strong class="primary-font">Jack Sparrow</strong>  <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
-										</div>
-										<p>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-										</p>
-									</div>
-								</li>
-								<li class="right clearfix">
-                                    <span class="chat-img pull-right">
-                                        <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
-                                    </span>
-									<div class="chat-body clearfix">
-										<div class="header">
-											<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>13 mins ago</small>
-											<strong class="pull-right primary-font">Bhaumik Patel</strong>
-										</div>
-										<p>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-										</p>
-									</div>
-								</li>
-								<li class="left clearfix">
-                                    <span class="chat-img pull-left">
-                                        <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
-                                    </span>
-									<div class="chat-body clearfix">
-										<div class="header">
-											<strong class="primary-font">Jack Sparrow</strong>  <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>14 mins ago</small>
-										</div>
-										<p>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-										</p>
-									</div>
-								</li>
-								<li class="right clearfix">
-                                    <span class="chat-img pull-right">
-                                        <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
-                                    </span>
-									<div class="chat-body clearfix">
-										<div class="header">
-											<small class=" text-muted"><span class="glyphicon glyphicon-time"></span>15 mins ago</small>
-											<strong class="pull-right primary-font">Bhaumik Patel</strong>
-										</div>
-										<p>
-											Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
-										</p>
-									</div>
-								</li>
+						<div class="panel-body"   style="height:320px;overflow:auto;" scroll >
+							<ul class="chat"  >
+
+                                <div ng-repeat="message in chatroom.messages">
+                                    <li
+                                        ng-if="message.sender._id == chatroom.id" scrollitem
+                                        class="left clearfix"  >
+                                        <span class="chat-img pull-left">
+                                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                                        </span>
+                                        <div class="chat-body clearfix">
+                                            <div class="header">
+                                                <strong class="primary-font">{{ message.sender.name.first }}</strong>
+                                                <small class="pull-right text-muted">
+                                                    <span class="glyphicon glyphicon-time"></span>
+                                                    <span am-time-ago="message._created"></span></small>
+                                                </small>
+                                            </div>
+                                            <p>
+                                                  {{ message.message }}
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li ng-if="message.receiver._id == chatroom.id" scrollitem class="right clearfix"
+                                        >
+                                        <span class="chat-img pull-right">
+                                            <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+                                        </span>
+                                        <div class="chat-body clearfix">
+                                            <div class="header">
+                                                <small class=" text-muted">
+                                                    <span class="glyphicon glyphicon-time"></span>
+                                                    <span am-time-ago="message._created"></span></small>
+                                                </small>
+                                                <strong class="pull-right primary-font">{{ message.sender.name.first }}</strong>
+                                            </div>
+                                            <p>
+                                                {{ message.message }}
+                                            </p>
+                                        </div>
+                                    </li>
+                                </div>
+
 							</ul>
+
 						</div>
 						<div class="panel-footer" style="padding:10px 15px;">
 							<div class="row">
                                 <div class="col-sm-12">
-                                    <input id="btn-input" type="text" class="form-control input-sm"
-                                           placeholder="Type your message here..." />
+                                    <input  type="text" class="form-control input-sm"
+                                           ng-keyup="$event.keyCode == 13 && send_message('sampletext', chatroom.id)"
+                                           placeholder="Type your message here..." autofocus />
+
                                 </div>
                             </div>
 						</div>

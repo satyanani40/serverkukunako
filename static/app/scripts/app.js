@@ -32,6 +32,21 @@ angular
 			});
 		}
 	])
+
+	.run(['$route', '$rootScope', '$location', function ($route, $rootScope, $location) {
+        var original = $location.path;
+        $location.path = function (path, reload) {
+            if (reload === false) {
+                var lastRoute = $route.current;
+                var un = $rootScope.$on('$locationChangeSuccess', function () {
+                    $route.current = lastRoute;
+                    un();
+                });
+            }
+            return original.apply($location, [path]);
+        };
+    }])
+
 	.config(['RestangularProvider',
 		function(RestangularProvider) {
 			// point RestangularProvider.setBaseUrl to your API's URL_PREFIX
@@ -91,7 +106,7 @@ angular
 				templateUrl:'/static/app/views/change_password.html'
 			})
 
-			.when('/', {
+			.when('/search/:query?', {
 				templateUrl: '/static/app/views/start_search.html',
 				controller: 'WeberSearchCtrl',
 			})
@@ -156,6 +171,7 @@ angular
 				controller: 'SignupCtrl'
 			})
 			.otherwise({
-				redirectTo: '/'
+				redirectTo: '/search/:query',
+				reloadOnSearch: false
 			});
 	});

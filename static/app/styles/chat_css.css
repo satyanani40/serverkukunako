@@ -89,3 +89,9 @@
 /*end of left arrow chat css*/
 
 
+/* Styles go here */
+
+.heightClass{
+  height:100px;
+  overflow :auto;
+}

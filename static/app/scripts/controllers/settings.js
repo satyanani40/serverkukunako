@@ -9,6 +9,8 @@
  */
 angular.module('weberApp')
 	.controller('SettingsCtrl', function($route, $location, $scope, $auth, Restangular, InfinitePosts, $alert, $http, CurrentUser, UserService, fileUpload) {
+
+
 		$scope.UserService = UserService;
 		$http.get('/api/me', {
 			headers: {
@@ -261,7 +263,56 @@ angular.module('weberApp')
 
 
 		});
-	}).directive('pwCheck', [function () {
+
+		/*console.log("sdfjhsgfuygsfcjsdgfvdsbjvgduvkjd jhdgfuvduvguvf")
+
+
+		$scope.size='small';
+        $scope.type='circle';
+        $scope.imageDataURI='';
+        $scope.resImageDataURI='';
+        $scope.resImgFormat='image/png';
+        $scope.resImgQuality=1;
+        $scope.selMinSize=100;
+        $scope.resImgSize=200;
+        //$scope.aspectRatio=1.2;
+        $scope.onChange=function($dataURI) {
+          console.log('onChange fired');
+          console.log($dataURI)
+        };
+        $scope.onLoadBegin=function() {
+          console.log('onLoadBegin fired');
+        };
+        $scope.onLoadDone=function() {
+          console.log('onLoadDone fired');
+        };
+        $scope.onLoadError=function() {
+          console.log('onLoadError fired');
+        };
+        var handleFileSelect=function(evt) {
+          var file=evt.currentTarget.files[0];
+          console.log(file);
+          var reader = new FileReader();
+          reader.onload = function (evt) {
+            $scope.$apply(function($scope){
+              $scope.imageDataURI=evt.target.result;
+              console.log("============after base encoding the image===========")
+              console.log($scope.imageDataURI);
+            });
+          };
+          reader.readAsDataURL(file);
+        };
+        angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+        $scope.$watch('resImageDataURI',function(){
+          //console.log('Res image', $scope.resImageDataURI);
+        });*/
+
+
+
+
+	})
+
+	.directive('pwCheck', [function () {
     return {
         require: 'ngModel',
         link: function (scope, elem, attrs, ctrl) {

@@ -21,10 +21,96 @@
     rel="stylesheet">
 	<link rel="stylesheet" href="/static/app/styles/main.css">
 	<link rel="stylesheet" href="/static/app/styles/chat_css.css">
+
+    <link rel="stylesheet" href="static/bower_components/ngImgCrop/compile/unminified/ng-img-crop.css"/>
+
+    <style>
+        body{
+
+        }
+        .add-on .input-group-btn > .btn {
+          border-left-color:#fff;left:-2px;
+          -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        }
+        /* stop the glowing blue shadow */
+        .form-control:focus {
+         box-shadow:none;
+         -webkit-box-shadow:none;
+         border-color:#cccccc;
+        }
+        .form-control1{
+            border-top:5px solid #ee9a4d;
+            height:50px;
+        }
+        .form-control-feedback {
+            position: absolute;
+            top: 7px;
+            right: 0;
+            z-index: 2;
+            display: block;
+            width: 40px;
+            height: 37px;
+            line-height: 34px;
+            text-align: center;
+            font-size: 20px;
+            opacity:0.70;
+        }
+
+
+    </style>
     <!-- endbuild -->
 </head>
 
-<body ng-app="weberApp">
+<body ng-app="weberApp" ng-controller="indexCtrl">
+
+    <!--<div ng-if="!(isloggin)">
+
+        <nav class="navbar navbar-default" style="background-color: #fff !important;border-color:#fff !important;">
+            <div class="container-fluid">
+
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href=""
+                     style="font-size:40px;font-family: 'Open sans',Arial,sans-serif;">
+                      <h2 style="font-family: 'Open sans',Arial,sans-serif;font-weight:400;margin-top:0px;">
+                          <img src="http://www.websoc.in/images/logo.png">
+                          <span style="margin-left: -7px;color:#444;">eber</span>
+                      </h2>
+                  </a>
+            </div>
+
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav navbar-right">
+                  <li>
+                      <a href="/#/login" style="color:#444;">
+                          Login
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/#/signup" style="color:#444;">
+                          Signup
+                      </a>
+                  </li>
+                  <li>
+                      <a href="/#/about" style="color:#444;">
+                          About
+                      </a>
+                  </li>
+              </ul>
+            </div>
+            </div>
+        </nav>
+    </div>-->
+
+<!--  ng-if="isloggin" -->
+    <div navbar></div>
 	<!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -37,6 +123,7 @@
     	<div ng-view=""></div>
     </div>
 
+    <div ng-if="isloggin" chatbar></div>
 
 
 
@@ -87,6 +174,9 @@
 	<script src="static/bower_components/elasticsearch/elasticsearch.js"></script>
 	<script src="static/bower_components/elasticsearch/elasticsearch.angular.js"></script>
     <script src="static/bower_components/angular-local-storage/angular-local-storage.js"></script>
+
+    <script type="text/javascript" src="static/bower_components/ngImgCrop/compile/unminified/ng-img-crop.js"></script>
+
 	<!-- endbower -->
 
 	<!-- endbuild -->
@@ -96,6 +186,9 @@
 	<script src="/static/app/scripts/controllers/main.js"></script>
     <script src="/static/app/scripts/controllers/testing.js"></script>
 	<script src="/static/app/scripts/controllers/about.js"></script>
+
+
+
     <script src="/static/app/scripts/controllers/friends.js"></script>
     <script src="/static/app/scripts/controllers/confirm_email.js"></script>
 	<script src="/static/app/scripts/controllers/emaildetails.js"></script>

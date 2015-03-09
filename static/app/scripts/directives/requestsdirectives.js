@@ -1,90 +1,45 @@
 angular.module('weberApp')
-.directive('checkinfunctions', function ($route, Restangular) {
+.directive('chatdivdir', function () {
     return {
         restrict: 'A',
         replace: true,
-        link: function ($scope, element, attrs) {
+        controller:function($scope, $element, $attrs){
 
-            $scope.removeFriends = function(currentuser, profileuser,operations){
-                operations = typeof operations !== 'undefined' ? operations : 'nothingtodo';
-
-                for (k in profileuser.friends){
-                    if(profileuser.friends[k] == currentuser._id){
-                        profileuser.friends.splice(profileuser.friends.indexOf(currentuser._id),1)
-                        profileuser.patch({
-                           'friends': profileuser.friends
-                        }).then(function(response){
-                            console.log("deleted at profile friend")
-                            if(operations == 'addfriend'){
-                                var d = new Date();
-                                var total_time = d.getDate()+d.getDay()+d.getFullYear()+d.getHours()+d.getMilliseconds()+d.getMinutes()+d.getMonth()+d.getSeconds()+d.getTime();
-                                var new_request = {'friend_id':currentuser._id,'seen':false,'timestamp':total_time,'daterequest':d}
-                                profileuser.notifications.push(new_request);
-                                return Restangular.one('people', profileuser._id).patch({
-                                    'notifications':profileuser.notifications,
-                                    'all_seen':false
-                                },{},{'If-Match':response._etag});
-                            }
-
-                        });
+            $scope.chatroomdiv = function(id){
+                if($element[0].offsetHeight == 414){
+                   $element.css('height', '40px')
+                    var data = JSON.parse(sessionStorage.getItem(id))
+                    json = {
+                                      name:data.name,
+                                      id: data.id,
+                                      minimize:true,
+                                      maximize:false,
+                                      right:0,
+                                      height:'40px'
                     }
-                }
+                    sessionStorage.removeItem(id);
+                    sessionStorage.setItem(data.id, JSON.stringify(json));
 
-                for(temp in currentuser.friends){
-                    if(currentuser.friends[temp] ==(profileuser._id)){
-                        currentuser.friends.splice(currentuser.friends.indexOf(profileuser._id),1);
-                        return currentuser.patch({
-                            'friends': currentuser.friends
-                        }).then(function(response){
-                            console.log('deleted at current user')
-
-                        });
-                    }
+                }else{
+                    $element.css('height', '414px')
+                    $scope.chatdivnotification = [];
+                    var data = JSON.parse(sessionStorage.getItem(id))
+                    json = {
+                                      name:data.name,
+                                      id: data.id,
+                                      minimize:false,
+                                      maximize:true,
+                                      right:0,
+                                      height:'414px'
+                          }
+                    sessionStorage.removeItem(id);
+                    sessionStorage.setItem(data.id, JSON.stringify(json));
                 }
             }
 
-                $scope.checkInNotifcations = function(cuser, puser){
-                    var pn_status = false;
-                    var cn_status = false;
-
-                    for(k in puser.notifications){
-                        if(puser.notifications[k].friend_id == cuser._id){
-                            console.log('yess in profile user notifications')
-                            pn_status = true;
-                        }
-
-                    }
-                    for(k in cuser.notifications){
-                        if(cuser.notifications[k].friend_id == puser._id){
-                            console.log('yess in current user notifications')
-                            cn_status = true;
-                        }
-
-                    }
-                    return ({cn_status:cn_status, pn_status:pn_status});
-                }
-
-                 $scope.checkInFriends = function(cuser, puser){
-                    var pf_status = false;
-                    var cf_status = false;
-
-                    for(k in puser.friends){
-                        if(puser.friends[k] == cuser._id){
-                            console.log('yess in profile user friends')
-                            pf_status = true;
-                        }
-                    }
-
-                    for(k in cuser.friends){
-                        if(cuser.friends[k] == puser._id){
-                            console.log('yess in current user friends')
-                            cf_status = true;
-                        }
-                    }
-                    return ({cf_status:cf_status,pf_status:pf_status});
-                }
-
         }
+
+
     };
 })
 
@@ -111,15 +66,19 @@ angular.module('weberApp')
                         user_obj.get({ seed : Math.random() }).then(function(profileuser) {
 
                             //console.log('-----------check in friends user--------')
-                            f_status = $scope.checkInFriends(user, profileuser)
+                            $scope.friendsactivity = new friendsActivity(user, profileuser)
+                            f_status = $scope.friendsactivity.checkInFriends()
+
                             if(f_status.pf_status && f_status.cf_status){
-                                console.log('alredy friends')
-                                $route.reload()
+                                var html ='<b>alredy friends please reload page</b>';
+                                e =$compile(html)($scope);
+                                $element.replaceWith(e);
 
                             }else if((!(f_status.pf_status)&& f_status.cf_status)
                                                     ||
                                     (!(f_status.cf_status) && f_status.pf_status)){
-                                    $scope.removeFriends(user, profileuser, 'addfriend').then(function(){
+
+                                    $scope.friendsactivity.removeFriends('addfriend').then(function(){
                                         console.log('remove friends add request sent')
                                         var html ='<addfriend><button ng-click="frndcancelrequest(\''+id+'\')" class="btn btn-primary" >cancel request</button></addfriend>';
                                         e =$compile(html)($scope);
@@ -127,16 +86,18 @@ angular.module('weberApp')
 
                                     });
                             }else if(!(f_status.pf_status && f_status.cf_status )){
-                                n_status = $scope.checkInNotifcations(user, profileuser)
+
+                                n_status = $scope.friendsactivity.checkInNotifcations()
                                     if(n_status.pn_status){
-                                        console.log('alredy add request sent')
-                                        $route.reload()
+                                        var html ='<b>alredy reqeust sent please reload page</b>';
+                                        e =$compile(html)($scope);
+                                        $element.replaceWith(e);
                                     }else if(n_status.cn_status){
-                                        console.log('accept add request first')
-                                        $route.reload()
+                                        var html ='<b>accept request first please reload page </b>';
+                                        e =$compile(html)($scope);
+                                        $element.replaceWith(e);
                                     }else{
-                                        friendsactivity = new friendsActivity(user,profileuser)
-                                        $scope.temps = friendsactivity.AddFriend();
+                                        $scope.temps = $scope.friendsactivity.AddFriend();
                                         $scope.temps.then(function(data){
                                             var html ='<addfriend><button ng-click="frndcancelrequest(\''+id+'\')"  class="btn btn-primary">cancel request</button></addfriend>';
                                             e =$compile(html)($scope);
@@ -176,39 +137,32 @@ angular.module('weberApp')
                         var user_obj = Restangular.one('people', id);
 		                user_obj.get({ seed : Math.random() }).then(function(profileuser) {
 
-		                 var n_status = $scope.checkInNotifcations(user, profileuser);
+                         $scope.friendsactivity = new friendsActivity(user, profileuser)
 
-                            $scope.currentuser = user;
+		                 var n_status = $scope.friendsactivity.checkInNotifcations();
+                         $scope.currentuser = user;
 
-                            friendsactivity = new friendsActivity($scope.currentuser, profileuser)
+                         if(n_status.cn_status && n_status.pn_status){
+                             $scope.friendsactivity.removeCnotifcations();
+                             $scope.friendsactivity.then(function(response){
+                                    console.log('remove notifcations at profile user')
+                                    html ='<cancelrequest><button  ng-click="frndaddrequest(\''+id+'\')"  class="btn btn-primary">AddFriend</button></cancelrequest>';
+                                    e =$compile(html)($scope);
+                                    $element.replaceWith(e);
+                             });
 
-                            if(n_status.cn_status && n_status.pn_status){
-
-                                friendsactivity.removeCnotifcations();
-
-                                $scope.rf = friendsactivity.removePnotifcations();
-                                $scope.rf.then(function(response){
+                         }else if(n_status.pn_status){
+                                var data = $scope.friendsactivity.removePnotifcations();
+                                data.then(function(response){
                                     console.log('remove notifcations at profile user')
                                     html ='<cancelrequest><button  ng-click="frndaddrequest(\''+id+'\')"  class="btn btn-primary">AddFriend</button></cancelrequest>';
                                     e =$compile(html)($scope);
                                     $element.replaceWith(e);
                                 });
 
-
-                            }else if(n_status.pn_status){
-                                $scope.rf = friendsactivity.removePnotifcations();
-                                console.log('===removing===')
-                                console.log($scope.rf)
-
-                                $scope.rf.then(function(response){
-                                    console.log('remove notifcations at profile user')
-                                    html ='<cancelrequest><button  ng-click="frndaddrequest(\''+id+'\')"  class="btn btn-primary">AddFriend</button></cancelrequest>';
-                                    e =$compile(html)($scope);
-                                    $element.replaceWith(e);
-                                });
                             }else if(n_status.cn_status){
-                                $scope.rf = friendsactivity.removeCnotifcations();
-                                $scope.rf.then(function(response){
+                                var data = $scope.friendsactivity.removeCnotifcations();
+                                data.then(function(response){
                                     console.log('remove notifcations at current user')
                                     html ='<cancelrequest><button ng-click="frndaddrequest(\''+id+'\')"  class="btn btn-primary">AddFriend</button></cancelrequest>';
                                     e =$compile(html)($scope);
@@ -217,7 +171,9 @@ angular.module('weberApp')
                             }
 
                            else {
-                                $route.reload()
+                                var html ='<b>bad request please reload page</b>';
+                                e =$compile(html)($scope);
+                                $element.replaceWith(e);
                             }
 		                });
                    });
@@ -236,9 +192,6 @@ angular.module('weberApp')
 
             $scope.acceptrequest = function(id,view){
 
-                console.log('---------ddddddddddddprofiueeee----')
-                console.log(id)
-                console.log(view)
                 if(view == 'navbarview')
                     $routeParams.username = id;
 
@@ -255,98 +208,96 @@ angular.module('weberApp')
                              var user_obj = Restangular.one('people', $routeParams.username);
                              user_obj.get({ seed : Math.random() }).then(function(profileuser) {
 
-                            var n_status = $scope.checkInNotifcations(user, profileuser)
+                                $scope.friendsactivity = new friendsActivity(user, profileuser)
+                                var n_status = $scope.friendsactivity.checkInNotifcations()
 
-                            if(n_status.cn_status){
-                                friendsactivity = new friendsActivity($scope.currentuser, profileuser)
+                                if(n_status.cn_status){
 
-                                $scope.rf = friendsactivity.accept_request();
+                                    var data = $scope.friendsactivity.accept_request();
+                                    data.then(function(response){
+                                        if(view == 'navbarview'){
+                                            html ='<b>friends</b>';
+                                            e =$compile(html)($scope);
+                                            $element.replaceWith(e);
+                                        }else{
+                                            html ='<unaddfriend><button ng-click="friendunfriend(\''+id+'\')" class="btn btn-primary">unfriend</button></unaddfriend>';
+                                            e =$compile(html)($scope);
+                                            $element.replaceWith(e);
+                                        }
+                                    });
 
-                                $scope.rf.then(function(response){
-                                if(view == 'navbarview'){
-                                    html ='<b>friends</b>';
-                                    e =$compile(html)($scope);
-                                    $element.replaceWith(e);
                                 }else{
-                                    html ='<unaddfriend><button ng-click="friendunfriend(\''+id+'\')" class="btn btn-primary">unfriend</button></unaddfriend>';
+                                    html ='<b>send request cancelled by your friend</b>';
                                     e =$compile(html)($scope);
                                     $element.replaceWith(e);
                                 }
 
-                                });
-
-                            }
                             });
                         });
                     });
             }
 
             $scope.rejectrequest = function(id, view){
-                console.log('---------profiueeeennnnn----')
-                console.log(id)
-                console.log(view)
+
                 if(view == 'navbarview'){
                     console.log('yes in nav bar view')
                     $routeParams.username = id;
                 }
+
                 html = '<image src="/static/app/images/pleasewait.gif" alt="no image found" style="position:absolute">';
                 $element.html(html);
                 $compile($element.contents())($scope);
                 var currentuserobj = new CurrentUser();
-
                     currentuserobj.getUserId().then(function(){
-
                     currentuserobj.getCUserDetails(currentuserobj.userId)
-
                         .then(function(user){
+
                          var user_obj = Restangular.one('people', $routeParams.username);
                              user_obj.get({ seed : Math.random() }).then(function(profileuser) {
 
-                            var n_status = $scope.checkInNotifcations(user, profileuser);
-
+                            $scope.friendsactivity = new friendsActivity(user, profileuser)
+                            var n_status = $scope.friendsactivity.checkInNotifcations();
                             $scope.currentuser = user;
-                            friendsactivity = new friendsActivity($scope.currentuser, $scope.profileuser)
 
                             if(n_status.cn_status && n_status.pn_status){
 
-                                friendsactivity.removeCnotifcations();
+                                $scope.friendsactivity.removeCnotifcations();
 
-                                $scope.rf = friendsactivity.removePnotifcations();
-                                $scope.rf.then(function(response){
-                                if(view == 'navbarview'){
-                                    console.log('navbarview')
-                                    html ='<b>rejected</b>';
-                                    e =$compile(html)($scope);
-                                    $element.replaceWith(e);
+                                var data = $scope.friendsactivity.removePnotifcations();
+                                data.then(function(response){
+                                    if(view == 'navbarview'){
+                                        console.log('navbarview')
+                                        html ='<b>rejected</b>';
+                                        e =$compile(html)($scope);
+                                        $element.replaceWith(e);
 
-                                }else{
+                                    }else{
 
-                                    console.log('userprofileview')
-                                    html ='<cancelrequest><button ng-click="frndaddrequest(\''+id+'\')" class="btn btn-primary">AddFriend</button></cancelrequest>';
-                                    e =$compile(html)($scope);
-                                    $element.replaceWith(e);
-                                }
-
+                                        console.log('userprofileview')
+                                        html ='<cancelrequest><button ng-click="frndaddrequest(\''+id+'\')" class="btn btn-primary">AddFriend</button></cancelrequest>';
+                                        e =$compile(html)($scope);
+                                        $element.replaceWith(e);
+                                    }
                                 });
 
 
                             }
                             else if(n_status.cn_status){
-                                $scope.rf = friendsactivity.removeCnotifcations();
-                                $scope.rf.then(function(response){
-                                     if(view == 'navbarview'){
-                                    console.log('navbarview')
-                                    html ='<b>rejected</b>';
-                                    e =$compile(html)($scope);
-                                    $element.replaceWith(e);
+                                var data = $scope.friendsactivity.removeCnotifcations();
+                                data.then(function(response){
+                                    if(view == 'navbarview'){
+                                        console.log('navbarview')
+                                        html ='<b>rejected</b>';
+                                        e =$compile(html)($scope);
+                                        $element.replaceWith(e);
 
-                                }else{
+                                    }else{
 
-                                    console.log('userprofileview')
-                                    html ='<cancelrequest><button ng-click="AddFriend()" class="btn btn-primary">AddFriend</button></cancelrequest>';
-                                    e =$compile(html)($scope);
-                                    $element.replaceWith(e);
-                                }
+                                        console.log('userprofileview')
+                                        html ='<cancelrequest><button ng-click="AddFriend()" class="btn btn-primary">AddFriend</button></cancelrequest>';
+                                        e =$compile(html)($scope);
+                                        $element.replaceWith(e);
+                                    }
                                 });
                             }
 
@@ -368,7 +319,9 @@ angular.module('weberApp')
                                 }
                                 });
                             }else {
-                                console.log('nothing to do')
+                                html ='<b>sent request cancelled by your friend</b>';
+                                e =$compile(html)($scope);
+                                $element.replaceWith(e);
 
                             }
 
@@ -386,6 +339,7 @@ angular.module('weberApp')
         replace: true,
         link: function ($scope, element, attrs) {},
         controller:function($scope, $element, $attrs, $transclude){
+
         $scope.friendunfriend = function(id){
 
                 html = '<image src="/static/app/images/pleasewait.gif" alt="no image found" style="position:absolute">';
@@ -394,41 +348,43 @@ angular.module('weberApp')
 
                var currentuserobj = new CurrentUser();
                currentuserobj.getUserId().then(function(){
+
                    currentuserobj.getCUserDetails(currentuserobj.userId).then(function(user){
                         var user_obj = Restangular.one('people', id);
+
 		                user_obj.get({ seed : Math.random() }).then(function(profileuser) {
-                            console.log(profileuser)
-                            var f_status = $scope.checkInFriends(user, profileuser);
+                            $scope.friendsactivity = new friendsActivity(user, profileuser)
+                            var f_status = $scope.friendsactivity.checkInFriends();
                             console.log(f_status)
 
                             if(f_status.pf_status && f_status.cf_status){
-                                friendsactivity = new friendsActivity(user,profileuser)
-                                $scope.temps = friendsactivity.unfriend();
-                                $scope.temps.then(function(data){
+
+                                var data = $scope.friendsactivity.unfriend();
+                                data.then(function(data){
                                     html ='<cancelrequest><button ng-click="frndaddrequest(\''+id+'\')" class="btn btn-primary">AddFriend</button></cancelrequest>';
                                     e =$compile(html)($scope);
                                     $element.replaceWith(e);
                                 });
                             }else if(f_status.pf_status){
-                                friendsactivity = new friendsActivity(user,profileuser)
-                                $scope.temps = friendsactivity.remove_pfriends();
-                                $scope.temps.then(function(data){
+                                var data = $scope.friendsactivity.remove_pfriends();
+                                data.then(function(data){
                                     html ='<cancelrequest><button ng-click="frndaddrequest(\''+id+'\')" class="btn btn-primary">AddFriend</button></cancelrequest>';
                                     e =$compile(html)($scope);
                                     $element.replaceWith(e);
                                 });
 
                             }else if(f_status.cf_status){
-                                friendsactivity = new friendsActivity(user,profileuser)
-                                $scope.temps = friendsactivity.remove_cfriends();
-                                $scope.temps.then(function(data){
+                                var data = $scope.friendsactivity.remove_cfriends();
+                                data.then(function(data){
                                     html ='<cancelrequest><button ng-click="frndcancelrequest("'+id+'")" class="btn btn-primary">AddFriend</button></cancelrequest>';
                                     e =$compile(html)($scope);
                                     $element.replaceWith(e);
                                 });
 
                             }else{
-                                console.log('nothing to done......')
+                                var html ='<b>bad request please reload page</b>';
+                                e =$compile(html)($scope);
+                                $element.replaceWith(e);
                             }
 
 		                });
@@ -463,29 +419,29 @@ angular.module('weberApp')
                         var user_obj = Restangular.one('people',id);
 		                user_obj.get({ seed : Math.random() }).then(function(profileuser) {
 
-                            var f_status = $scope.checkInFriends(user, profileuser);
+                            $scope.friendsactivity = new friendsActivity(user, profileuser)
+                            var f_status = $scope.friendsactivity.checkInFriends();
 
                             if(f_status.pf_status && f_status.cf_status){
-                                friendsactivity = new friendsActivity(user,profileuser)
-                                $scope.temps = friendsactivity.unfriend();
-                                $scope.temps.then(function(data){
+
+                                var data = $scope.friendsactivity.unfriend();
+                                data.then(function(data){
                                     html ='<cancelrequest><button ng-click="AddFriend()" class="btn btn-primary" ng-click="frndcancelrequest("'+id+'")">AddFriend</button></cancelrequest>';
                                     e =$compile(html)($scope);
                                     $element.replaceWith(e);
                                 });
+
                             }else if(f_status.pf_status){
-                                friendsactivity = new friendsActivity(user,profileuser)
-                                $scope.temps = friendsactivity.remove_pfriends();
-                                $scope.temps.then(function(data){
+                                var data = $scope.friendsactivity.remove_pfriends();
+                                data.then(function(data){
                                     html ='<cancelrequest><button ng-click="AddFriend()" class="btn btn-primary" ng-click="frndcancelrequest("'+id+'")">AddFriend</button></cancelrequest>';
                                     e =$compile(html)($scope);
                                     $element.replaceWith(e);
                                 });
 
                             }else if(f_status.cf_status){
-                                friendsactivity = new friendsActivity(user,profileuser)
-                                $scope.temps = friendsactivity.remove_cfriends();
-                                $scope.temps.then(function(data){
+                                var data = $scope.friendsactivity.remove_cfriends();
+                                data.then(function(data){
                                     html ='<cancelrequest><button ng-click="AddFriend()" class="btn btn-primary" ng-click="frndcancelrequest("'+id+'")">AddFriend</button></cancelrequest>';
                                     e =$compile(html)($scope);
                                     $element.replaceWith(e);

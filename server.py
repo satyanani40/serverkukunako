@@ -21,6 +21,11 @@ from flask.ext.socketio import SocketIO, emit, join_room, leave_room
 from flask import Flask
 from flask_mail import Mail, Message
 from bson import json_util
+import string
+import random
+
+
+
 
 class TokenAuth(TokenAuth):
 	def check_auth(self, token, allowed_roles, resource, method):
@@ -86,6 +91,23 @@ def index():
 @login_required
 def me():
     return Response(json.dumps(g.user_id),  mimetype='application/json')
+
+
+@app.route('/api/getpeoplenames',  methods=['GET','POST'])
+def getnames():
+
+    page =  request.json['page']
+    query = request.json['query']
+    accounts = app.data.driver.db['people']
+    print page
+    data = accounts.find({"$or":[
+                {"name.first":{"$regex":".*"+query+".*"}},
+                {"name.name":{"$regex":".*"+query+".*"}},
+                {"username":{"$regex":".*"+query+".*"}}
+            ]}).limit(10);
+
+    return json_util.dumps(data)
+
 
 @app.route('/foo/<path:filename>')
 def send_foo(filename):
@@ -153,14 +175,9 @@ def changepassword():
 @app.route('/settingschangepassword', methods=['POST', 'GET'])
 def settingschangepassword():
     accounts = app.data.driver.db['people']
-    print "--------=======***********user name**********=========-----------"
-    print request.json['user_name']
     user = accounts.find_one({'username': request.json['user_name']})
-    if not user:
-        print "=======************no user found********==========="
-        return "sorry"
     get_hash_new_password = generate_password_hash(request.json['new_password'])
-    print "=================settings change password====================="
+    print "======================================"
     print get_hash_new_password
     if check_password_hash(user['password'], request.json['old_password']):
         return get_hash_new_password
@@ -266,20 +283,41 @@ def sendmessage():
         return False
 
     accounts = app.data.driver.db['messages']
+
     message = {
-        'sender':request.json['sender'],
-        'receiver': request.json['receiver'],
+        'sender':ObjectId(request.json['sender']),
+        'receiver': ObjectId(request.json['receiver']),
         'seen' : False,
         'message' : request.json['message'],
         'timestamp': ts
     }
+
+    #accounts.update({'timestamp':1425368551},{'$set':{'seen':True}})
     data = accounts.insert(message)
     if data:
         return json.dumps({'status': 'ok','data':data}, default=json_util.default)
     return json.dumps({'status':'failed','data':0})
 
-import string
-import random
+@app.route('/api/updatetimestamp', methods=['POST'])
+def updateTimeStamp():
+    accounts = app.data.driver.db['people']
+    ts = int(time.time())
+    data = accounts.update({'_id':ObjectId(request.json['userid'])},{'$set':{'lastmessageseen':ts}})
+    if data:
+        return jsonify({'status':'ok'})
+    return jsonify({'status':'failed'})
+
+@app.route('/api/updateMessageSeen', methods=['POST'])
+def makeMessagesSeen():
+    print request.json['messageids']
+    list = []
+    accounts = app.data.driver.db['messages']
+
+    for x in request.json['messageids']:
+        accounts.update({ '_id':ObjectId(x) },{'$set':{'seen':True}})
+
+    return 'hai'
+
 def id_generator(size=60, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 

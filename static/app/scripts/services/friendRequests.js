@@ -4,9 +4,7 @@ angular.module('weberApp')
         var friendsActivity = function(currentuser, profileuser){
             //console.log(profileuser)
             this.currentuser = currentuser;
-
             this.profileuser = profileuser;
-
             this.status = null;
             this.status_method = null;
 
@@ -21,7 +19,91 @@ angular.module('weberApp')
                     "notifications": []
                 })
             }
+        }
 
+
+        friendsActivity.prototype.checkInFriends = function(){
+
+            var pf_status = false;
+            var cf_status = false;
+
+            for(k in this.profileuser.friends){
+                if(this.profileuser.friends[k] == this.currentuser._id){
+                    console.log('yess in profile user friends')
+                    pf_status = true;
+                }
+            }
+
+            for(k in this.currentuser.friends){
+                if(this.currentuser.friends[k] == this.profileuser._id){
+                    console.log('yess in current user friends')
+                    cf_status = true;
+                }
+            }
+
+            return ({cf_status:cf_status,pf_status:pf_status});
+        }
+
+
+         friendsActivity.prototype.removeFriends = function(operations){
+             operations = typeof operations !== 'undefined' ? operations : 'nothingtodo';
+
+                for (k in this.profileuser.friends){
+                    if(this.profileuser.friends[k] == this.currentuser._id){
+                        this.profileuser.friends.splice(this.profileuser.friends.indexOf(this.currentuser._id),1)
+                        this.profileuser.patch({
+                           'friends': this.profileuser.friends
+                        }).then(function(response){
+                            console.log("deleted at profile friend")
+                            if(operations == 'addfriend'){
+                                var d = new Date();
+                                var total_time = d.getDate()+d.getDay()+d.getFullYear()+d.getHours()+d.getMilliseconds()+d.getMinutes()+d.getMonth()+d.getSeconds()+d.getTime();
+                                var new_request = {'friend_id':currentuser._id,'seen':false,'timestamp':total_time,'daterequest':d}
+                                this.profileuser.notifications.push(new_request);
+                                return Restangular.one('people', this.profileuser._id).patch({
+                                    'notifications':this.profileuser.notifications,
+                                    'all_seen':false
+                                },{},{'If-Match':response._etag});
+                            }
+                        });
+                    }
+                }
+
+                for(temp in this.currentuser.friends){
+                    if(this.currentuser.friends[temp] ==(this.profileuser._id)){
+                        this.currentuser.friends.splice(this.currentuser.friends.indexOf(this.profileuser._id),1);
+                        return this.currentuser.patch({
+                            'friends': this.currentuser.friends
+                        }).then(function(response){
+                            console.log('deleted at current user')
+
+                        });
+                    }
+                }
+            }
+
+
+
+
+        friendsActivity.prototype.checkInNotifcations = function(){
+            var pn_status = false;
+            var cn_status = false;
+
+            for(k in this.profileuser.notifications){
+                if(this.profileuser.notifications[k].friend_id == this.currentuser._id){
+                    console.log('yess in profile user notifications')
+                    pn_status = true;
+                }
+
+            }
+            for(k in this.currentuser.notifications){
+                if(this.currentuser.notifications[k].friend_id == this.profileuser._id){
+                    console.log('yess in current user notifications')
+                    cn_status = true;
+                }
+
+            }
+            return ({cn_status:cn_status, pn_status:pn_status});
         }
 
         friendsActivity.prototype.getRelation = function(){

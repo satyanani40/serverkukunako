@@ -15,6 +15,73 @@ angular.module('weberApp')
 			return $sce.trustAsHtml(text);
 		};
 	})
+
+	.factory('InstanceSearch', function($http, Restangular, $alert, $timeout) {
+
+		var InstanceSearch = function() {
+			this.InstancesearchResult = [];
+			this.busy = false;
+			this.end = false;
+			this.page = 1;
+			this.query = null;
+		};
+
+		InstanceSearch.prototype.getInstancePeoples = function(query){
+
+
+            self = this;
+            this.query = query;
+
+            var req = {
+                 method: 'POST',
+                 url: '/api/getpeoplenames',
+                 headers: {
+                   'Content-Type': 'application/json'
+                 },
+                 data: { page: this.page,
+                         query: query.toLowerCase()
+                       },
+            }
+            $http(req).success(function(peoples){
+                self.InstancesearchResult = peoples;
+				console.log(self.InstancesearchResult)
+            }.bind(self));
+        };
+
+        InstanceSearch.prototype.nextPage = function() {
+            console.log('next page')
+            console.log(this.busy, this.end)
+            if (this.busy | this.end) return;
+			this.busy = true;
+			self = this;
+
+            var req = {
+                 method: 'POST',
+                 url: '/api/getpeoplenames',
+                 headers: {
+                   'Content-Type': 'application/json'
+                 },
+                 data: { page: self.page,
+                         query: self.query
+                       },
+            }
+
+            $http(req).success(function(peoples){
+
+                if (peoples.length === 0) {
+					self.end = true;
+				}
+
+				self.InstancesearchResult.push.apply(self.InstancesearchResult, peoples);
+				self.page = self.page + 1;
+				self.busy = false;
+				console.log(self.InstancesearchResult)
+            }.bind(self));
+
+		};
+       return InstanceSearch;
+    })
+
 	.service('UserService', function($http, Restangular) {
 		this.users = [];
 
@@ -32,9 +99,11 @@ angular.module('weberApp')
 		};
 	}).service('CurrentUser1', function($http, Restangular) {
 		this.userId = null;
+		this.user = null;
 		this.reset = function() {
 			this.userId = null;
 		};
+
 		if (this.userId === null) {
 			$http.get('/api/me', {
 				headers: {
@@ -42,12 +111,15 @@ angular.module('weberApp')
 				}
 			}).success(function(userId) {
 				this.userId = userId;
-				Restangular.one('people', userId).get().then(function(user) {
+				Restangular.one('people', JSON.parse(userId)).get().then(function(user) {
 					this.user = user;
 				}.bind(this));
 			}.bind(this));
 		}
+
 	})
+
+
 	.factory('CurrentUser', function($http,$auth,$q, Restangular) {
 
             var CurrentUser = function() {
@@ -93,14 +165,6 @@ angular.module('weberApp')
 			this.end = false;
             this.params = '{"author": {"$in":'+this.loadPostIds+'}}';
 
-			/*Restangular.all('posts').getList({
-                where: params
-			}).then(function(data){
-			    console.log('=========getting================')
-			    console.log(data);
-			});*/
-
-
 			Restangular.all('posts').getList({
 			    where : this.params,
 				max_results: 10,
@@ -124,11 +188,16 @@ angular.module('weberApp')
 				content: content,
 				keywords: similar_keywords
 			}).then(function(data) {
-					this.posts.unshift({
-					author: this.user_obj._id,
-					content: content,
-					_created: "a few seconds ago"
+
+                this.posts.unshift({
+                    author: this.user_obj._id,
+                    content: content,
+                    _created: new Date(),
+                    _id:data._id,
+                    _etag: data._etag
+
 				});
+
 				var myAlert = $alert({
 					title: 'Successfully Posted! :)',
 					placement: 'top',
@@ -138,6 +207,30 @@ angular.module('weberApp')
 				$timeout(function() {
 					myAlert.hide();
 				}, 5000);
+
+			}.bind(this));
+		};
+
+		InfinitePosts.prototype.deletePost = function(post1) {
+		    console.log(post1._etag)
+			Restangular.one('posts', post1._id).remove({},{
+			    'If-Match': (post1._etag).toString()
+			})
+			.then(function(data) {
+
+			    for(var k in this.posts){
+			        if(this.posts[k]._id == post1._id){
+			            this.posts.splice(k,1)
+			        }
+			    }
+
+					/*this.posts.unshift({
+					author: this.user_obj._id,
+					content: content,
+					_created: "a few seconds ago"
+					})*/
+
+					console.log("successfully deleted")
 			}.bind(this));
 		};
 
@@ -159,9 +252,6 @@ angular.module('weberApp')
 				this.page = this.page + 1;
 				this.busy = false;
 			}.bind(this));
-
-
-
 		};
 		return InfinitePosts;
 	}).factory('SearchActivity', function($http, Restangular, $alert, $timeout) {
@@ -169,32 +259,61 @@ angular.module('weberApp')
 		var SearchActivity = function(user_obj) {
 			this.searchResult = [];
 			this.user_obj = user_obj;
-			this.user_obj.all('searchActivity').getList({
-				sort: '[("_created",-1)]',
-				seed: Math.random()
-			}).then(function(sResult) {
-				this.searchResult.push.apply(this.searchResult,sResult);
-			}.bind(this));
-
+			this.busy = false;
+			this.end = false;
+			this.page = 1;
 		};
 
+		SearchActivity.prototype.getMysearches = function(){
 
-		SearchActivity.prototype.addSearchText = function(content,resultcount,resultIds,keywords) {
+                this.user_obj.all('searchActivity').getList({
+                    max_results: 10,
+                    page: this.page,
+                    sort: '[("_created",-1)]',
+                    seed: Math.random()
+                }).then(function(data) {
+                    console.log('my search')
+                    console.log(data)
+                    if (data.length < 10) {
+					    this.end = true;
+				    }
+
+				    this.searchResult.push.apply(this.searchResult,data);
+				    this.page = this.page + 1;
+				    this.busy = false;
+                }.bind(this));
+
+		}
+
+       SearchActivity.prototype.nextPage = function() {
+			if (this.busy | this.end) return;
+			this.busy = true;
+            this.user_obj.all('searchActivity').getList({
+                    max_results: 2,
+                    page: this.page,
+                    sort: '[("_created",-1)]',
+                    seed: Math.random()
+            }).then(function(data) {
+                    if(data.length === 0){
+                        this.end = true;
+                    }
+                    this.searchResult.push.apply(this.searchResult,data);
+                    console.log(this.searchResult)
+                    this.page = this.page + 1;
+				    this.busy = false;
+            }.bind(this));
+		};
+
+		SearchActivity.prototype.addSearchText = function(content) {
 			this.user_obj.all('searchActivity').post({
 				author: this.user_obj._id,
 				content: content,
-				keywords:keywords,
-				totalResults:resultcount,
-				matchedPosts:resultIds
 			}).then(function(data) {
-					console.log(data)
-					this.searchResult.unshift({
-					author: this.user_obj._id,
-					content: content,
-					_id: data._id,
-					matchesCount:resultcount
-				});
-
+                this.searchResult.unshift({
+                    author: this.user_obj._id,
+                    content: content,
+                    _id: data._id
+                });
 			}.bind(this));
 		};
 
@@ -206,17 +325,53 @@ angular.module('weberApp')
 
 	}).factory('MatchMeResults', function($http, Restangular, $alert, $timeout,CurrentUser,$auth,CurrentUser1) {
 
-		var  MatchMeResults = function() {
+        function combine_ids(ids) {
+   				return (ids.length ? "\"" + ids.join("\",\"") + "\"" : "");
+		}
+
+		var  MatchMeResults = function(query) {
+
 			this.total_matches = '';
 			this.mresults = [];
 			this.matchedids = [];
 			this.totalNames = '';
 			this.searchNames =[];
+			this.busy = true;
+			this.page = 1;
+			this.end = false;
+            var keywords;
+            this.param1 = null;
+            this.param2 = null;
+            this.query = query
+
+            if(this.query){
+                keywords = combine_ids(this.query.split(" "));
+
+                this.param1 = '{"$or":[{"keywords": {"$in":['+keywords+']}},{"content":{"$regex":".*'+this.query+'.*"}}]}';
+			    this.param2 = '{"author":1}';
+                Restangular.all('posts').getList({
+				where : this.param1,
+				max_results: 10,
+				page: this.page,
+				embedded : this.param2
+				}).then(function(data) {
+
+                   if (data.length < 10) {
+                        this.end = true;
+    			   }
+                   this.mresults.push.apply(this.mresults,data);
+                   this.total_matches = data.length;
+                   this.page = this.page + 1;
+                   this.busy = false;
+
+					/*for(var i=0;i<this.total_matches;i++){
+						this.matchedids.push(this.mresults[i]['_id'])
+					}*/
+				}.bind(this));
+            }
 		};
 
-		function combine_ids(ids) {
-   				return (ids.length ? "\"" + ids.join("\",\"") + "\"" : "");
-		}
+
 
 		MatchMeResults.prototype.getMatchedNewResults = function(searchPostId) {
 
@@ -254,38 +409,38 @@ angular.module('weberApp')
             return data
 		};
 
-		MatchMeResults.prototype.getMatchResults = function(content,keywords) {
 
-			var param1 = '{"$or":[{"keywords": {"$in":['+keywords+']}},{"content":{"$regex":".*'+content+'.*"}}]}';
-			var param2 = '{"author":1}';
+        MatchMeResults.prototype.nextPage = function() {
+            console.log("nextpage_this.end"+this.end)
 
-			var data = '';
-			var data = Restangular.all('posts').getList({
-				where :param1,
-				embedded :param2
-				}).then(function(data) {
-					this.total_matches = data.length;
-					this.mresults.push.apply(this.mresults,data);
+			if ((this.busy | this.end) && this.query) return;
+			this.busy = true;
 
-					var i;
-					for(i=0;i<this.total_matches;i++){
-						this.matchedids.push(this.mresults[i]['_id'])
-					}
-				}.bind(this));
-        	return data;
-
+			Restangular.all('posts').getList({
+			    where : this.param1,
+				max_results: 10,
+				page: this.page,
+				embedded : this.param2
+			}).then(function(data) {
+                if (data.length === 0) {
+					this.end = true;
+				}
+				console.log('called infinity scroll')
+				this.mresults.push.apply(this.mresults, data);
+				this.page = this.page + 1;
+				this.busy = false;
+			}.bind(this));
 		};
 
 		MatchMeResults.prototype.getMatchPeoples = function(searchText) {
-			var params = '{"$or":[{"name.first":{"$regex":".*'+searchText+'.*"}},{"name.last":{"$regex":".*'+searchText+'.*"}},{"username":{"$regex":".*'+searchText+'.*"}}]}';
-			var data = Restangular.all('people').getList({
+			var params = '{"$or":[{"name.first":{"$regex":".*'+searchText+'.*"}},{"name.last":{"$regex":".*'+searchText+'.*"}},'+
+			             '{"username":{"$regex":".*'+searchText+'.*"}}]}';
+			Restangular.all('people').getList({
 				where :params
 				}).then(function(data) {
-					console.log(data)
 					this.totalNames = data.length;
 					this.searchNames.push.apply(this.searchNames,data);
 				}.bind(this));
-				return data
 			};
 		return MatchMeResults;
 	});

@@ -1,4 +1,4 @@
-<div navbar></div>
+
 <div class="container">
 	<div class="col-md-3 colpadding" wb-affix="150">
 		<div class="thumbnail">
@@ -10,9 +10,7 @@
                 </div>
             </div>
 			<div class="caption text-center">
-				<h3 style="text-transform: capitalize;">
-                    {{user.name.first}} {{user.name.last}}
-                </h3>
+				<h3 style="text-transform: capitalize;">{{user.name.first}} {{user.name.last}}</h3>
 				@{{user.username}}
 			</div>
 		</div>
@@ -30,9 +28,12 @@
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-sm-12">
-						<h6 style="margin-bottom:5px;margin-top:0px;opacity:0.80" class="about-edit">
-							interested in:
-                            <a href="" ng-repeat="interest in user.interests" style="line-height:1.2em;color:">
+						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80" class="about-edit">
+							<i class="glyphicon glyphicon-check" style="opacity:0.65"></i>&nbsp;
+							Iam interested in:
+						</h5>
+						<h6 style="margin-top:1px">
+							<a href="" ng-repeat="interest in user.interests" style="line-height:1.2em;color:">
 
 									{{ interest }},&nbsp;
 
@@ -43,15 +44,15 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80">
+							<i class="glyphicon glyphicon-folder-open" style="opacity:0.65"></i>&nbsp;
 							Studied at:
-                            <a href="" style="line-height:1.2em;color:">
+						</h5>
+						<h6 style="margin-top:1px">
+							<a href="" style="line-height:1.2em;color:">
 
 									{{ user.study.graduate }}
 
 							</a>
-						</h5>
-						<h6 style="margin-top:1px">
-
 						</h6>
 					</div>
 				</div>
@@ -78,7 +79,7 @@
 		</div>
 		<div class="panel panel-default">
 			<div class="clearfix panel-heading">Friends({{user.friends.length}})</div>
-                <a ng-repeat="friend in friends" href="#/profile/{{friend._id}}">
+                <a ng-repeat="friend in friends | limitTo : 8" href="#/profile/{{friend._id}}">
                     <img data-placement="top-right" style="width:65px"
                          data-content="{{friend.location.city}}, {{friend.location.state}}"
                          title="{{friend.name.first}} {{friend.name.last}}" data-trigger="hover" bs-popover src="{{friend.picture.thumbnail}}">
@@ -109,27 +110,29 @@
 			<button class="btn btn-success btn-sm pull-right">Import</button>
 		</div>-->
 		<div infinite-scroll='infinitePosts.nextPage()' infinite-scroll-disabled='infinitePosts.busy' infinite-scroll-distance='0'>
-			<div class="media panel panel-default" ng-repeat="post in infinitePosts.posts"
-                 style="border: 1px solid #E4E4E4;">
-				<div class="media-body panel-body"
-                     style="border:1px solid #ECEAEA;padding:10px;">
+			<div class="media panel panel-default" ng-repeat="post in infinitePosts.posts">
+				<div class="panel-heading post-div" style="background-color:#fff;border-bottom:1px solid #F2F2F2;">
 					<a class="pull-left" style="padding: 5px;" href="#/profile/{{UserService.get(post.author)._id}}">
 						<img style="width:35px" class="media-object img-circle" src="{{UserService.get(post.author).picture.thumbnail}}" alt="">
 					</a>
 					<strong>
-						<a href="#/profile/{{UserService.get(post.author)._id}}" style="color:#E04836">
+						<a href="#/profile/{{UserService.get(post.author)._id}}" style="color:#133444">
 							{{UserService.get(post.author).name.first}} {{UserService.get(post.author).name.last}}
 						</a>
 					</strong>&nbsp;wrote on his story.
+                    <confirmdelete>
+                        <a class="pull-right delete-div" ng-if="user._id == UserService.get(post.author)._id" ng-click="deletediv(post._id)"
+                           style="cursor:pointer;font-size:12px">
+                            Delete
+                        </a>
+                    </confirmdelete>
 					<br>
 					<small class="text-muted">
                         <span class="glyphicon glyphicon-time" style="color:#2F5168"></span>
 						<span am-time-ago="post._created"></span></small>
 					<br>
 				</div>
-				<p class="panel-body" style="text-align:justify;">
-                    {{post.content}}
-                </p>
+				<p class="panel-body">{{post.content}}</p>
 			</div>
 			<div ng-show='infinitePosts.busy'>Loading data...</div>
 			<div ng-show='infinitePosts.end'>You Reached the end!</div>
@@ -137,4 +140,13 @@
 	</div>
 </div>
 
-<div chatbar></div>
+<style>
+    .post-div .delete-div{
+        display:none;
+    }
+    .post-div:hover .delete-div{
+        display:block;
+    }
+
+</style>
+

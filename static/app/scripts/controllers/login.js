@@ -8,7 +8,8 @@
  * Controller of the weberApp
  */
 angular.module('weberApp')
-	.controller('LoginCtrl', function($scope, $auth, $alert,$location) {
+	.controller('LoginCtrl', function($scope, $auth, $alert,$location, $rootScope) {
+
 
 		$scope.submitLogin = function() {
 
@@ -17,7 +18,9 @@ angular.module('weberApp')
 				password: $scope.formData.password
 			}).then(function(response) {
 				$auth.setToken(response.data.token);
-				$location.path('/home');
+				$rootScope.isloggin = true;
+				console.log('=========print true===========')
+				//$location.path('/home');
 			}, function(error) {
 				$scope.error = error.data.error;
 				/*$alert({

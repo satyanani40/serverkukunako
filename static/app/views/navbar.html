@@ -1,33 +1,43 @@
+
 <div  checkinfunctions class="navbar navbar-inverse navbar-fixed-top" role="navigation" bs-navbar>
         <div class="container" style="width:;">
 
             <div class="navbar-header">
-                <a class="navbar-brand" href="/#/home" ng-if="isAuthenticated()"
-                     style="padding:7px;font-size:20px;font-family: 'Open sans',Arial,sans-serif;">
-                  <h3 style="font-family: 'Open sans',Arial,sans-serif;font-weight:400;margin-top:0px;">
-                      <img src="http://www.websoc.in/images/logo.png" style="width: 33px;">
-                      <span style="margin-left: -7px;color:#fff;">eber</span>
+                <a class="navbar-brand" href="/#/home"
+                     style="padding:5px;font-size:20px;font-family: 'Open sans',Arial,sans-serif;">
+
+                  <h3 style="font-family: 'Open sans',Arial,sans-serif;font-weight:400;margin-top:5px;">
+                      <i class="glyphicon glyphicon-signal" style="font-size:17px;"></i>&nbsp;
+                      <span style="margin-left: 0px;color:#fff;">Weber</span>
                   </h3>
                 </a>
             </div>
             <div class="navbar-collapse collapse">
 
-                <div class="col-sm-6">
+                <div class="col-sm-5" ng-controller="InstantsearchCtrl" ng-if="isAuthenticated()">
                     <form role="form" style="margin-top: 8px;">
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="input-group input-group-md">
-                                    <input type="text" class="form-control" ng-model="searchPeople"
-                                           placeholder="Search Friends or anything in weber" ng-change="searchP()"/>
+                                    <input type="text" id="searchText" ng-click="menuMenu($event)" class="form-control" ng-model="InstanceSearchQuery"
+                                           placeholder="Search Friends or anything in weber"
+                                           ng-change="InstanceSearchPeoples()" />
                                     <div class="input-group-btn">
                                         <button type="submit" class="btn">Search</button>
                                     </div><!-- /btn-group -->
                                 </div><!-- /input-group -->
-                                <div class="" style="width:540px;position:absolute;">
-                                    <div class="list-group" style="padding:0px;">
+                                <div class="messages-scroll" ng-show="menuOpened" style="width:445px;position:absolute;padding:0px;overflow:auto;">
+
+                                    <div  id="scroll123" class="list-group" style="">
+                                         <!--infinite-scroll='instancesearch.nextPage()'
+                                            infinite-scroll-disabled='instancesearch.busy'
+                                            infinite-scroll-distance='0'
+                                            infinite-scroll-container="'#scroll123'"-->
+
                                         <div class="" style="margin-bottom:0px;"
-                                                ng-repeat="temp in filtered | limitTo : 5 ">
-                                            <a style="" href="#/profile/{{ temp._id }}"
+                                                ng-repeat="temp in instancesearch.InstancesearchResult"
+                                                  >
+                                            <a style="" href="#/profile/{{ temp._id.$oid }}"
                                                class="list-group-item search_a">
                                                 <div class="row">
                                                     <div class="col-sm-2" style="padding-right:0px;">
@@ -42,64 +52,31 @@
                                                 </div>
                                             </a>
                                         </div>
+
+                                        <div ng-show='instancesearch.busy'>Loading data...</div>
+                                        <div ng-show='instancesearch.end'>You Reached the end!</div>
+
                                     </div>
                                 </div>
                             </div><!-- /.col-xs-12 -->
                         </div><!-- /.row -->
                     </form>
-
                 </div>
-
                 <ul class="nav navbar-nav pull-right" ng-if="!isAuthenticated()">
                     <li data-match-route="/login"><a href="#/login">Login</a>
                     </li>
                     <li data-match-route="/signup"><a href="#/signup">Sign up</a>
                     </li>
                 </ul>
+
+
+
                 <ul class="nav navbar-nav navbar-right" ng-if="isAuthenticated()">
-                    <li><a href="#/matchme">Match Me</a></li>
+
+                    <li><a href="#/search">Match Me</a></li>
                     <li><a href="#/friends">Friends</a></li>
-                    <li>
-                        <a ng-click="messageMenu($event);loadLatestMessages()" style="cursor:pointer">
-                            <i class="glyphicon glyphicon-envelope" style="font-size:17px;opacity:0.70;">
-
-                            </i>
-
-                                <label class="label label-danger" ng-if="chatactivity.messageNotifc.length"
-                                       style="position:absolute;font-size:10px;top: 5px;right: 0px;">
-                                        {{ chatactivity.messageNotifc.length }}
-                                </label>
-
-                        </a>
-
-                        <div class="panel panel-default message_box box-shadowpanel"
-                             ng-show="messageOpened" style="position:absolute;width:450px;right:0px;">
-                            <div class="panel-body" style="padding:0px;">
-                                <div class="" style="margin-bottom:0px;"
-                                       ng-repeat="message in chatactivity.latestMessages  | limitTo : 5 ">
-                                    <a style="" href="/#/profile/{{message.sender._id }}"
-                                       class="list-group-item search_a">
-                                        <div class="row">
-                                            <div class="col-sm-1">
-                                                <img src="{{ message.sender.picture.large }}"
-                                                     style="width:40px">
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <h5 style="opacity:0.75;">
-                                                    {{ message.sender.name.first }} {{ message.sender.name.last }}
-                                                </h5>
-                                            </div>
-                                            <div>
-                                                {{ message.message }}
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <a ng-click="toggle = !toggle; getNewNotifcations()" style="cursor:pointer">
+                    <!--<li ng-click="loadSearchHistory()">
+                        <a ng-click="notificationMenu($event)" style="cursor:pointer">
                             <i class="glyphicon glyphicon-globe" style="font-size:17px;opacity:0.70;">
 
                             </i>
@@ -111,9 +88,9 @@
 
                         </a>
 
-                        <div class="panel panel-default arrow_box" ng-show="toggle"
-                             style="position:absolute;width:500px;right:0px;">
-                            <div class="panel-body" style="padding-top:2px">
+                        <div class="panel panel-default arrow_box" ng-show="notificationOpened"
+                             style="position:absolute;width:400px;right:0px;">
+                            <div class="panel-body" style="padding-top:2px;height:200px;overflow-y:scroll" >
                                 <div class="row"
                                      style="border-bottom:1px solid #E7E5E5;">
                                     <div class="col-sm-12">
@@ -122,14 +99,63 @@
                                         </h5>
                                     </div>
                                 </div>
+                                <div class="row" style="margin-top:7px" >
+                                    <div class="col-sm-12">
+
+                                        <ul infinite-scroll='searchActivity.nextPage()'
+                                            infinite-scroll-disabled='searchActivity.busy'
+                                            infinite-scroll-distance='0'>
+
+                                            <li ng-repeat="searchItem in searchActivity.searchResult">
+                                                <a>{{ searchItem.content }}</a>
+                                            </li>
+                                             <div ng-show='searchActivity.busy'>Loading data...</div>
+			                                 <div ng-show='searchActivity.end'>You Reached the end!</div>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>-->
+                    <li>
+                        <a ng-click="notificationMenu($event); getNewNotifcations()" style="cursor:pointer">
+                            <i class="glyphicon glyphicon-globe" style="font-size:17px;opacity:0.70;">
+
+                            </i>
+
+                                <label class="label label-danger" ng-if="newnotific"
+                                       style="position:absolute;font-size:10px;top: 5px;right: 0px;">
+                                        {{ newnotific }}
+                                </label>
+
+                        </a>
+
+                        <div class="panel panel-default arrow_box" ng-show="notificationOpened"
+                             style="position:absolute;width:400px;right:0px;border:1px solid #dcdcdc;">
+                            <div class="panel-body" style="padding-top:2px">
+                                <div class="row"
+                                     style="border-bottom:1px solid #E7E5E5;">
+                                    <div class="col-sm-12">
+                                        <h5>
+                                            <strong>
+                                                Friends Requests
+                                            </strong>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="row" ng-if="!rpeoples.length">
+                                    <div class="col-sm-12">
+                                        <h5>No new requests found</h5>
+                                    </div>
+                                </div>
 
                                 <div class="row" style="margin-top:7px" ng-repeat="requestedPeople in rpeoples">
                                     <div class="col-sm-2">
                                         <img src="{{ requestedPeople.picture.thumbnail }}"
-                                             style="width:65px">
+                                             style="width:50px">
                                     </div>
-                                    <div class="col-sm-7">
-                                        <a href="">
+                                    <div class="col-sm-5">
+                                        <a href="#/profile/{{ requestedPeople._id }}">
                                             <h5>
                                                 {{ requestedPeople.name.first }}
                                             </h5>
@@ -143,10 +169,12 @@
                                             </strong>
                                         </h6>-->
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-5">
                                         <acceptreject>
-                                            <button ng-click="acceptrequest('{{requestedPeople._id}}','navbarview')" class="btn btn-primary">accept request</button>
-                                            <button ng-click="rejectrequest('{{requestedPeople._id}}','navbarview')" class="btn btn-primary">reject request</button>
+                                            <button ng-click="acceptrequest('{{requestedPeople._id}}','navbarview')"
+                                                    class="btn btn-sm btn-primary">accept</button>
+                                            <button ng-click="rejectrequest('{{requestedPeople._id}}','navbarview')"
+                                                    class="btn btn-primary btn-sm pull-right">reject</button>
                                         </acceptreject>
                                     </div>
                                 </div>
@@ -156,15 +184,23 @@
                                      style="border-bottom:1px solid #E7E5E5;margin-top:10px">
                                     <div class="col-sm-12">
                                         <h5>
-                                            Notifications
+                                            <strong>
+                                                Notifications
+                                            </strong>
                                         </h5>
                                     </div>
                                 </div>
+                                <div class="row" ng-if="!apeoples.length">
+                                    <div class="col-sm-12">
+                                        <h5>No new notifications found</h5>
+                                    </div>
+                                </div>
 
-                                <div class="row" style="margin-top:7px" ng-repeat="accepted_people in apeoples">
+                                <div class="row" style="margin-top:7px;border-bottom:1px solid #f2f2f2;padding-bottom:5px;"
+                                     ng-repeat="accepted_people in apeoples">
                                     <div class="col-sm-2">
                                         <img src="{{ accepted_people.picture.thumbnail }}"
-                                             style="width:65px">
+                                             style="width:50px">
                                     </div>
                                     <div class="col-sm-10">
                                         <h5>

@@ -19,7 +19,6 @@ angular.module('weberApp')
 		}).success(function(user_id) {
 			Restangular.one('people',JSON.parse(user_id)).get({seed:Math.random()}).then(function(user) {
 				$scope.user = user;
-
 				var loadPostIds = angular.copy(user.friends)
                 loadPostIds.push(user._id)
                 loadPostIds = "[\"" + loadPostIds.join("\",\"") + "\"]";
@@ -48,7 +47,54 @@ angular.module('weberApp')
 					$scope.new_post = '';
 					});
 				};
+
+
 			});
 		});
 	})
-	;
+	.directive('confirmdelete', function ($compile, CurrentUser, Restangular, $routeParams, friendsActivity) {
+        return {
+            restrict: 'E',
+            replace: true,
+            link: function (scope, element, attrs) {},
+            controller:function($scope, $http, $route, $element, $attrs, $transclude){
+
+                function checkdeletepost(post_id){
+                    var status = false;
+                    var post = null;
+
+                    for(var k in $scope.infinitePosts.posts){
+                        if($scope.infinitePosts.posts[k]._id == post_id &&
+                            $scope.infinitePosts.posts[k].author == $scope.user._id){
+                                status = true;
+                                post =  $scope.infinitePosts.posts[k];
+                            }
+
+                    }
+                    return ({status:status, post:post});
+                }
+
+                $scope.deletediv = function(get_post_id){
+                    var html ='<a class="pull-right" ng-click="confirm_delete(\''+get_post_id+'\')" style="cursor:pointer;font-size:12px">Confirm Delete?</a>';
+                    $element.html(html);
+                    $compile($element.contents())($scope);
+
+
+                }
+
+                $scope.confirm_delete = function(get_post_id){
+
+                    console.log("============confirm delete=====")
+                    console.log(checkdeletepost(get_post_id))
+                    var result = checkdeletepost(get_post_id);
+
+                    if(result.status){
+                        $scope.infinitePosts.deletePost(result.post)
+                    }
+                    else{
+                        console.log(" faild in check post id with author")
+                    }
+                }
+            }
+        };
+    });

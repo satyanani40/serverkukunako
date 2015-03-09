@@ -364,3 +364,23 @@ body {
 
 
 
+.heightClass{
+  height:320px;
+  overflow :auto;
+}
+
+.display-text{
+    display:inline-block;
+    width:100%;
+    white-space: nowrap;
+    overflow:hidden !important;
+    text-overflow: ellipsis;
+    text-align:justify;
+}
+
+.my-class {
+   overflow:none !important;
+   white-space:normal;
+   text-overflow: initial;
+   text-align:justify;
+}

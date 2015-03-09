@@ -1,3 +1,62 @@
+<!--<style>
+    .cropArea {
+      background: #E4E4E4;
+      margin: auto;
+      overflow: hidden;
+    }
+    .cropArea.big {
+      width:800px;
+      height:600px;
+    }
+    .cropArea.medium {
+      width:500px;
+      height:350px;
+    }
+    .cropArea.small {
+      width:300px;
+      height:200px;
+    }
+</style>
+
+<div class="container">
+  <form ng-show="enableCrop=true">
+    <label for="fileInput">Select Image:</label>
+    <input type="file" id="fileInput" />
+  </form>
+  <div>
+    <label>Image URL: <input type="text" ng-model="edtImageURI" /></label>
+    <button ng-click="imageDataURI=edtImageURI">Set Image</button>
+  </div>
+  <div>
+    <button ng-click="imageDataURI=''">Reset Image</button>
+  </div>
+
+  <div ng-if="enableCrop" class="cropArea" ng-class="{'big':size=='big', 'medium':size=='medium', 'small':size=='small'}">
+    <img-crop image="imageDataURI"
+              result-image="$parent.resImageDataURI"
+              change-on-fly="changeOnFly"
+              area-type="{{type}}"
+              area-min-size="selMinSize"
+              result-image-format="{{resImgFormat}}"
+              result-image-quality="resImgQuality"
+              result-image-size="resImgSize"
+              on-change="onChange($dataURI)"
+              on-load-begin="onLoadBegin()"
+              on-load-done="onLoadDone()"
+              on-load-error="onLoadError()"
+    ></img-crop>
+
+  </div>
+
+  <div style="text-align:center">
+    <h3>Result</h3>
+    <div>
+      <img ng-src="{{resImageDataURI}}" />
+    </div>
+  </div>
+</div>-->
+
+
 <div navbar></div>
 <div class="container">
     <div class="col-sm-4 colpadding">
@@ -275,6 +334,9 @@
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
                     <div class="row interests_section">
                         <div class="col-sm-9">
+                            <h5 ng-if="!user.interests">
+                                Add interests
+                            </h5>
                             <h5 style="opacity:0.90">
                                 <a style="color:#333;" ng-repeat="interest in user.interests">
                                     {{ interest }}
@@ -381,6 +443,9 @@
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
                         <div class="row study_section">
                             <div class="col-sm-9">
+                                <h5 ng-if="user.study.intermediate == ''">
+                                    Add Study Here
+                                </h5>
                                 <h5 style="opacity:0.90">
                                     {{ user.study.intermediate }}, {{ user.study.graduate }}
                                 </h5>

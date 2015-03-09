@@ -1,48 +1,94 @@
-<nav class="navbar navbar-default" style="background-color: #fff !important;border-color:#fff !important;">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href=""
-             style="font-size:40px;font-family: 'Open sans',Arial,sans-serif;">
-              <h2 style="font-family: 'Open sans',Arial,sans-serif;font-weight:400;margin-top:0px;">
-                  <img src="http://www.websoc.in/images/logo.png">
-                  <span style="margin-left: -7px;color:#444;">eber</span>
-              </h2>
-          </a>
+<!--<div ng-if="isAuthenticated()" ></div>-->
+<div class="container" style="min-height:2000px">
+    <div class="col-md-3 colpadding" ng-if="isAuthenticated()" style="padding-top:30px;">
+        <div class="thumbnail">
+            <div class="itemsContainer">
+                <div class="image">
+                    <a href="">
+                        <img class="img-rounded" style="width:;" src="{{user.picture.large}}" />
+                    </a>
+                </div>
+            </div>
+			<div class="caption text-center">
+				<h3 style="text-transform: capitalize;">{{user.name.first}} {{user.name.last}}</h3>
+				@{{user.username}}
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h5 style="margin:1px 0px 1px 0px">
+					About
+					<a href="" class="pull-right">
+						<h6 style="margin-top:0px">
+							See all
+						</h6>
+					</a>
+				</h5>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-12">
+						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80" class="about-edit">
+							<i class="glyphicon glyphicon-check" style="opacity:0.65"></i>&nbsp;
+							Iam interested in:
+						</h5>
+						<h6 style="margin-top:1px">
+							<a href="" ng-repeat="interest in user.interests" style="line-height:1.2em;color:">
+
+									{{ interest }},&nbsp;
+
+							</a>
+						</h6>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80">
+							<i class="glyphicon glyphicon-folder-open" style="opacity:0.65"></i>&nbsp;
+							Studied at:
+						</h5>
+						<h6 style="margin-top:1px">
+							<a href="" style="line-height:1.2em;color:">
+
+									{{ user.study.graduate }}
+
+							</a>
+						</h6>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<h5 style="margin-bottom:5px;margin-top:0px;opacity:0.80">
+							<i class="glyphicon glyphicon-home" style="opacity:0.65"></i>&nbsp;
+							Lives in:
+						</h5>
+						<h6 style="margin-top:1px">
+							<a href="" style="line-height:1.2em;color:">
+								{{ user.location.state }},
+							</a>
+                            <a href="" style="line-height:1.2em;color:">
+                                 {{ user.location.city }},
+                            </a>
+                             <a href="" style="line-height:1.2em;color:">
+                                  {{ user.location.street }}
+                            </a>
+						</h6>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="clearfix panel-heading">Friends({{user.friends.length}})</div>
+                <a ng-repeat="friend in friends | limitTo : 8" href="#/profile/{{friend._id}}">
+                    <img data-placement="top-right" style="width:65px"
+                         data-content="{{friend.location.city}}, {{friend.location.state}}"
+                         title="{{friend.name.first}} {{friend.name.last}}" data-trigger="hover" bs-popover src="{{friend.picture.thumbnail}}">
+                </a>
+		</div>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-          <li>
-              <a href="/#/login" style="color:#444;">
-                  Login
-              </a>
-          </li>
-          <li>
-              <a href="/#/signup" style="color:#444;">
-                  Signup
-              </a>
-          </li>
-          <li>
-              <a href="/#/about" style="color:#444;">
-                  About
-              </a>
-          </li>
-      </ul>
-    </div><!-- /.nav bar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
-
-<div class="container">
     <div class="col-sm-6">
-        <div class="row" style="padding-top:20px;">
+        <div class="row" style="padding-top:20px;" ng-if="!(isAuthenticated())">
             <h3 style="font-family: 'Open sans',Arial,sans-serif;font-weight:300;">
                 Wonder what <strong style="opacity:0.70;">weber</strong> can do
             </h3>
@@ -51,74 +97,73 @@
             </h3>
         </div>
         <div class="row" style="padding-top:30px;">
-            <form class="col-sm-12" style="padding:0px;" role="search">
+            <!--<form class="col-sm-12" style="padding:0px;" role="search">-->
                 <div class="form-group has-feedback">
-                    <input type="text" class="form-control"
-                           placeholder="Search anything in weber" />
+                    <input type="text" class="form-control form-control1" ng-model="query"
+                           placeholder="Search anything in weber" ng-keyup="$event.keyCode == 13 && perfomSearch()"/>
                     <i class="glyphicon glyphicon-search form-control-feedback"
                        style=""></i>
                 </div>
-            </form>
+            <!--</form>-->
         </div>
-        <div class="row" style="padding-top:50px;">
-            <div class="panel panel-body" style="border:1px solid #dcdcdc;">
+
+
+        <div class="row" style="padding-top:50px;" infinite-scroll='matchResults.nextPage()'
+                                     infinite-scroll-disabled='matchResults.busy'
+                                     infinite-scroll-distance='0'
+                                     infinite-scroll-parent="true">
+
+            <div class="panel panel-body" style="border:1px solid #dcdcdc;" ng-repeat="rs in matchResults.mresults" >
                 <div class="media">
                   <div class="media-left">
                     <a href="#" class="pull-left" style="padding: 0px 7px;" href="">
-                      <img class="media-object" style="width:50px;border-radius:4px;" src="http://api.randomuser.me/portraits/med/women/59.jpg" alt="...">
+                      <img class="media-object" style="width:50px;border-radius:4px;" src="{{rs.author.picture.medium}}" alt="...">
                     </a>
                   </div>
                   <div class="media-body">
                     <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
-                        <strong>Vegesina Satyanarayana</strong>
+                        <strong>{{rs.author.name.first}}</strong>
                         <span class="pull-right">
-                            <a href="" style="font-size:14px;">
+                            <a matchpersonroom style="font-size:14px;" name="{{rs.author._id}}"  ng-click="openchatroom('{{ rs.author._id }}')">
                                 Chat
                             </a>
+
                         </span>
                     </h5>
-                    <p style="font-family: 'Open sans',Arial,sans-serif;padding-top:4px;">
-                        Wonder what weber can do Search for people you are interested in
+                    <p class="display-text" ng-class="myVar"
+                       style="font-family: 'Open sans',Arial,sans-serif;padding-top:4px;margin-bottom:0px;">
+                        {{ rs.content }}
                     </p>
+                    <seefulltextdirective>
+                        <p class="" ng-click="myVar='my-class';hide_text()">
+                              <a style="font-size:12px;cursor:pointer;color:#666;">
+                                  See full text
+                              </a>
+                        </p>
+                    </seefulltextdirective>
                   </div>
                 </div>
             </div>
-            <div class="panel panel-body" style="border:1px solid #dcdcdc;">
-                <div class="media">
-                  <div class="media-left">
-                    <a href="#" class="pull-left" style="padding: 0px 7px;" href="">
-                      <img class="media-object" style="width:50px;border-radius:4px;"
-                           src="http://api.randomuser.me/portraits/med/men/59.jpg" alt="...">
-                    </a>
-                  </div>
-                  <div class="media-body">
-                    <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
-                        <strong>Surya Muppalla</strong>
-                        <span class="pull-right">
-                            <a href="" style="font-size:14px;">
-                                Chat
-                            </a>
-                        </span>
-                    </h5>
-                    <p style="font-family: 'Open sans',Arial,sans-serif;padding-top:4px;">
-                        Wonder what weber can do Search for people you are interested in
-                    </p>
-                  </div>
-                </div>
-            </div>
+            <!--<div ng-show='matchResults.busy'>Loading data...</div>
+			<div ng-show='matchResults.end'>You Reached the end!</div>-->
         </div>
+
+
     </div>
 
-    <div class="col-sm-4 colpadding col-sm-offset-2" style="padding-top:50px;">
+    <div class="col-sm-3 colpadding col-sm-offset-2"
+         style="position:fixed;bottom:0px;right:0px;width:300px;"
+         ng-if="!(isAuthenticated())">
         <div class="row">
             <div class="col-sm-12">
-                <div class="panel" style="border:1px solid #dcdcdc;">
-                    <div class="panel-body" style="margin-bottom:5px;border-bottom:1px solid #dcdcdc;">
-                        <h5 style="margin:0px 0px;">What you can search in <strong>weber</strong></h5>
+                <div class="panel"
+                     style="border:1px solid #dcdcdc;background-color:#f2f2f2;height:100%;min-height:95vh !important;margin-bottom:0px;">
+                    <div class="panel-heading" style="margin-bottom:5px;border-bottom:1px solid #dcdcdc;">
+                        <h5 style="">What you can search in <strong>weber</strong></h5>
                     </div>
-                    <div class="panel-body messages-scroll" style="padding:0px;border:0px solid #F7F7F5;">
-                        <div class="list-group" style="margin-bottom:20px;">
-                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;">
+                    <div class="panel-body" style="padding:0px;margin-bottom:0px;background-color:#f2f2f2;">
+                        <div class="list-group" style="margin-bottom:0px;background-color:#f2f2f2;">
+                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;background-color:#f2f2f2;">
                                 <div class="media" style="border-bottom:1px solid #F7F7F7;">
                                   <div class="media-left">
 
@@ -127,16 +172,16 @@
 
                                   </div>
                                   <div class="media-body">
-                                    <h6 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
-                                        <strong style="color:#888;">Surya Muppalla</strong>
-                                    </h6>
-                                    <p style="font-size:12px;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
+                                    <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
+                                        Surya Muppalla
+                                    </h5>
+                                    <p style="font-size:12px;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
                                         Wonder what weber can do Search for people you are interested in
                                     </p>
                                   </div>
                                 </div>
                             </a>
-                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;">
+                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;background-color:#f2f2f2;">
                                 <div class="media" style="border-bottom:1px solid #F7F7F7;">
                                   <div class="media-left">
 
@@ -145,16 +190,16 @@
 
                                   </div>
                                   <div class="media-body">
-                                    <h6 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
-                                        <strong style="color:#888;">Vegesina Satyanarayana</strong>
-                                    </h6>
-                                    <p style="font-size:12px;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
+                                    <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
+                                        Vegesina Satyanarayana Raju
+                                    </h5>
+                                    <p style="font-size:12px;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
                                         Wonder what weber can do Search for people you are interested in
                                     </p>
                                   </div>
                                 </div>
                             </a>
-                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;">
+                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;background-color:#f2f2f2;">
                                 <div class="media" style="border-bottom:1px solid #F7F7F7;">
                                   <div class="media-left">
 
@@ -163,17 +208,17 @@
 
                                   </div>
                                   <div class="media-body">
-                                    <h6 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
-                                        <strong style="color:#888;">Ashok Raj Bathu</strong>
-                                    </h6>
-                                    <p style="font-size:12px;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
+                                    <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
+                                        RamaKrishna Parimi
+                                    </h5>
+                                    <p style="font-size:12px;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
                                         Wonder what weber can do Search for people you are interested in
                                     </p>
                                   </div>
                                 </div>
                             </a>
 
-                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;">
+                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;background-color:#f2f2f2;">
                                 <div class="media" style="border-bottom:1px solid #F7F7F7;">
                                   <div class="media-left">
 
@@ -182,16 +227,16 @@
 
                                   </div>
                                   <div class="media-body">
-                                    <h6 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
-                                        <strong style="color:#888;">Vegesina Satyanarayana</strong>
-                                    </h6>
-                                    <p style="font-size:12px;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
+                                    <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
+                                        Ashok Raj Bathu
+                                    </h5>
+                                    <p style="font-size:12px;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
                                         Wonder what weber can do Search for people you are interested in
                                     </p>
                                   </div>
                                 </div>
                             </a>
-                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;">
+                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;background-color:#f2f2f2;">
                                 <div class="media" style="border-bottom:1px solid #F7F7F7;">
                                   <div class="media-left">
 
@@ -200,16 +245,16 @@
 
                                   </div>
                                   <div class="media-body">
-                                    <h6 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
-                                        <strong style="color:#888;">Ashok Raj Bathu</strong>
-                                    </h6>
-                                    <p style="font-size:12px;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
+                                    <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
+                                        Balakrishna Daggubati
+                                    </h5>
+                                    <p style="font-size:12px;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
                                         Wonder what weber can do Search for people you are interested in
                                     </p>
                                   </div>
                                 </div>
                             </a>
-                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;">
+                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;background-color:#f2f2f2;">
                                 <div class="media" style="border-bottom:1px solid #F7F7F7;">
                                   <div class="media-left">
 
@@ -218,16 +263,16 @@
 
                                   </div>
                                   <div class="media-body">
-                                    <h6 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
-                                        <strong style="color:#888;">Vegesina Satyanarayana</strong>
-                                    </h6>
-                                    <p style="font-size:12px;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
+                                    <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
+                                        Vegesina Satyanarayana Raju
+                                    </h5>
+                                    <p style="font-size:12px;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
                                         Wonder what weber can do Search for people you are interested in
                                     </p>
                                   </div>
                                 </div>
                             </a>
-                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;">
+                            <a href="" class="list-group-item" style="padding:3px;border:0px solid #dcdcdc;background-color:#f2f2f2;">
                                 <div class="media" style="border-bottom:1px solid #F7F7F7;">
                                   <div class="media-left">
 
@@ -236,10 +281,10 @@
 
                                   </div>
                                   <div class="media-body">
-                                    <h6 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
-                                        <strong style="color:#888;">Ashok Raj Bathu</strong>
-                                    </h6>
-                                    <p style="font-size:12px;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
+                                    <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
+                                        Surya Muppalla
+                                    </h5>
+                                    <p style="font-size:12px;white-space: nowrap;overflow:hidden !important;text-overflow: ellipsis;font-family: 'Open sans',Arial,sans-serif;padding-top:2px;">
                                         Wonder what weber can do Search for people you are interested in
                                     </p>
                                   </div>
@@ -260,7 +305,7 @@
 <style>
     body{
         padding-top:25px !important;
-        background-color:#fff;
+
     }
     .add-on .input-group-btn > .btn {
       border-left-color:#fff;left:-2px;
@@ -273,8 +318,9 @@
      -webkit-box-shadow:none;
      border-color:#cccccc;
     }
-    .form-control{
-        border-top:5px solid #ee9a4d;
+    .form-control1{
+        /*border-top:5px solid #ee9a4d;*/
+        border-top:5px solid #22A7F0;
         height:50px;
     }
     .form-control-feedback {

@@ -115,7 +115,6 @@ searchActivity_schema = {
 
     }
 
-
 message_schema = {
 
         'sender': {
@@ -213,7 +212,7 @@ people = {
             'type': 'string'
         },
         'lastmessageseen': {
-            'type': 'datetime'
+            'type': 'integer'
         },
         'role': {
             'type': 'string',
@@ -339,7 +338,7 @@ posts = {
     'item_title': 'posts',
     'schema':posts_schema,
     #'url': 'people/posts/<regex("[a-f0-9]{24}"):author>',
-    'url' : 'posts',
+    #'url' : 'posts',
 }
 
 searchActivity = {
