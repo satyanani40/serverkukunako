@@ -4,7 +4,6 @@ angular.module('weberApp')
                                           $document, Restangular,ChatActivity){
 
     // -----nav bar methods-----
-
     // nav search bar methods
      $http.get('/api/me', {
             headers: {
@@ -13,30 +12,18 @@ angular.module('weberApp')
     }).success(function(userId) {
 
             // popup notifications code
-            $scope.menuOpened = false;
-            $scope.messageOpened = false;
+            $scope.chat_message_Opened = false;
 
-            $scope.messageMenu = function(event) {
-                $scope.messageOpened = !($scope.messageOpened);
-                event.stopPropagation();
-            };
 
-            $scope.menuMenu = function(event) {
-                $scope.menuOpened = !($scope.menuOpened);
+            $scope.chat_message_Menu = function(event) {
+                $scope.chat_message_Opened = !($scope.chat_message_Opened);
                 event.stopPropagation();
             };
 
             window.onclick = function() {
-                if ($scope.menuOpened) {
-                  $scope.menuOpened = false;
-                  console.log("========dewduywegdfywef")
 
-                // You should let angular know about the update that you have made, so that it can refresh the UI
-                  $scope.$apply();
-                }
-
-                if ($scope.messageOpened) {
-                  $scope.messageOpened = false;
+                if ($scope.chat_message_Opened) {
+                    $scope.chat_message_Opened = false;
 
                 // You should let angular know about the update that you have made, so that it can refresh the UI
                   $scope.$apply();
@@ -50,19 +37,20 @@ angular.module('weberApp')
             this.userId = userId;
             Restangular.one('people', JSON.parse(userId)).get().then(function(user) {
 
-                this.user = user;
+
                 $scope.chatdivnotification = [];
 
-                $scope.chatactivity = new ChatActivity(user);
+                $rootScope.chatactivity = new ChatActivity(user);
                 $scope.loadLatestMessages = function(){
                     //console.log('load message')
-                    $scope.chatactivity.loadLatestMessages();
+                    $rootScope.chatactivity.loadLatestMessages();
                 }
+                 if(user.conversations.length !== 0){
+                    $rootScope.chatactivity.getConversations();
+                 }
 
                  if(user.friends.length !== 0){
-                    $scope.chatactivity.getChatFriends().then(function(data){
-                        $scope.chatusers = data;
-                    });
+                    $rootScope.chatactivity.getChatFriends();
                  }
 
                 var socket = io.connect('http://127.0.0.1:8000');
@@ -79,6 +67,7 @@ angular.module('weberApp')
                 });
 
                 socket.on('receive_messages', function(msg) {
+
                     console.log('message received')
                     new_message = {}
 
@@ -92,9 +81,13 @@ angular.module('weberApp')
                         // no chat rooms opened push message into latest Notifications
                         if(sessionStorage.getItem(msg.senderid) == null){
                             console.log('no chat div opened')
-                            $scope.chatactivity.pushLatestMessage(msg)
+                            $rootScope.chatactivity.pushLatestMessage(msg)
+                             $scope.$apply(function(){
+                                $rootScope.chatactivity = $rootScope.chatactivity;
+                          });
 
                         }
+                        else{
                         console.log('yes chat room opened')
                          new_message = {
                                   sender :{
@@ -118,19 +111,27 @@ angular.module('weberApp')
                                 $scope.chatdivnotification.push({ id:msg.senderid,message: true})
                          }
 
-                          $scope.chatactivity.pushMessage(msg.senderid, new_message);
+
+                          $rootScope.chatactivity.pushMessage(msg.senderid, new_message);
                           $scope.$apply(function(){
-                            $scope.chatactivity.messages = $scope.chatactivity.messages;
+                            $rootScope.chatactivity.messages = $rootScope.chatactivity.messages;
                           });
 
                          msg = null;
+                         }
                     }else{}
 
                 });
-
+                $scope.newMessageSeen = function(id){
+                    for(k in $scope.chatdivnotification){
+                        if($scope.chatdivnotification[k].id == id){
+                            $scope.chatdivnotification.splice(k,1)
+                        }
+                    }
+                }
                 // sending and pushing message
                 $scope.send_message = function(text, Recept){
-
+                    console.log(Recept, user._id)
                     var pushNewMessage = {
                         sender :{
                             name:{
@@ -151,12 +152,14 @@ angular.module('weberApp')
                         _created: new Date()
                     }
 
-                    $scope.chatactivity.pushMessage(Recept, pushNewMessage);
+                    $rootScope.chatactivity.pushMessage(Recept, pushNewMessage);
 
                     //$scope.chatactivity.messages = data;
 
                     socket.emit('send_message', {receiverid: Recept, senderid :user._id  ,message: text});
-                    $scope.chatactivity.sendMessage(Recept, text);
+                    $rootScope.chatactivity.sendMessage(Recept, text);
+                    $scope.SendMessage = {};
+                    //document.getElementById("send_"+Recept).value="";
 
                 }
 
@@ -189,7 +192,7 @@ angular.module('weberApp')
                     var chatrooms = getData();
                     for(k in  chatrooms){
                         console.log(chatrooms[k])
-                        $scope.chatactivity.loadMessages(user._id, chatrooms[k].id, chatrooms[k]);
+                        $rootScope.chatactivity.loadMessages(user._id, chatrooms[k].id, chatrooms[k]);
                    }
 
                 }
@@ -197,7 +200,7 @@ angular.module('weberApp')
 
                  // opens new chat room
                  $scope.openchatroom = function(id){
-
+                    console.log('open chat room')
                     if(!(sessionStorage.getItem(id))){
                         // check room alredy open
 
@@ -213,13 +216,14 @@ angular.module('weberApp')
                                 minimize:false,
                                 maximize:true,
                                 right:0,
-                                height:'414px'
+                                height:'364px'
                             }
 
                             sessionStorage.setItem(id, JSON.stringify(json));
                             socket.emit('connect', {data:id});
                             // load messages into new open chat room
-                            $scope.chatactivity.loadMessages(user._id, id, json);
+                            $rootScope.chatactivity.loadMessages(user._id, id, json);
+
                         });
 
                     }
@@ -238,13 +242,17 @@ angular.module('weberApp')
                  }
 
                  $scope.MessageNotifcations = function(){
-                   $scope.chatactivity.getMessageNotifcations();
+                   $rootScope.chatactivity.getMessageNotifcations();
                  }
 
 
                 $scope.makeMessagesSeen = function(senderid){
-                    $scope.chatactivity.makeMessagesSeen(senderid);
-                }
+                    $rootScope.chatactivity.makeMessagesSeen(senderid);
+
+                $scope.loadOlder = function(){
+                    console.log('loading more data')
+
+                }               }
 
                 $scope.checknotific = function(id){
                        for(k in $scope.chatdivnotification){
@@ -256,10 +264,18 @@ angular.module('weberApp')
                              }
                        }
                 }
+
+                $scope.addToConversations = function(id){
+                    if(user.conversations.indexOf(id) == -1 && user.friends.indexOf(id) == -1){
+                        $scope.chatactivity.addToConversations(id);
+                    }else{
+                        console.log('alredy added')
+                    }
+                }
                     //display_divs();
                     loadintodivs();
                     $scope.MessageNotifcations();
-            });
+        });
     });
 
 
@@ -272,7 +288,7 @@ angular.module('weberApp')
         restrict: 'E',
         replace: true,
         link: function (scope, element, attrs) {
-            console.log("=====call confirmmessagetrash======")
+            //console.log("=====call confirmmessagetrash======")
         },
         controller:function($scope, $http, $route, $element, $attrs, $transclude){
 
@@ -315,28 +331,35 @@ angular.module('weberApp')
 .directive('scroll', function($timeout) {
   return {
     restrict: 'A',
-    link: function(scope, element, attr) {},
+    link: function(scope, element, attr) {
+        var raw = element[0];
+        raw.scrollTop = 450;
+        $timeout(function() {
+
+        });
+    },
      controller : function($scope, $element){
+
+
+        $element.bind('scroll', function(){
+
+            if($element[0].scrollTop == 0){
+                $scope.chatactivity.nextPage($element[0].id)
+            }
+         });
+
          this.setElement = function(ele){
-            $element[0].scrollTop = ($element[0].scrollTop+ele.getBoundingClientRect().top+16);
+                $element[0].scrollTop = ($element[0].scrollTop+ele.getBoundingClientRect().top+16);
+
+
          }
      }
-      /*scope.$watchCollection(attr.scroll, function(newVal) {
-        $timeout(function() {
-         console.log('time out')
-         console.log(element[0].scrollTop)
-         console.log(element[0].scrollHeight)
-         element[0].scrollTop = element[0].scrollHeight;
-         console.log(element[0].scrollTop)
-        });
-      });*/
-}
+  }
 })
 .directive('scrollitem', function($timeout) {
   return {
-     require : "^scroll",
+    require : "^scroll",
     link: function(scope, element, attr, scrollCtrl) {
-        //console.log(element[0].height)
         scrollCtrl.setElement(element[0]);
       /*scope.$watchCollection(attr.scroll, function(newVal) {
         $timeout(function() {
@@ -345,10 +368,46 @@ angular.module('weberApp')
          console.log(element[0].scrollHeight)
          element[0].scrollTop = element[0].scrollHeight;
          console.log(element[0].scrollTop)
-        });
-      });*/
+        });*/
+      }
+         }
+})
+.directive('upwardsScoll', function ($timeout) {
+    return {
+        link: function (scope, elem, attr, ctrl) {
+            var raw = elem[0];
 
+            elem.bind('scroll', function() {
+                if(raw.scrollTop <= 0) {
+                    var sh = raw.scrollHeight;
+                    scope.$apply(attr.upwardsScoll);
 
+                    $timeout(function() {
+                        elem.animate({
+                            scrollTop: raw.scrollHeight - sh
+                        },500);
+                    }, 0);
+                }
+            });
+
+            //scroll to bottom
+            $timeout(function() {
+                scope.$apply(function () {
+                    elem.scrollTop( raw.scrollHeight );
+                });
+            }, 500);
+        }
     }
-  }
+})
+.controller('UpwardsScroll', function($scope, $http) {
+    var counter = 1;
+    var limit = 50;
+    $scope.items = [];
+    $scope.LoadMore = function() {
+        for (var i = 0; i < limit; i++) {
+            $scope.items.unshift( { text: counter } );
+            counter++;
+        }
+    };
+    $scope.LoadMore();
 });

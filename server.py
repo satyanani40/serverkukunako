@@ -44,6 +44,8 @@ app.config.update(
 	MAIL_PASSWORD = 'Ssurya@Mmuppalla7'
 	)
 mail=Mail(app)
+socketio = SocketIO(app)
+
 
 def create_token(user):
     payload = {
@@ -277,6 +279,8 @@ def signup():
 
 @app.route('/api/chat/sendmessage', methods=['POST'])
 def sendmessage():
+    print '------------datetime-----------'
+    print datetime.now()
     ts = int(time.time())
     if not request.json['sender'] or not request.json['receiver']\
             or not request.json['message']:
@@ -289,7 +293,8 @@ def sendmessage():
         'receiver': ObjectId(request.json['receiver']),
         'seen' : False,
         'message' : request.json['message'],
-        'timestamp': ts
+        'timestamp': ts,
+        'message_created': datetime.now()
     }
 
     #accounts.update({'timestamp':1425368551},{'$set':{'seen':True}})
@@ -315,6 +320,7 @@ def makeMessagesSeen():
 
     for x in request.json['messageids']:
         accounts.update({ '_id':ObjectId(x) },{'$set':{'seen':True}})
+        print(x+'is updated')
 
     return 'hai'
 
@@ -358,24 +364,28 @@ def stream(userid):
     return Response(check_updates(userid),mimetype='text/event-stream')
 
 def after_post_inserted(items):
+    post_author = ""
+    post_id = ""
     for atribute,value in items[0].iteritems():
-        if(atribute == "keywords"):
-            db = WeberDB()
-            lastupdatedRecords =  db.update_search(value,items[0]['_id'])
-            for temp in lastupdatedRecords:
-                for attribute,value in temp.iteritems():
-                    if(attribute == 'author'):
-                        key = 'search_'+str(value)
-                        pipe.set(key,'search_notific')
-            pipe.execute()
+        print atribute, value
+
+        if(atribute == "author"):
+            post_author = str(value)
+        if(atribute == "_id"):
+            post_id = str(value)
+
+    socketio.emit('postNotifications',{'data':{'postnotific': True},
+                                           'author':post_author,
+                                           'postid':post_id})
+
 
 def after_friend_notification_get(updates, original):
     for attrbute,value in original.iteritems():
         if(attrbute == '_id'):
-            print '========friend requests==========='
-            key = 'friend_'+str(value)
-            pipe.set(key,'friend_notific')
-    pipe.execute()
+            socketio.emit('friendnotifications',{'data':{'friendsnotifc': True}}, room = str(value))
+            #key = 'friend_'+str(value)
+            #pipe.set(key,'friend_notific')
+    #pipe.execute()
 
 app.on_inserted_people_posts+= after_post_inserted
 app.on_updated_people+= after_friend_notification_get
@@ -422,7 +432,19 @@ def fileupload():
         return os.path.join(app.config['UPLOAD_FOLDER'], renamed_filename)
 
 #chating part
-socketio = SocketIO(app)
+
+
+
+@socketio.on('connecting', namespace='/live')
+def joiningtoroom(data):
+
+    print '========================'
+    print data['id']
+    if(join_into_room(data['id'])):
+        print request.namespace.rooms
+        print 'succesfuuly joined'
+        emit('joiningstatus',{'data': data['id'] in request.namespace.rooms})
+
 
 
 @socketio.on('connect')
@@ -434,6 +456,10 @@ def creta_or_join(data):
         print request.namespace.rooms
         emit('join_status',{'data': data['data'] in request.namespace.rooms})
 
+@socketio.on('otherEvent')
+def sampletesting(data):
+    print '===========received other event==========='
+    #return 'hai'
 
 @socketio.on('send_message')
 def send_to_room(data):

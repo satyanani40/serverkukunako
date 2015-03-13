@@ -8,7 +8,8 @@
  * Controller of the weberApp
  */
 angular.module('weberApp')
-	.controller('SettingsCtrl', function($route, $location, $scope, $auth, Restangular, InfinitePosts, $alert, $http, CurrentUser, UserService, fileUpload) {
+	.controller('SettingsCtrl',
+	    function($route, $location, $scope, $auth, Restangular, InfinitePosts, $alert, $http, CurrentUser, UserService) {
 
 
 		$scope.UserService = UserService;
@@ -18,10 +19,88 @@ angular.module('weberApp')
                 'Authorization':$auth.getToken()
 			}
 		}).success(function(user_id) {
+		    console.log(user_id)
+		    console.log(JSON.parse(user_id))
 			var passReq = Restangular.one("people", JSON.parse(user_id)).get({seed:Math.random()}).then(function(result) {
               $scope.user = result;
+              console.log("hai")
+              console.log($scope.user)
 
             });
+            console.log($scope.user)
+
+
+            $scope.size='small';
+            $scope.type='circle';
+            $scope.imageDataURI='';
+            $scope.resImageDataURI='';
+            $scope.resImgFormat='image/png';
+            $scope.resImgQuality=1;
+            $scope.selMinSize=100;
+            $scope.resImgSize=200;
+            //$scope.aspectRatio=1.2;
+            $scope.onChange=function($dataURI) {
+              console.log('onChange fired');
+              console.log($dataURI)
+            };
+            $scope.onLoadBegin=function() {
+              console.log('onLoadBegin fired');
+            };
+            $scope.onLoadDone=function() {
+              console.log('onLoadDone fired');
+            };
+            $scope.onLoadError=function() {
+              console.log('onLoadError fired');
+            };
+            var handleFileSelect=function(evt) {
+              var file=evt.currentTarget.files[0];
+              console.log(file);
+              var reader = new FileReader();
+              reader.onload = function (evt) {
+                $scope.$apply(function($scope){
+                  $scope.imageDataURI=evt.target.result;
+                  console.log("============after base encoding the image===========")
+                  console.log($scope.imageDataURI);
+                });
+              };
+              reader.readAsDataURL(file);
+            };
+            angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+            $scope.$watch('resImageDataURI',function(){
+                console.log('Res image', $scope.resImageDataURI);
+                console.log("its just testing the encoding base64")
+
+
+            });
+
+            $scope.uploadFile = function(){
+
+                var Get_upload_details = Restangular.one('people', $scope.user._id).get({seed:Math.random()});
+                    Get_upload_details.then(function(response){
+                    $scope.user = response;
+
+                    $scope.user.picture.large = $scope.imageDataURI;
+                    $scope.user.picture.medium = $scope.resImageDataURI;
+                    $scope.user.picture.thumbnail = $scope.resImageDataURI;
+
+                    console.log("=========before patch of upload========")
+
+                    $scope.user.patch({
+                        'picture':{
+                            'large':$scope.imageDataURI,
+                            'medium':$scope.resImageDataURI,
+                            'thumbnail':$scope.resImageDataURI
+                        }
+                    }).then(function(response){
+
+                        console.log("=====after patch========")
+                        console.log(response)
+                    });
+                });
+
+            }
+
+
 
             $scope.updateUsername = function() {
 
@@ -66,15 +145,6 @@ angular.module('weberApp')
                         console.log(response)
                     });
                 });
-			};
-
-
-			$scope.uploadFile = function(){
-				var file = $scope.myFile;
-				console.log('file is ' + JSON.stringify(file));
-				var uploadUrl = "/fileUpload";
-				fileUpload.uploadFileToUrl(file, uploadUrl,$scope.user);
-                $route.reload();
 			};
 
 			$scope.updateEmail = function() {
@@ -258,54 +328,7 @@ angular.module('weberApp')
 
 
 
-
-
-
-
-		});
-
-		/*console.log("sdfjhsgfuygsfcjsdgfvdsbjvgduvkjd jhdgfuvduvguvf")
-
-
-		$scope.size='small';
-        $scope.type='circle';
-        $scope.imageDataURI='';
-        $scope.resImageDataURI='';
-        $scope.resImgFormat='image/png';
-        $scope.resImgQuality=1;
-        $scope.selMinSize=100;
-        $scope.resImgSize=200;
-        //$scope.aspectRatio=1.2;
-        $scope.onChange=function($dataURI) {
-          console.log('onChange fired');
-          console.log($dataURI)
-        };
-        $scope.onLoadBegin=function() {
-          console.log('onLoadBegin fired');
-        };
-        $scope.onLoadDone=function() {
-          console.log('onLoadDone fired');
-        };
-        $scope.onLoadError=function() {
-          console.log('onLoadError fired');
-        };
-        var handleFileSelect=function(evt) {
-          var file=evt.currentTarget.files[0];
-          console.log(file);
-          var reader = new FileReader();
-          reader.onload = function (evt) {
-            $scope.$apply(function($scope){
-              $scope.imageDataURI=evt.target.result;
-              console.log("============after base encoding the image===========")
-              console.log($scope.imageDataURI);
-            });
-          };
-          reader.readAsDataURL(file);
-        };
-        angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
-        $scope.$watch('resImageDataURI',function(){
-          //console.log('Res image', $scope.resImageDataURI);
-        });*/
+        });
 
 
 

@@ -17,11 +17,12 @@ angular
 		'ngSanitize',
 		'ngTouch',
 		'mgcrea.ngStrap',
-		'infinite-scroll',
 		'satellizer',
 		'restangular',
 		'angularMoment',
-		'elasticsearch' 
+		'elasticsearch',
+		'ngImgCrop',
+		'ngSocket'
 	])
 	.run(["$rootScope", "$location",
 		function($rootScope, $location) {
@@ -33,7 +34,7 @@ angular
 		}
 	])
 
-	.run(['$route', '$rootScope', '$location', function ($route, $rootScope, $location) {
+	/*.run(['$route', '$rootScope', '$location', function ($route, $rootScope, $location) {
         var original = $location.path;
         $location.path = function (path, reload) {
             if (reload === false) {
@@ -45,7 +46,7 @@ angular
             }
             return original.apply($location, [path]);
         };
-    }])
+    }])*/
 
 	.config(['RestangularProvider',
 		function(RestangularProvider) {

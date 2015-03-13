@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html>
 
 <head>
 	<meta charset="utf-8">
@@ -164,6 +164,7 @@
 	<script src="static/bower_components/angular-route/angular-route.js"></script>
 	<script src="static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
 	<script src="static/bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
+     <script src="static/bower_components/zInfiniteScroll/zInfiniteScroll.js"></script>
 	<script src="static/bower_components/angular-strap/dist/angular-strap.js"></script>
 	<script src="static/bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
 	<script src="static/bower_components/lodash/dist/lodash.compat.js"></script>
@@ -175,6 +176,8 @@
 	<script src="static/bower_components/elasticsearch/elasticsearch.angular.js"></script>
     <script src="static/bower_components/angular-local-storage/angular-local-storage.js"></script>
 
+    <script src="static/bower_components/ng-socket/ngSocket.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
     <script type="text/javascript" src="static/bower_components/ngImgCrop/compile/unminified/ng-img-crop.js"></script>
 
 	<!-- endbower -->
@@ -184,7 +187,7 @@
 	<!-- build:js({.tmp,app}) scripts/scripts.js -->
 	<script src="/static/app/scripts/app.js"></script>
 	<script src="/static/app/scripts/controllers/main.js"></script>
-    <script src="/static/app/scripts/controllers/testing.js"></script>
+    <script src="/static/app/scripts/controllers/indexcontroller.js"></script>
 	<script src="/static/app/scripts/controllers/about.js"></script>
 
 
@@ -209,7 +212,7 @@
 	<script src="/static/app/scripts/controllers/navbar.js"></script>
 	<script src="/static/app/scripts/filters/fromnow.js"></script>
 	<script src="/static/app/scripts/controllers/weber_search.js"></script>
-	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+
 	<!--<script type="text/javascript" src="/static/app/scripts/autocomplete.js"></script>
 	<script type="text/javascript" src="/static/app/scripts/autocomplete_ap.js"></script>-->
 	<!-- endbuild -->

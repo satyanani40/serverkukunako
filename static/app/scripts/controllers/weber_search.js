@@ -10,13 +10,14 @@
 angular.module('weberApp')
     .controller('WeberSearchCtrl', function($scope, $auth, Restangular,
 	 										InfinitePosts, $alert, $http,$location,
-	 										CurrentUser, UserService,CurrentUser1,
+	 										CurrentUser, UserService,CurrentUser1,$rootScope,
 	 										SearchActivity, $routeParams, MatchMeResults) {
 
         function combine_ids(ids) {
    				return (ids.length ? "\"" + ids.join("\",\"") + "\"" : "");
 		}
 
+        $scope.query = $routeParams.query;
         $scope.matchResults = new MatchMeResults($routeParams.query);
         store_search_text($routeParams.query);
 
@@ -42,7 +43,7 @@ angular.module('weberApp')
 
 		$scope.UserService = UserService;
         $scope.CurrentUser = CurrentUser1;
-
+        $rootScope.loggeduser = CurrentUser1;
 
         $scope.isAuthenticated = function() {
             return $auth.isAuthenticated();
@@ -54,14 +55,19 @@ angular.module('weberApp')
         };
 
         $scope.perfomSearch = function(){
-            if($scope.query)
-                $location.path('search/' + $scope.query, true);
+            if($scope.query && ($routeParams.query == $scope.query)){
+                //$scope.matchResults = new MatchMeResults($scope.query);
+            }else if($scope.query){
                 $routeParams.query = $scope.query;
-
+                $location.path('search/' + $routeParams.query);
+            }
+            else{
+                //$scope.query = '';
+                //$scope.matchResults.mresults = null;
+            }
         }
+
 	})
-
-
 
 
 
@@ -95,9 +101,23 @@ angular.module('weberApp')
                     var html ='<p></p>';
                     $element.html(html);
                     $compile($element.contents())($scope);
-
-
                 }
             }
         };
-    });
+    })
+    .directive('focus',function($timeout) {
+        return {
+            scope : {
+                trigger : '@focus'
+            },
+            link : function(scope, element) {
+                scope.$watch('trigger', function(value) {
+                    if (value === "true") {
+                        $timeout(function() {
+                            element[0].focus();
+                        });
+                    }
+                });
+            }
+        };
+     });

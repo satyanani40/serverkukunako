@@ -3,10 +3,13 @@ angular.module('weberApp')
     return {
         restrict: 'A',
         replace: true,
+
+
         controller:function($scope, $element, $attrs){
 
             $scope.chatroomdiv = function(id){
-                if($element[0].offsetHeight == 414){
+                if($element[0].offsetHeight == 364){
+                   console.log($element)
                    $element.css('height', '40px')
                     var data = JSON.parse(sessionStorage.getItem(id))
                     json = {
@@ -21,7 +24,7 @@ angular.module('weberApp')
                     sessionStorage.setItem(data.id, JSON.stringify(json));
 
                 }else{
-                    $element.css('height', '414px')
+                    $element.css('height', '364px')
                     $scope.chatdivnotification = [];
                     var data = JSON.parse(sessionStorage.getItem(id))
                     json = {
@@ -30,10 +33,13 @@ angular.module('weberApp')
                                       minimize:false,
                                       maximize:true,
                                       right:0,
-                                      height:'414px'
+                                      height:'364px'
                           }
                     sessionStorage.removeItem(id);
                     sessionStorage.setItem(data.id, JSON.stringify(json));
+                    console.log('chat div notifications============')
+                    // make message notifications on div seen
+                    $scope.newMessageSeen(data.id);
                 }
             }
 

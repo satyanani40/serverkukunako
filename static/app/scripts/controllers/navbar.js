@@ -8,20 +8,22 @@
  * Controller of the weberApp
  */
 angular.module('weberApp')
-	.directive('navbar', function () {
+.directive('navbar', function () {
     return {
         restrict: 'A', //This menas that it will be used as an attribute and NOT as an element. I don't like creating custom HTML elements
         replace: true,
-        scope: {},
+        scope:true,
         templateUrl: "/static/app/views/navbar.html",
-
-        controller:function ($scope, $auth, CurrentUser, $alert,$rootScope,
-                             $location,$http,Restangular,ChatActivity, $window,
-                             SearchActivity,FriendsNotific,friendsActivity) {
-    console.log("=================================================")
-
-
-
+        controller: "navbarcontroller"
+  }
+})
+    .controller('navbarcontroller',function($scope, $auth, CurrentUser, $alert,$rootScope,$timeout,
+                                            $location,$http,Restangular,ChatActivity, $window,
+                                            CurrentUser1,SearchActivity,FriendsNotific,friendsActivity,$socket) {
+    //$scope.data = CurrentUser1;
+    /*$timeout(function(){
+        console.log($scope.data)
+    }, 10000);*/
     $scope.dropdown = [{
         "text": "Settings",
         "href": "#/settings"
@@ -42,9 +44,6 @@ angular.module('weberApp')
         return $auth.isAuthenticated();
     };
 
-
-
-
     $http.get('/api/me', {
         headers: {
             'Content-Type': 'application/json',
@@ -52,10 +51,21 @@ angular.module('weberApp')
         }
     }).success(function(user_id) {
 
+        Restangular.one('people',JSON.parse(user_id)).get({seed: Math.random()}).then(function(user) {
+
+            $socket.emit('connecting', {id:user._id});
+
+             // Listening to an event
+            $socket.on('joiningstatus', function(data) {
+                console.log(data)
+            });
+
+
+
+
         // popup notifications code
             $scope.menuOpened = false;
             $scope.notificationOpened = false;
-
             $scope.notificationMenu = function(event) {
                 $scope.notificationOpened = !($scope.notificationOpened);
                 event.stopPropagation();
@@ -86,8 +96,6 @@ angular.module('weberApp')
             };
         // end of popup notifications
 
-        Restangular.one('people',JSON.parse(user_id)).get({seed: Math.random()}).then(function(user) {
-             $scope.currentUser = user;
         $scope.searchActivity = new SearchActivity($scope.currentUser)
         $scope.loadSearchHistory = function(){
             $scope.searchActivity.getMysearches();
@@ -133,15 +141,14 @@ angular.module('weberApp')
 
         get_friend_notifications(user);
 
-        var source = new EventSource('/stream/'+user._id);
-        source.onmessage = function (event) {
-
-            data = JSON.parse(event.data)
-            if(parseInt(data.searchNotific)){
+          $socket.on('friendnotifications', function(data){
+            console.log(data)
+            /*if(parseInt(data.searchNotific)){
                 $scope.searchActivity = new SearchActivity(user);
-            }
+            }*/
 
-            if(parseInt(data.friendsnotifc)){
+            if(data.data.friendsnotifc){
+
                 $http.get('/api/me', {
                     headers: {
                         'Content-Type': 'application/json',
@@ -155,7 +162,8 @@ angular.module('weberApp')
 
                 });
             }
-        };
+
+        });
 
         $scope.getNewNotifcations = function(){
 
@@ -167,6 +175,7 @@ angular.module('weberApp')
                 }
             }).success(function(user_id) {
                 Restangular.one('people',JSON.parse(user_id)).get({seed: Math.random()}).then(function(user) {
+
                         var anotific = [];
                         var reqnotific = [];
                         var k = null;
@@ -188,29 +197,43 @@ angular.module('weberApp')
                         ).then(function(data){
                             console.log('updated accept notifications')
                         });
-                            var params = '{"_id": {"$in":["'+(reqnotific).join('", "') + '"'+']}}'
-                            Restangular.all('people').getList({
-                                where : params,
-                                seed: Math.random()
-                            }).then(function(response){
-                                $scope.rpeoples = response;
-                            });
+                        var params = '{"_id": {"$in":["'+(reqnotific).join('", "') + '"'+']}}'
+                        Restangular.all('people').getList({
+                            where : params,
+                            seed: Math.random()
+                        }).then(function(response){
+                            $scope.rpeoples = response;
+                        });
 
-                            var params = '{"_id": {"$in":["'+(anotific).join('", "') + '"'+']}}'
-                            Restangular.all('people').getList({
-                                where : params,
-                                seed: Math.random()
-                            }).then(function(resposne){
-                                $scope.apeoples = resposne;
-                            });
+                        var params = '{"_id": {"$in":["'+(anotific).join('", "') + '"'+']}}'
+                        Restangular.all('people').getList({
+                            where : params,
+                            seed: Math.random()
+                        }).then(function(resposne){
+                            $scope.apeoples = resposne;
+                        });
+
                     });
                 });
             }
 
 
-
     });
 });
-	}
-  }
+})
+.directive('getuserdata', function () {
+    return {
+        controller:function($scope, CurrentUser1,$http,Restangular,$auth){
+            $http.get('/api/me', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': $auth.getToken()
+                }
+            }).success(function(user_id) {
+                Restangular.one('people',JSON.parse(user_id)).get({seed: Math.random()}).then(function(user) {
+                    $scope.currentUser = user;
+                });
+            });
+        }
+    }
 });

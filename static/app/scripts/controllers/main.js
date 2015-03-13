@@ -8,8 +8,13 @@
  * Controller of the weberApp
  */
 angular.module('weberApp')
-	.controller('MainCtrl', function($scope, $auth, Restangular, InfinitePosts, $alert, $http, CurrentUser, UserService) {
+	.controller('MainCtrl', function($scope, $auth, $socket, Restangular, InfinitePosts, $alert,
+	                                 $http, CurrentUser, UserService) {
+
+	    console.log("--------calling main.js ------------------")
+
 		$scope.UserService = UserService;
+
 
 		$http.get('/api/me', {
 			headers: {
@@ -19,10 +24,12 @@ angular.module('weberApp')
 		}).success(function(user_id) {
 			Restangular.one('people',JSON.parse(user_id)).get({seed:Math.random()}).then(function(user) {
 				$scope.user = user;
+
+
+
 				var loadPostIds = angular.copy(user.friends)
                 loadPostIds.push(user._id)
                 loadPostIds = "[\"" + loadPostIds.join("\",\"") + "\"]";
-
 				$scope.infinitePosts = new InfinitePosts(user, loadPostIds);
 
                 if (user.friends.length !== 0) {
@@ -47,6 +54,22 @@ angular.module('weberApp')
 					$scope.new_post = '';
 					});
 				};
+				$scope.test = function(){
+				    console.log('ha')
+				}
+                $socket.on('postNotifications', function(data){
+
+                    if(data.data.postnotific){
+
+                        if(user.friends.indexOf(data.author) == -1){
+                            console.log('no a friend')
+                        }else if(user.friends.indexOf(data.author != -1) && data.postid != 'undefined'){
+                            $scope.infinitePosts.loadNotificPost(data.postid, data.author)
+                        }else{
+                            console.log('nothing to do')
+                        }
+                    }
+                });
 
 
 			});

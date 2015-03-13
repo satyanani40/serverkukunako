@@ -1,5 +1,6 @@
 
-<div  checkinfunctions class="navbar navbar-inverse navbar-fixed-top" role="navigation" bs-navbar>
+<div   class="navbar navbar-inverse navbar-fixed-top"
+      role="navigation" bs-navbar getdata>
         <div class="container" style="width:;">
 
             <div class="navbar-header">
@@ -53,8 +54,6 @@
                                             </a>
                                         </div>
 
-                                        <div ng-show='instancesearch.busy'>Loading data...</div>
-                                        <div ng-show='instancesearch.end'>You Reached the end!</div>
 
                                     </div>
                                 </div>
@@ -71,7 +70,7 @@
 
 
 
-                <ul class="nav navbar-nav navbar-right" ng-if="isAuthenticated()">
+                <ul class="nav navbar-nav navbar-right" ng-if="isAuthenticated()" >
 
                     <li><a href="#/search">Match Me</a></li>
                     <li><a href="#/friends">Friends</a></li>
@@ -215,7 +214,7 @@
                         </div>
                     </li>
                     <li>
-                        <a href="" bs-dropdown="dropdown" style="padding-top: 11px; padding-bottom: 11px;">
+                        <a href="" bs-dropdown="dropdown" style="padding-top: 11px; padding-bottom: 11px;" getuserdata>
                             <img style="width:28px; border: 2px solid; margin-right: 5px;" class="img-circle" src="{{currentUser.picture.thumbnail}}" alt="">{{currentUser.username}} <span class="caret"></span>
                         </a>
                     </li>

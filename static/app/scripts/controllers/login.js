@@ -19,7 +19,6 @@ angular.module('weberApp')
 			}).then(function(response) {
 				$auth.setToken(response.data.token);
 				$rootScope.isloggin = true;
-				console.log('=========print true===========')
 				//$location.path('/home');
 			}, function(error) {
 				$scope.error = error.data.error;

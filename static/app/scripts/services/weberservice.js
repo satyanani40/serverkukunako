@@ -1,5 +1,4 @@
 'use strict';
-
 /**
  * @ngdoc service
  * @name weberApp.weberService
@@ -15,7 +14,6 @@ angular.module('weberApp')
 			return $sce.trustAsHtml(text);
 		};
 	})
-
 	.factory('InstanceSearch', function($http, Restangular, $alert, $timeout) {
 
 		var InstanceSearch = function() {
@@ -28,19 +26,18 @@ angular.module('weberApp')
 
 		InstanceSearch.prototype.getInstancePeoples = function(query){
 
-
             self = this;
             this.query = query;
-
             var req = {
-                 method: 'POST',
-                 url: '/api/getpeoplenames',
-                 headers: {
-                   'Content-Type': 'application/json'
-                 },
-                 data: { page: this.page,
-                         query: query.toLowerCase()
-                       },
+                method: 'POST',
+                url: '/api/getpeoplenames',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    page: this.page,
+                    query: query.toLowerCase()
+                },
             }
             $http(req).success(function(peoples){
                 self.InstancesearchResult = peoples;
@@ -54,16 +51,16 @@ angular.module('weberApp')
             if (this.busy | this.end) return;
 			this.busy = true;
 			self = this;
-
             var req = {
                  method: 'POST',
                  url: '/api/getpeoplenames',
                  headers: {
                    'Content-Type': 'application/json'
                  },
-                 data: { page: self.page,
-                         query: self.query
-                       },
+                 data: {
+                    page: self.page,
+                    query: self.query
+                 },
             }
 
             $http(req).success(function(peoples){
@@ -71,7 +68,6 @@ angular.module('weberApp')
                 if (peoples.length === 0) {
 					self.end = true;
 				}
-
 				self.InstancesearchResult.push.apply(self.InstancesearchResult, peoples);
 				self.page = self.page + 1;
 				self.busy = false;
@@ -81,7 +77,6 @@ angular.module('weberApp')
 		};
        return InstanceSearch;
     })
-
 	.service('UserService', function($http, Restangular) {
 		this.users = [];
 
@@ -97,13 +92,13 @@ angular.module('weberApp')
 			this.users.push(promise);
 			return promise;
 		};
+
 	}).service('CurrentUser1', function($http, Restangular) {
 		this.userId = null;
 		this.user = null;
 		this.reset = function() {
 			this.userId = null;
 		};
-
 		if (this.userId === null) {
 			$http.get('/api/me', {
 				headers: {
@@ -118,12 +113,8 @@ angular.module('weberApp')
 		}
 
 	})
-
-
 	.factory('CurrentUser', function($http,$auth,$q, Restangular) {
-
             var CurrentUser = function() {
-
 			    this.userId = null;
 			    this.user = null;
             }
@@ -139,7 +130,6 @@ angular.module('weberApp')
                         this.userId = userId;
                     }.bind(this));
             };
-
 
 			CurrentUser.prototype.getCUserDetails = function(userid){
 
@@ -159,7 +149,7 @@ angular.module('weberApp')
 		var InfinitePosts = function(user_obj,authorIds) {
 			this.posts = [];
 			this.user_obj = user_obj;
-			this.busy = false;
+			this.busy = true;
 			this.page = 1;
 			this.loadPostIds = authorIds;
 			this.end = false;
@@ -169,17 +159,61 @@ angular.module('weberApp')
 			    where : this.params,
 				max_results: 10,
 				page: this.page,
-				sort: '[("_created",-1)]'
+				sort: '[("_created",-1)]',
+				seed:Math.random()
 			}).then(function(posts) {
+                console.log('loadposts')
 				if (posts.length < 10) {
 					this.end = true;
 				}
 				this.posts.push.apply(this.posts, posts);
 				this.page = this.page + 1;
 				this.busy = false;
+
 			}.bind(this));
 
 		};
+
+
+		InfinitePosts.prototype.nextPage = function() {
+		    console.log('nextpage')
+			if (this.busy | this.end) return;
+			this.busy = true;
+
+			Restangular.all('posts').getList({
+			    where : this.params,
+				max_results: 10,
+				page: this.page,
+				sort: '[("_created",-1)]',
+				seed:Math.random()
+			}).then(function(posts) {
+				if (posts.length === 0) {
+					this.end = true;
+				}
+				this.posts.push.apply(this.posts, posts);
+				this.page = this.page + 1;
+				this.busy = false;
+			}.bind(this));
+		};
+
+		InfinitePosts.prototype.loadNotificPost = function(postid, author){
+            console.log(postid, author)
+
+		    Restangular.one('posts', postid).get().then(function(post) {
+		        console.log(post)
+                this.posts.unshift({
+                    author: post.author,
+                    content: post.content,
+                    _created: post._created,
+                    _id: post._id,
+                    _etag: post._etag
+                });
+                console.log(this.posts)
+			}.bind(this));
+
+
+
+		}
 
 		InfinitePosts.prototype.addPost = function(content,similar_keywords) {
 
@@ -235,24 +269,7 @@ angular.module('weberApp')
 		};
 
 
-		InfinitePosts.prototype.nextPage = function() {
-			if (this.busy | this.end) return;
-			this.busy = true;
 
-			Restangular.all('posts').getList({
-			    where : this.params,
-				max_results: 10,
-				page: this.page,
-				sort: '[("_created",-1)]'
-			}).then(function(posts) {
-				if (posts.length === 0) {
-					this.end = true;
-				}
-				this.posts.push.apply(this.posts, posts);
-				this.page = this.page + 1;
-				this.busy = false;
-			}.bind(this));
-		};
 		return InfinitePosts;
 	}).factory('SearchActivity', function($http, Restangular, $alert, $timeout) {
 
@@ -351,11 +368,11 @@ angular.module('weberApp')
 			    this.param2 = '{"author":1}';
                 Restangular.all('posts').getList({
 				where : this.param1,
+				seed: Math.random(),
 				max_results: 10,
 				page: this.page,
 				embedded : this.param2
 				}).then(function(data) {
-
                    if (data.length < 10) {
                         this.end = true;
     			   }
@@ -363,10 +380,6 @@ angular.module('weberApp')
                    this.total_matches = data.length;
                    this.page = this.page + 1;
                    this.busy = false;
-
-					/*for(var i=0;i<this.total_matches;i++){
-						this.matchedids.push(this.mresults[i]['_id'])
-					}*/
 				}.bind(this));
             }
 		};
@@ -406,9 +419,8 @@ angular.module('weberApp')
 
 				return data2
             }.bind(this));
-            return data
+            return data;
 		};
-
 
         MatchMeResults.prototype.nextPage = function() {
             console.log("nextpage_this.end"+this.end)
@@ -422,6 +434,7 @@ angular.module('weberApp')
 				page: this.page,
 				embedded : this.param2
 			}).then(function(data) {
+
                 if (data.length === 0) {
 					this.end = true;
 				}
@@ -429,6 +442,7 @@ angular.module('weberApp')
 				this.mresults.push.apply(this.mresults, data);
 				this.page = this.page + 1;
 				this.busy = false;
+
 			}.bind(this));
 		};
 

@@ -1,7 +1,7 @@
 <!--<div ng-if="isAuthenticated()" ></div>-->
 <div class="container" style="min-height:2000px">
-    <div class="col-md-3 colpadding" ng-if="isAuthenticated()" style="padding-top:30px;">
-        <div class="thumbnail">
+    <div class="col-md-3 colpadding" ng-if="isAuthenticated()" style="padding-top:30px;" >
+        <!--<div class="thumbnail">
             <div class="itemsContainer">
                 <div class="image">
                     <a href="">
@@ -82,9 +82,10 @@
                 <a ng-repeat="friend in friends | limitTo : 8" href="#/profile/{{friend._id}}">
                     <img data-placement="top-right" style="width:65px"
                          data-content="{{friend.location.city}}, {{friend.location.state}}"
-                         title="{{friend.name.first}} {{friend.name.last}}" data-trigger="hover" bs-popover src="{{friend.picture.thumbnail}}">
+                         title="{{friend.name.first}} {{friend.name.last}}" data-trigger="hover"
+                         bs-popover src="{{friend.picture.thumbnail}}">
                 </a>
-		</div>
+		</div>-->
     </div>
 
     <div class="col-sm-6">
@@ -99,7 +100,7 @@
         <div class="row" style="padding-top:30px;">
             <!--<form class="col-sm-12" style="padding:0px;" role="search">-->
                 <div class="form-group has-feedback">
-                    <input type="text" class="form-control form-control1" ng-model="query"
+                    <input type="text" class="form-control form-control1" ng-model="query" focus="true"
                            placeholder="Search anything in weber" ng-keyup="$event.keyCode == 13 && perfomSearch()"/>
                     <i class="glyphicon glyphicon-search form-control-feedback"
                        style=""></i>
@@ -124,8 +125,21 @@
                     <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
                         <strong>{{rs.author.name.first}}</strong>
                         <span class="pull-right">
-                            <a matchpersonroom style="font-size:14px;" name="{{rs.author._id}}"  ng-click="openchatroom('{{ rs.author._id }}')">
-                                Chat
+                            <!-- if post from you -->
+                            <a style="font-size:14px;" name="{{rs.author._id}}"
+                               ng-if="isAuthenticated() && user._id == rs.author._id" >
+                                post from you
+                            </a>
+                            <!-- if post not from you and you logged in-->
+                            <a matchpersonroom style="font-size:14px;" name="{{rs.author._id}}"
+                               ng-if="isAuthenticated() && user._id != rs.author._id"
+                               ng-click="openchatroom('{{ rs.author._id }}');addToConversations('{{ rs.author._id}}')">
+                               chat
+                            </a>
+                            <!-- if not logged in -->
+                            <a  ng-if="!(isAuthenticated())" style="font-size:14px;"
+                                name="{{rs.author._id}}" href="/#/login">
+                                Chat(please login)
                             </a>
 
                         </span>

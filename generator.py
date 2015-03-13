@@ -9,7 +9,7 @@ import time
 
 print '---------------------------------fetching users-----------------------'
 url = 'http://127.0.0.1:8000/api/people'
-randomuser = urllib2.urlopen('http://api.randomuser.me/?results=10&'+str(random.randrange(0, 101, 2)))
+randomuser = urllib2.urlopen('http://api.randomuser.me/?results=10&seed='+str(random.randrange(0, 101, 2)))
 results = json.loads(randomuser.read())
 users=results['results']
 processed_users = []
@@ -37,9 +37,11 @@ for raw_user in users:
         'intermediate':"",
         'graduate':""
     }
+    #user['testing_doc'] = []
     user['movies'] = []
     user['notifications'] = []
     user['accept_notifications'] = []
+    user['conversations'] = []
     user['password'] = generate_password_hash(user['password'])
     user['role'] = 'test'
     r = requests.post(url, data=json.dumps(user, default=json_util.default), headers=headers)

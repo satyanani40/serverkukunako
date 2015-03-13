@@ -26,7 +26,11 @@ angular.module('weberApp')
 		return result;
     };
   })
-
+.filter('reverse', function() {
+  return function(items) {
+    return items.slice().reverse();
+  };
+});
 
  /*.filter('makeUppercase', function () {
   // function that's invoked each time Angular runs $digest()

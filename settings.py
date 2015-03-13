@@ -10,9 +10,6 @@ MONGO_DBNAME = 'test'
 
 
 URL_PREFIX = 'api'
-ELASTICSEARCH_URL = 'http://127.0.0.1:8000'
-ELASTICSEARCH_INDEX = 'elasticindex'
-
 TOKEN_SECRET = os.environ.get('SECRET_KEY') or 'JWT Token Secret String'
 
 
@@ -147,7 +144,7 @@ message_schema = {
             'type':'integer',
             'default': 0
         },
-        'messaged_on':{
+        'message_created':{
             'type':'datetime'
         }
 
@@ -192,13 +189,26 @@ people = {
                 }
             }
         },
+
         'email': {
             'type': 'string',
             'minlength': 1,
             'required': True,
             'unique': True,
         },
-	      'username': {
+
+        'conversations': {
+            'type': 'list',
+            'schema': {
+                'type': 'objectid',
+                'data_relation': {
+                    'resource': 'people',
+                    'embeddable': True
+                }
+            },
+        },
+
+	    'username': {
             'type': 'string',
             'minlength': 1,
             'maxlength': 25,
