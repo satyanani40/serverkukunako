@@ -53,7 +53,7 @@ angular.module('weberApp')
 			}
 		};
 	}])
-	.service('fileUpload', ['$http', function ($http,$auth, Restangular) {
+	.service('fileUpload', ['$http', function ($http,$auth, $scope, Restangular) {
 		this.uploadFileToUrl = function(file, uploadUrl,user_id){
 			var fd = new FormData();
 			this.user_id = user_id;
@@ -62,19 +62,9 @@ angular.module('weberApp')
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			})
-			.success(function(data){
-				console.log(data)
-				user_id.patch({
-					'picture':{
-						'large':data,
-						'medium':data,
-						'thumbnail':data
-					}
-				});
+			.then(function(data){
+				return data;
 
 			})
-			.error(function(error){
-				console.log(error)
-			});
 		}
 	}]);/*====== end of file upload services ======*/

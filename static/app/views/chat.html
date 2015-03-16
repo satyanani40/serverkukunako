@@ -6,63 +6,31 @@
                 <div class="panel-heading"
                      style="border-bottom:1px solid #dcdcdc;margin-bottom:9px;">
                     <h5 style="margin:5px 0px;opacity:0.70;">
-                        Online Friends
-                        <a class="pull-right" ng-click="chat_message_Menu($event);loadLatestMessages()" style="cursor:pointer">
-                            <i class="glyphicon glyphicon-envelope"
-                               style="font-size:17px;opacity:0.70;">
-                            </i>
-                            {{ chatactivity.messageNotific.length }}
-                            <label class="label label-danger" ng-if="chatactivity.messageNotifc.length"
-                                   style="position:absolute;font-size:10px;top: 5px;right: 0px;">
-                                    {{ chatactivity.messageNotifc.length }}
-                            </label>
-                        </a>
+                        Friends
                     </h5>
-                    <!--chating notifications div-->
-                    <div class="panel panel-default message_box box-shadowpanel"
-                         ng-show="chat_message_Opened"
-                         style="top: 45px;z-index:999;position:absolute;width:380px;right:7px;border:1px solid #D0D0D0;">
-                        <div class="panel-heading" style="padding: 2px 15px;">
-                            <h5>Messages</h5>
-                        </div>
-                        <div class="panel-body" style="padding:0px;height:300px;">
-                            <div class="" style="margin-bottom:0px;"
-                                   ng-repeat="message in chatactivity.latestMessages  | limitTo : 5 ">
-                                <a style=""
-                                   ng-click="openchatroom('{{ message.sender._id }}')"
-                                   class="list-group-item search_a">
-                                    <div class="row" >
-                                        <div class="col-sm-1">
-                                            <img src="{{ message.sender.picture.large }}"
-                                                 style="width:40px">
-                                        </div>
-                                        <div class="col-sm-8">
-                                            <h5 style="opacity:0.75;">
-                                                {{ message.sender.name.first }} {{ message.sender.name.last }}
-                                            </h5>
-                                        </div>
-                                        <div>
-                                            {{ message.message }}
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="panel-footer" style="padding: 2px 15px;">
-                            <a href="" class="">
-                                <h6 class="text-center">Read more</h6>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- end of chat notifications div -->
                 </div>
 
                 <div class="panel-body messages-scroll" style="padding:0px;height:34vh;">
-                    <div class="row" style="cursor:pointer;">
+                    <div class="row" style="cursor:pointer;" ng-if="!(chatactivity.chatfriends.length)">
+                        <div class="col-sm-4 col-sm-offset-4">
+                            <div class="">
+                                <div class="thumbnail" style="border:0px solid;">
+                                    <img src="https://pbs.twimg.com/profile_images/419852181869576193/yxaX7JJy_400x400.jpeg">
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="col-sm-12">
+                            <h5 class="text-center">
+                                You have No friends
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12">
                             <div  class="media" ng-repeat="chatuser in chatactivity.chatfriends"
                                  ng-click="openchatroom('{{ chatuser._id }}')"
-                                 style="border-bottom:1px solid #F5F5F5;" >
+                                 style="border-bottom:1px solid #F5F5F5;cursor:pointer;" >
                               <div class="media-left">
                                 <a class="pull-left" style="padding: 0px 7px;">
                                   <img class="media-object" style="width:40px;border-radius:50%;"
@@ -92,12 +60,27 @@
                     </h5>
                 </div>
                 <div class="panel-body messages-scroll" style="padding:0px;height:33vh;">
-                    <div class="row" style="cursor:pointer;">
+                    <div class="row" style="cursor:pointer;" ng-if="!(chatactivity.conversations.length)">
+                      <div class="col-sm-4 col-sm-offset-4">
+                            <div class="">
+                                <div class="thumbnail" style="border:0px solid;">
+                                    <img src="https://pbs.twimg.com/profile_images/419852181869576193/yxaX7JJy_400x400.jpeg">
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="col-sm-12">
+                            <h5 class="text-center">
+                                You have No Conversations
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12">
                             <div class="media" ng-repeat="conversation in chatactivity.conversations"
                                  ng-click="openchatroom('{{ conversation._id }}')"
 
-                                 style="border-bottom:1px solid #F5F5F5;" >
+                                 style="border-bottom:1px solid #F5F5F5;cursor:pointer;" >
                               <div class="media-left">
                                 <a class="pull-left" style="padding: 0px 7px;">
                                   <img class="media-object" style="width:40px;border-radius:50%;"
@@ -116,7 +99,7 @@
                                 </h6>
                               </div>
                             </div>
-                            <div ng-if="chatactivity.conversations.length == 0"> no users found</div>
+
                         </div>
                     </div>
                 </div>

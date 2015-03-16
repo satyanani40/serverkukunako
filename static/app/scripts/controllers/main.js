@@ -9,11 +9,23 @@
  */
 angular.module('weberApp')
 	.controller('MainCtrl', function($scope, $auth, $socket, Restangular, InfinitePosts, $alert,
-	                                 $http, CurrentUser, UserService) {
+	                                 $http, CurrentUser, UserService, fileUpload) {
 
 	    console.log("--------calling main.js ------------------")
 
 		$scope.UserService = UserService;
+
+
+
+        var handleFileSelect=function(evt) {
+            var file=evt.currentTarget.files[0];
+            console.log('file is ' + JSON.stringify(file));
+            var uploadUrl = "/fileUpload";
+            fileUpload.uploadFileToUrl(file, uploadUrl,$scope.user);
+            console.log("----------testing upload image------------")
+            console.log($scope.uploaded);
+        };
+        angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
 
 
 		$http.get('/api/me', {

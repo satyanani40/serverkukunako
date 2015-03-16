@@ -13,6 +13,35 @@ angular.module('weberApp')
 	 										CurrentUser, UserService,CurrentUser1,$rootScope,
 	 										SearchActivity, $routeParams, MatchMeResults) {
 
+	 	/* login functionality code goes here*/
+        $scope.submitLogin = function() {
+            console.log("-------------------------")
+            console.log($scope.login_email)
+            console.log($scope.login_password)
+			$auth.login({
+				email: $scope.login_email,
+				password: $scope.login_password
+			}).then(function(response) {
+				$auth.setToken(response.data.token);
+				$rootScope.isloggin = true;
+				//$location.path('/home');
+			}, function(error) {
+				$scope.error = error.data.error;
+				/*$alert({
+					title: 'Login Failed: ',
+					content: error.data.error,
+					placement: 'top',
+					type: 'danger',
+					show: true
+				});*/
+			});
+		};
+
+        /* end of login functionality*/
+
+
+
+
         function combine_ids(ids) {
    				return (ids.length ? "\"" + ids.join("\",\"") + "\"" : "");
 		}
@@ -53,13 +82,17 @@ angular.module('weberApp')
             $auth.logout();
             $location.path("/search");
         };
+        $scope.showNoResults = false;
 
         $scope.perfomSearch = function(){
+            $scope.showNoResults = !($scope.showNoResults);
             if($scope.query && ($routeParams.query == $scope.query)){
                 //$scope.matchResults = new MatchMeResults($scope.query);
             }else if($scope.query){
+
                 $routeParams.query = $scope.query;
                 $location.path('search/' + $routeParams.query);
+
             }
             else{
                 //$scope.query = '';

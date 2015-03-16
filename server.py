@@ -424,9 +424,6 @@ def fileupload():
             import os
             renamed_filename = filename+dt
 
-            print "==============================================="
-            print renamed_filename
-
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], renamed_filename))
             print os.path.join(app.config['UPLOAD_FOLDER'], renamed_filename)
         return os.path.join(app.config['UPLOAD_FOLDER'], renamed_filename)

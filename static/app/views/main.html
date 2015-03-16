@@ -10,19 +10,24 @@
                 </div>
             </div>
 			<div class="caption text-center">
-				<h3 style="text-transform: capitalize;">{{user.name.first}} {{user.name.last}}</h3>
-				@{{user.username}}
+				<h3 style="text-transform: capitalize;">
+                    <a href="" style="text-decoration:none;">
+                        {{user.name.first}} {{user.name.last}}
+                    </a>
+                </h3>
 			</div>
 		</div>
 		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h5 style="margin:1px 0px 1px 0px">
-					About
-					<a href="" class="pull-right">
+			<div class="panel-heading" style="background-color:#fff;">
+				<h5 style="">
+					<a href="" style="color:#333;">
+                        About
+					</a>
+					<!--<a href="" class="pull-right">
 						<h6 style="margin-top:0px">
 							See all
 						</h6>
-					</a>
+					</a>-->
 				</h5>
 			</div>
 			<div class="panel-body">
@@ -78,12 +83,16 @@
 			</div>
 		</div>
 		<div class="panel panel-default">
-			<div class="clearfix panel-heading">Friends({{user.friends.length}})</div>
-                <a ng-repeat="friend in friends | limitTo : 8" href="#/profile/{{friend._id}}">
-                    <img data-placement="top-right" style="width:65px"
-                         data-content="{{friend.location.city}}, {{friend.location.state}}"
-                         title="{{friend.name.first}} {{friend.name.last}}" data-trigger="hover" bs-popover src="{{friend.picture.thumbnail}}">
-                </a>
+			<div class="clearfix panel-heading" style="background-color:#fff;">
+                <h5>
+                    Friends({{user.friends.length}})
+                </h5>
+			</div>
+            <a ng-repeat="friend in friends | limitTo : 8" href="#/profile/{{friend._id}}">
+                <img data-placement="top-right" style="width:65px"
+                     data-content="{{friend.location.city}}, {{friend.location.state}}"
+                     title="{{friend.name.first}} {{friend.name.last}}" data-trigger="hover" bs-popover src="{{friend.picture.thumbnail}}">
+            </a>
 		</div>
 	</div>
 	<div class="col-md-6 colpadding" style="min-height:2000px">
@@ -92,7 +101,7 @@
                       style="height: 70px;margin-bottom: 10px;resize: none;" placeholder="Whats happening?" required></textarea>
 			<div class="row">
 				<div class="col-sm-6">
-					<a class="btn btn-sm btn-default"><i class="glyphicon glyphicon-camera"></i></a>
+					<input type="file" id="fileInput" />
 					<a class="btn btn-sm btn-default"><i class="glyphicon glyphicon-facetime-video"></i></a>
 					<a class="btn btn-sm btn-default"><i class="glyphicon glyphicon-map-marker"></i></a>
 				</div>
@@ -103,12 +112,20 @@
 				</div>
 			</div>
 		</form>
-		<!--<div class="well clearfix">
-			<h3 style="text-align: center">
-					Import your Contacts from your Email to find your friends on Weber!
-					</h3>
-			<button class="btn btn-success btn-sm pull-right">Import</button>
-		</div>-->
+		<div class="well clearfix" style="background-color:#fff;" ng-if="!(infinitePosts.posts.length)">
+			<div class="row">
+				<div class="col-sm-4 col-sm-offset-4">
+					<div class="thumbnail" style="border:0px solid;">
+						<img src="https://pbs.twimg.com/profile_images/419852181869576193/yxaX7JJy_400x400.jpeg">
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<h4 class="text-center">
+						No Posts to Show
+					</h4>
+				</div>
+			</div>
+		</div>
 		<div id='userposts' infinite-scroll='infinitePosts.nextPage()' infinite-scroll-disabled='infinitePosts.busy'
              infinite-scroll-distance='0' infinite-scroll-container="'#userposts'">
 			<div class="media panel panel-default" ng-repeat="post in infinitePosts.posts">
