@@ -54,17 +54,21 @@ angular.module('weberApp')
 		};
 	}])
 	.service('fileUpload', ['$http', function ($http,$auth, $scope, Restangular) {
-		this.uploadFileToUrl = function(file, uploadUrl,user_id){
+		this.uploadFileToUrl = function(file, uploadUrl){
 			var fd = new FormData();
-			this.user_id = user_id;
 			fd.append('file', file);
+			this.path_name = "";
 			$http.post(uploadUrl, fd, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			})
 			.then(function(data){
+				console.log("==========printing the path from server=========")
+				console.log(data)
 				return data;
+				this.path_name = data;
 
-			})
+			}.bind(this))
+			return data;
 		}
 	}]);/*====== end of file upload services ======*/

@@ -1,5 +1,5 @@
-<div class="navbar navbar-default navbar-fixed-top">
-    <div class="container" style="padding:15px;">
+<div class="navbar navbar-default header-start-search navbar-fixed-top" style="background-color:#F8F8F8;">
+    <div class="container" style="padding:10px;">
         <div class="navbar-header">
             <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
                 <span class="icon-bar"></span>
@@ -15,7 +15,7 @@
             <div class="navbar-collapse collapse" id="navbar-main">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <form class="navbar-form" role="form" ng-submit="login()" name="myForm">
+                        <form class="navbar-form" role="form" ng-submit="login()" name="myForm1">
                             <div class="form-group" style="height:50px;">
                                 <input type="email"
                                    class="form-control input-sm"
@@ -27,18 +27,23 @@
                                    placeholder="Enter Password"
                                    name="password" ng-model="login_password" required  /><br>
                                 <span class="pull-right">
-                                    <a href="/#/" style="font-size:12px;">
+                                    <a href="/#/forgotpassword" style="font-size:12px;color:#000;">
                                         Forgot Password?
                                     </a>
                                 </span>
                             </div>
                             <div class="form-group" style="height:50px;">
-                                <button type="submit" ng-disabled="!myForm.$valid"
-                                        class="btn btn-info btn-sm" ng-click="submitLogin()">
+                                <button type="submit" ng-disabled="!myForm1.$valid"
+                                        class="btn btn-warning btn-sm" ng-click="submitLogin()">
                                     Sign in
                                 </button>
                             </div>
                         </form>
+                        <div ng-if="error" class="panel-body" style="padding-top:2px;color:red;position:absolute;top:50px;">
+                            <span style="color:red;">
+                                {{ error }}
+                            </span>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -49,12 +54,12 @@
 
 <!--<div ng-if="isAuthenticated()" ></div>-->
 <div class="container" style="min-height:2000px">
-    <div class="col-sm-6">
+    <div class="col-sm-12 col-md-6 col-lg-6">
         <div class="row" style="padding-top:80px;" ng-if="!(isAuthenticated())">
-            <h2 style="color:#000;font-family: 'Open sans',Arial,sans-serif;font-weight:400;">
+            <h2 style="color:#000;font-family: 'Open sans',Arial,sans-serif;font-weight:300;">
                 Wonder what weber can do
             </h2>
-            <h2 style="color:#000;font-family: 'Open sans',Arial,sans-serif;font-weight:400;">
+            <h2 style="color:#000;font-family: 'Open sans',Arial,sans-serif;font-weight:300;">
                 Search for people you are interested in..
             </h2>
         </div>
@@ -96,13 +101,15 @@
             <div class="panel panel-body" style="border:1px solid #dcdcdc;" ng-repeat="rs in matchResults.mresults" >
                 <div class="media">
                   <div class="media-left">
-                    <a href="#" class="pull-left" style="padding: 0px 7px;" href="">
-                      <img class="media-object" style="width:50px;border-radius:4px;" src="{{rs.author.picture.medium}}" alt="...">
+                    <a href="#" class="pull-left" style="padding: 0px 7px;">
+                      <img data-placement="top-right" style="width:50px;border-radius:4px;"
+                     data-content="{{rs.author.location.city}}, {{rs.author.location.state}}"
+                     title="{{rs.author.name.first}} {{rs.author.name.last}}" data-trigger="hover" bs-popover src="{{rs.author.picture.medium}}">
                     </a>
                   </div>
                   <div class="media-body">
                     <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;">
-                        <strong>{{rs.author.name.first}}</strong>
+                        <strong><a href="/#/" style="color:#333;">{{rs.author.name.first}}</a></strong>
                         <span class="pull-right">
                             <!-- if post from you -->
                             <a style="font-size:14px;" name="{{rs.author._id}}"
@@ -118,20 +125,10 @@
                             <!-- if not logged in -->
                             <span ng-if="!(isAuthenticated())" style="font-size:14px;"
                                 name="{{rs.author._id}}" class="chat_not_login">
-                                <a style="cursor:pointer;">Chat</a>
-                                <div class="chat_hover_div">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div class="panel panel-body login_bubble">
-                                                <h5>
-                                                    Please Login to Chat<br><br>
-                                                    <a href="/#/login"> Login</a>
-                                                </h5>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <a data-placement="top-right" style="width:65px"
+                                    data-content="Please Login to Chat" data-trigger="hover" bs-popover >
+                                    Chat
+                                </a>
                             </span>
 
 
@@ -159,44 +156,74 @@
     </div>
 
     <!--col-sm-4 starts-->
-        <div class="col-sm-4 pull-right" style="padding-top:70px;">
-    		<div class="panel panel-default" style="border:0px solid #dcdcdc;">
+        <div class="col-sm-12 col-md-12 col-lg-4 pull-right" style="padding-top:140px;">
+    		<div class="panel panel-default" style="border:1px solid #dcdcdc;">
 			  	<div class="panel-body">
-                    <h2 style="font-family: Raleway, Helvetica, Arial, sans-serif;font-weight:;">
-                        Give Banana to weber
-                    </h2>
-                    <h4 style="font-family: Raleway, Helvetica, Arial, sans-serif;">
-                        Your details are confidential</h4><br>
-			    	<form accept-charset="UTF-8" role="form">
+                    <h4 style="margin-top:0px;color:#000;font-family: 'Open sans',Arial,sans-serif;font-weight:300;">
+                        <strong>Register with us</strong>
+                    </h4>
+                    <h5 style="color:#000;font-family: 'Open sans',Arial,sans-serif;font-weight:300;">
+                        Your details are confidential
+                    </h5>
+                    <br>
+			    	<form accept-charset="UTF-8" role="form" name="myForm" method="post" ng-submit="signup()">
                     <fieldset>
 			    	  	<div class="form-group">
-			    		    <input class="form-control input-md" style="background-color:#fdfdfd;"
-                                   placeholder="Your valid email address" name="r_email" type="text">
+			    		    <input type="email" class="form-control input-box input-md" placeholder="Enter email"
+                                       id="email" name="email" ng-model="formData.email" required/>
+                                <span ng-show="myForm.email.$error.required && myForm.email.$dirty" style="color:red">
+                                    Email is required
+                                </span>
+                                <span ng-show="!myForm.email.$error.required && myForm.email.$error.email && myForm.email.$dirty"
+                                        style="color:red">
+                                    You entered an invalid email
+                                </span>
 			    		</div>
 			    		<div class="form-group">
 			    			<div class="row">
                                 <div class="col-sm-6" style="padding-right:2px;">
-                                    <input class="form-control input-md"
-                                        placeholder="First Name" name="r_email" type="text">
+                                    <input class="form-control input-box input-md" type="text" placeholder="Enter first name"
+                                       id="name" name="name" ng-model="formData.firstname" required/>
+                                    <span ng-show="myForm.name.$error.required && myForm.name.$dirty" style="color:red">
+                                        required
+                                    </span>
                                 </div>
                                 <div class="col-sm-6" style="padding-left:2px;">
-                                    <input class="form-control input-md"
-                                        placeholder="Last Name" name="r_email" type="text">
+                                    <input class="form-control input-box input-md" type="text" placeholder="Enter last name"
+                                       id="lastname" name="lastname" ng-model="formData.lastname" required  />
+                                    <span ng-show="myForm.lastname.$error.required && myForm.lastname.$dirty" style="color:red">
+                                        required
+                                    </span>
                                 </div>
 			    			</div>
 			    		</div>
-			    		<div class="form-group">
-			    			<input class="form-control input-md"
-                                   placeholder="Password(at least 6 Characters )" name="password" type="password" value="">
+			    		<div class="form-group" style="">
+			    			<input class="form-control input-box input-md"
+                                   placeholder="Password(at least 6 Characters )" id="password" name="password" ng-model="formData.password" ng-minlength="5" ng-maxlength="15" type="password" value="">
+                            <span ng-show="myForm.password.$error.required && myForm.password.$dirty" style="color:red">
+                                required
+                            </span>
+                            <span ng-show="!myForm.password.$error.required && (myForm.password.$error.minlength || myForm.password.$error.maxlength) && myForm.password.$dirty" style="color:red">
+                                Passwords must be between 8 and 15 characters.
+                            </span>
 			    		</div>
-			    		<input class="btn btn-md btn-success btn-block"
-                               type="submit" value="Join with weber">
+                        <div class="form-group" style="">
+                            <label class="radio-inline">
+                              <input type="radio" ng-model="formData.gender" value="male">
+                              Male
+                            </label>
+                            <label class="radio-inline">
+                              <input type="radio" ng-model="formData.gender" value="female">
+                              Female
+                            </label>
+                        </div>
+			    		<button ng-click = "registerUser()"
+                                            type="submit" class="btn btn-block btn-primary"
+                                            ng-disabled="!myForm.$valid">
+                            Register with weber
+                        </button>
 			    	</fieldset>
 			      	</form>
-                      <hr/>
-                    <center><h4>OR</h4></center>
-                    <input class="btn btn-md btn-danger btn-block"
-                           type="submit" value="Signup via Google">
 			    </div>
 			</div>
 		</div>

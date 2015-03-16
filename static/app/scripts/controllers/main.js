@@ -1,5 +1,4 @@
 'use strict';
-
 /**
  * @ngdoc function
  * @name weberApp.controller:MainCtrl
@@ -11,19 +10,16 @@ angular.module('weberApp')
 	.controller('MainCtrl', function($scope, $auth, $socket, Restangular, InfinitePosts, $alert,
 	                                 $http, CurrentUser, UserService, fileUpload) {
 
-	    console.log("--------calling main.js ------------------")
-
+	    console.log("-------- calling main.js ------------------")
 		$scope.UserService = UserService;
 
+        var handleFileSelect = function(evt) {
 
-
-        var handleFileSelect=function(evt) {
             var file=evt.currentTarget.files[0];
             console.log('file is ' + JSON.stringify(file));
             var uploadUrl = "/fileUpload";
-            fileUpload.uploadFileToUrl(file, uploadUrl,$scope.user);
-            console.log("----------testing upload image------------")
-            console.log($scope.uploaded);
+            var get_details = fileUpload.uploadFileToUrl(file, uploadUrl,$scope.user)
+            console.log(get_details)
         };
         angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
 

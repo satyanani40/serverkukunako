@@ -120,13 +120,13 @@ def login():
     accounts = app.data.driver.db['people']
     user = accounts.find_one({'email': request.json['email']})
     if not user:
-        response = jsonify(error='you email does not exist, please register with us to login')
+        response = jsonify(error='you email does not exist')
         response.status_code = 401
         return response
-    """if not user['email_confirmed'] == True:
-        response = jsonify(error='you email is not confirmed please confirm your account')
+    if not user['email_confirmed'] == True:
+        response = jsonify(error='email is not confirmed')
         response.status_code = 401
-        return response"""
+        return response
     if not user or not check_password_hash(user['password'], request.json['password']):
         response = jsonify(error='Wrong Email or Password')
         response.status_code = 401
@@ -242,7 +242,7 @@ def signup():
             'random_string': id_generator(),
             'accept_notifications':[],
             'born' : "",
-            'gender' : "",
+            'gender' : request.json['gender'],
             'lastmessageseen' : dt.strftime('%Y-%m-%dT%H:%M:%SZ'),
             'location' : {
                 'city' : "",
@@ -496,7 +496,7 @@ def join_into_room(id):
 
 
 app.threaded=True
-socketio.run(app, host='127.0.0.1', port=8000)
+socketio.run(app, host='10.240.200.70', port=8000)
 
 # server sent events section
 """from redis import Redis

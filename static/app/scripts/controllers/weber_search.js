@@ -15,29 +15,54 @@ angular.module('weberApp')
 
 	 	/* login functionality code goes here*/
         $scope.submitLogin = function() {
-            console.log("-------------------------")
-            console.log($scope.login_email)
-            console.log($scope.login_password)
 			$auth.login({
 				email: $scope.login_email,
 				password: $scope.login_password
 			}).then(function(response) {
 				$auth.setToken(response.data.token);
 				$rootScope.isloggin = true;
-				//$location.path('/home');
+				$location.path('/home');
 			}, function(error) {
+                console.log(error.data.error)
 				$scope.error = error.data.error;
-				/*$alert({
-					title: 'Login Failed: ',
+				$alert({
+					title: 'Login Failed:',
 					content: error.data.error,
 					placement: 'top',
 					type: 'danger',
 					show: true
-				});*/
+				});
 			});
 		};
 
         /* end of login functionality*/
+
+        /* starting code of signup goes here */
+
+            $scope.registerUser = function() {
+                $auth.signup({
+                    email: $scope.formData.email,
+                    password: $scope.formData.password,
+                    firstname: $scope.formData.firstname,
+                    lastname: $scope.formData.lastname,
+                    username: $scope.formData.firstname+$scope.formData.lastname,
+                    gender: $scope.formData.gender
+                }).then(function(response) {
+                    console.log(response.data);
+                    $location.path('/email_details/'+$scope.formData.email);
+                }, function(error) {
+                    $scope.error = error;
+                    $alert({
+                        title: 'Registration Failed: ',
+                        content: error.data.error,
+                        placement: 'top',
+                        type: 'danger',
+                        show: true
+                    });
+                });
+            };
+
+        /* ending of signup code */
 
 
 
@@ -89,9 +114,18 @@ angular.module('weberApp')
             if($scope.query && ($routeParams.query == $scope.query)){
                 //$scope.matchResults = new MatchMeResults($scope.query);
             }else if($scope.query){
+                if (!($auth.isAuthenticated())) {
+                    $routeParams.query = $scope.query;
+                    $location.path('search/' + $routeParams.query);
 
-                $routeParams.query = $scope.query;
-                $location.path('search/' + $routeParams.query);
+                }
+                else {
+                    $routeParams.query = $scope.query;
+                    $location.path('matchme/' + $routeParams.query);
+
+                }
+
+                
 
             }
             else{
