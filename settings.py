@@ -2,7 +2,7 @@ import os
 
 
     # Running on local machine. Let's just use the local mongod instance.
-MONGO_HOST = '10.240.200.70'
+MONGO_HOST = '10.240.115.93'
 MONGO_PORT = 27017
 MONGO_USERNAME = 'test'
 MONGO_PASSWORD = 'test'
