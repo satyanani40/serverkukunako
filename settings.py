@@ -1,12 +1,22 @@
 import os
 
 
+
+if os.environ.get('PORT'):
+# We're hosted on Heroku! Use the MongoHQ sandbox as our backend.+ 
+    MONGO_HOST = '10.240.115.93'
+    MONGO_PORT = 27017
+    MONGO_USERNAME = 'test'
+    MONGO_PASSWORD = 'test'
+    MONGO_DBNAME = 'test'
+# also, correctly set the API entry point+# SERVER_NAME = '127.0.0.1:8000' #10.240.115.93:27017'
+else:
     # Running on local machine. Let's just use the local mongod instance.
-MONGO_HOST = '127.0.0.1'
-MONGO_PORT = 27017
-MONGO_USERNAME = 'test'
-MONGO_PASSWORD = 'test'
-MONGO_DBNAME = 'test'
+    MONGO_HOST = '127.0.0.1'
+    MONGO_PORT = 27017
+    MONGO_USERNAME = 'test'
+    MONGO_PASSWORD = 'test'
+    MONGO_DBNAME = 'test'
 
 
 URL_PREFIX = 'api'
