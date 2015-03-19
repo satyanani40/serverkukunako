@@ -22,6 +22,7 @@ angular
 		'angularMoment',
 		'elasticsearch',
 		'ngImgCrop',
+		'infinite-scroll',
 		'ngSocket'
 	])
 	.run(["$rootScope", "$location",
@@ -110,7 +111,9 @@ angular
 			.when('/search/:query?', {
 				templateUrl: '/static/app/views/start_search.html',
 				controller: 'WeberSearchCtrl',
+				reloadOnSearch: false
 			})
+
 			.when('/matchme/:query?', {
 				templateUrl: '/static/app/views/search.html',
 				controller: 'WeberSearchCtrl',
@@ -120,7 +123,8 @@ angular
 							return $location.path('/login');
 						}
 					}
-				}
+				},
+				reloadOnSearch: false
 			})
 			.when('/login', {
 				templateUrl: '/static/app/views/login.html',
@@ -171,8 +175,9 @@ angular
 				templateUrl: '/static/app/views/signup.html',
 				controller: 'SignupCtrl'
 			})
+
 			.otherwise({
-				redirectTo: '/search/:query',
+				redirectTo: '/search',
 				reloadOnSearch: false
 			});
 	});

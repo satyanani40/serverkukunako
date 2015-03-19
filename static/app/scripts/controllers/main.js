@@ -7,19 +7,18 @@
  * Controller of the weberApp
  */
 angular.module('weberApp')
-	.controller('MainCtrl', function($scope, $auth, $socket, Restangular, InfinitePosts, $alert,
-	                                 $http, CurrentUser, UserService, fileUpload) {
+	.controller('MainCtrl', function($scope, $auth, $rootScope, $socket, Restangular, InfinitePosts, $alert,
+	                                 $http, CurrentUser, UserService, fileUpload, MatchButton) {
+
 
 	    console.log("-------- calling main.js ------------------")
 		$scope.UserService = UserService;
 
         var handleFileSelect = function(evt) {
 
-            var file=evt.currentTarget.files[0];
-            console.log('file is ' + JSON.stringify(file));
-            var uploadUrl = "/fileUpload";
-            var get_details = fileUpload.uploadFileToUrl(file, uploadUrl,$scope.user)
-            console.log(get_details)
+            $rootScope.file = evt.currentTarget.files[0];
+
+            console.log($rootScope.file)
         };
         angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
 
@@ -51,6 +50,19 @@ angular.module('weberApp')
 
 				$scope.submit_post = function(){
 
+				    console.log('file is ' + JSON.stringify($rootScope.file));
+                    var uploadUrl = "/fileUpload";
+
+                    var get_details = fileUpload.uploadFileToUrl($rootScope.file, uploadUrl)
+
+                    get_details.then(function(response){
+                        console.log("------getting the url for an image-----")
+                        console.log(response.data)
+                        $rootScope.server_file_path = response.data;
+                        console.log("=====get server image path=====")
+                        console.log($rootScope.server_file_path)
+                    })
+
 					$http({
 						url: '/similarwords',
 						method: "GET",
@@ -58,13 +70,29 @@ angular.module('weberApp')
 					})
 					.success(function(similarwords) {
 
-					$scope.infinitePosts.addPost($scope.new_post,similarwords);
+					$scope.infinitePosts.addPost($scope.new_post,similarwords, $rootScope.server_file_path);
 					$scope.new_post = '';
 					});
 				};
-				$scope.test = function(){
-				    console.log('ha')
+
+				$scope.MatchAgree = function(postid, authorid ){
+
+				    for(var k in $scope.infinitePosts.posts){
+
+				        if($scope.infinitePosts.posts[k].author === authorid &&
+				           $scope.infinitePosts.posts[k]._id === postid){
+
+                           $scope.matchbutton = new MatchButton(user, authorid, postid)
+                           $scope.matchbutton.addToInterested();
+				        }
+				    }
 				}
+
+				$scope.MatchDisAgree = function(postid, authorid ){
+				           $scope.matchbutton = new MatchButton(user, authorid, postid)
+				           $scope.matchbutton.DeleteFromInterested();
+				}
+
                 $socket.on('postNotifications', function(data){
 
                     if(data.data.postnotific){
@@ -123,9 +151,9 @@ angular.module('weberApp')
                         $scope.infinitePosts.deletePost(result.post)
                     }
                     else{
-                        console.log(" faild in check post id with author")
+                        console.log(" failed in check post id with author")
                     }
                 }
             }
-        };
+        }
     });

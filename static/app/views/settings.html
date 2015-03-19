@@ -1,26 +1,4 @@
-<style>
-    .cropArea {
-      background: #E4E4E4;
-      margin: auto;
-      overflow: hidden;
-    }
-    .cropArea.big {
-      width:800px;
-      height:600px;
-    }
-    .cropArea.medium {
-      width:500px;
-      height:350px;
-    }
-    .cropArea.small {
-      width:300px;
-      height:200px;
-    }
-</style>
-
-
-<div navbar></div>
-<div class="container">
+<div class="container" style="min-height:1000px;">
     <div class="col-sm-4 colpadding">
         <div class="panel panel-default" style="opacity:0.90">
             <div class="media panel-heading" style="background-color:#fff">
@@ -42,21 +20,21 @@
                             </h5>
                         </div>
                         <div class="col-sm-3">
-                            <button style="margin-top:7px" class="pull-right edit_name btn btn-xs btn-primary">
+                            <button ng-click="username_section = !username_section" style="margin-top:7px" class="pull-right edit_name btn btn-xs btn-primary">
                                 Edit
                             </button>
                         </div>
                     </div>
-                    <div class="row name_edit_section" style="margin-top:5px;">
+                    <div ng-show="username_section" class="row" style="margin-top:5px;">
                         <div class="col-sm-12">
                             <h6 style="opacity:0.60">
                                 Your public username is the same as your Storyboard address:
                             </h6>
                             <h6 style="opacity:0.80">
                                 For example:&nbsp;
-                                <a href="">
+                                <a style="text-decoration:none;color:#333;">
                                     <strong>
-                                        www.theweber.in/suryamuppalla
+                                        www.weber.ooo/{{user.username }}
                                     </strong>
                                 </a>
                             </h6>
@@ -74,12 +52,12 @@
                             <span>
                                 <div class="row" style="margin-top:5px;">
                                     <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                        <button ng-click="updateUsername()" class="btn btn-xs edit_name btn-success">
+                                        <button ng-click="username_section = !username_section;updateUsername()" class="btn btn-xs edit_name btn-success">
                                             Update
                                         </button>
                                     </div>
                                     <div class="col-sm-2 colpadding">
-                                        <button class="btn btn-xs btn-default">
+                                        <button ng-click="username_section = !username_section" class="btn btn-xs btn-default">
                                             Cancel
                                         </button>
                                     </div>
@@ -90,7 +68,7 @@
                 </div>
 
                 <label style="opacity:0.70;margin-left:2px">
-                    Edit First name and Last name
+                    First name and Last name
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
                     <div class="row first_last_name_section">
@@ -100,13 +78,13 @@
                             </h5>
                         </div>
                         <div class="col-sm-3">
-                            <button style="margin-top:7px;"
+                            <button ng-click="show_first_last_name = !show_first_last_name" style="margin-top:7px;"
                                     class="pull-right edit_first_last_name btn btn-xs btn-primary">
                                 Edit
                             </button>
                         </div>
                     </div>
-                    <div class="first_last_name_edit_section">
+                    <div class="" ng-show="show_first_last_name">
                         <div class="row " style="padding-bottom:10px;">
                             <div class="col-sm-4 colpadding">
                                 <h6 class="pull-right" >First name</h6>
@@ -127,15 +105,13 @@
                         </div>
                         <div class="row" style="">
                             <div class="col-sm-offset-4 col-sm-5 colpadding">
-                                <button ng-click="updateFirstLastName()" class="btn edit_first_last_name btn-xs btn-success">
+                                <button ng-click="show_first_last_name = !show_first_last_name;updateFirstLastName()" class="btn edit_first_last_name btn-xs btn-success">
                                     Update
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
 
                 <label style="opacity:0.70;margin-left:2px">
                     Password
@@ -146,12 +122,12 @@
                             <h5 style="opacity:0.90">Password updated a month ago</h5>
                         </div>
                         <div class="col-sm-3">
-                            <button style="margin-top:7px" class="pull-right edit_password btn btn-xs btn-primary">
+                            <button ng-click="show_password = !show_password" style="margin-top:7px" class="pull-right edit_password btn btn-xs btn-primary">
                                 Edit
                             </button>
                         </div>
                     </div>
-                    <div class="row password_edit_section" style="margin-top:5px;">
+                    <div class="row" ng-show="show_password" style="margin-top:5px;">
                         <div class="col-sm-12">
                             <h6 style="opacity:0.60">
                                 Your Password is very confidential, Please Follow the rules while updating the password:
@@ -207,7 +183,7 @@
                             <span>
                                 <div class="row" style="margin-top:5px;">
                                     <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                        <button ng-click="updatePassword()" class="btn edit_password btn-xs btn-success">
+                                        <button ng-click="show_password = !show_password;updatePassword()" class="btn edit_password btn-xs btn-success">
                                             Update
                                         </button>
                                     </div>
@@ -226,7 +202,7 @@
                             <h5>
                                 <a style="text-decoration:none;color:#333;cursor: no-drop;opacity:0.60;">
                                     <strong>
-                                        suryamuppalla@gmail.com
+                                        {{ user.email }}
                                     </strong>
                                 </a>
                             </h5>
@@ -264,10 +240,10 @@
                             </div>
                         </div>
                         <div class="col-sm-8">
-                            <a class="change_picture" style="cursor:pointer;">
+                            <a ng-click="show_profile_picture = !show_profile_picture" class="change_picture" style="cursor:pointer;">
                                 Change Profile Picture
                             </a>
-                            <div class="row picture_edit_section" style="margin-top:5px;">
+                            <div class="row" ng-show="show_profile_picture" style="margin-top:5px;">
                                 <div class="col-sm-12">
                                     <span>
                                         <h6 style="opacity:0.70">
@@ -302,7 +278,7 @@
                                           </div>
                                     </span>
                                     <span>
-                                        <input style="margin-top:5px" ng-click="uploadFile()"
+                                        <input style="margin-top:5px" ng-click="show_profile_picture = !show_profile_picture;uploadFile()"
                                                type="submit" value="Update" class="btn btn-xs btn-success" />
                                     </span>
                                 </div>
@@ -322,15 +298,18 @@
                                     {{ interest }}
                                 </a>
                             </h5>
+                            <h5 style="opacity:0.90;" ng-if="!(user.interests.length)">
+                                Please add some interests here
+                            </h5>
                         </div>
                         <div class="col-sm-3">
-                            <button style="margin-top:7px;"
+                            <button style="margin-top:7px;" ng-click="show_interests = !show_interests"
                                     class="pull-right edit_interests btn btn-xs btn-primary">
                                 Edit
                             </button>
                         </div>
                     </div>
-                    <div class="interests_edit_section">
+                    <div class="" ng-show="show_interests">
                         <div class="row" style="padding-bottom:10px;">
                             <div class="col-sm-4 colpadding">
                                 <h6 class="pull-right">Add Interests</h6>
@@ -342,7 +321,7 @@
                         </div>
                         <div class="row" style="">
                             <div class="col-sm-offset-4 col-sm-5 colpadding">
-                                <button ng-click="updateInterests()" class="btn edit_interests btn-xs btn-success">
+                                <button ng-click="show_interests = !show_interests;updateInterests()" class="btn edit_interests btn-xs btn-success">
                                     Update
                                 </button>
                             </div>
@@ -354,66 +333,66 @@
                     My Location
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-                        <div class="row location_section">
-                            <div class="col-sm-9">
-                                <h5 style="opacity:0.90">
-                                    {{ user.location.state }}, {{ user.location.city }}, {{ user.location.street }}
-                                </h5>
-                            </div>
-                            <div class="col-sm-3">
-                                <button style="margin-top:7px" class="pull-right edit_location btn btn-xs btn-primary">
-                                    Edit
-                                </button>
-                            </div>
+                    <div class="row location_section">
+                        <div class="col-sm-9">
+                            <h5 style="opacity:0.90">
+                                {{ user.location.state }}, {{ user.location.city }}, {{ user.location.street }}
+                            </h5>
                         </div>
-                        <div class="row location_edit_section" style="margin-top:5px;">
-                            <div class="col-sm-12">
-                                <h6 style="opacity:0.60">
-                                    Enter Exact location to provide more benefits to your search
-                                </h6>
-                                <span>
-                                    <form name="myForm">
-                                        <div class="row">
-                                            <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                                <h6>Enter State:</h6>
-                                            </div>
-                                            <div class="col-sm-8 colpadding">
-                                                <input type="text" placeholder="Enter State" ng-model="location_state"
-                                                   class="form-control input-sm" required />
-                                            </div>
+                        <div class="col-sm-3">
+                            <button style="margin-top:7px" ng-click="show_location = !show_location" class="pull-right edit_location btn btn-xs btn-primary">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="show_location" style="margin-top:5px;">
+                        <div class="col-sm-12">
+                            <h6 style="opacity:0.60">
+                                Enter Exact location to provide more benefits to your search
+                            </h6>
+                            <span>
+                                <form name="myForm">
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>Enter State:</h6>
                                         </div>
-
-                                        <div class="row">
-                                            <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                                <h6>Enter City:</h6>
-                                            </div>
-                                            <div class="col-sm-8 colpadding">
-                                                <input type="text" name="pw1" class="form-control input-sm" placeholder="enter city"
-                                                       ng-model="location_city" required />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                                <h6>Enter Street:</h6>
-                                            </div>
-                                            <div class="col-sm-8 colpadding">
-                                                <input type="text" class="form-control input-sm" placeholder="Enter Street"
-                                                       ng-model="location_street" required />
-                                            </div>
-                                        </div>
-                                    </form>
-                                </span>
-                                <span>
-                                    <div class="row" style="margin-top:5px;">
-                                        <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                            <button ng-click="updatechangelocation()" class="btn edit_location btn-xs btn-success">
-                                                Save
-                                            </button>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="text" placeholder="Enter State" ng-model="location_state"
+                                               class="form-control input-sm" required />
                                         </div>
                                     </div>
-                                </span>
-                            </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>Enter City:</h6>
+                                        </div>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="text" name="pw1" class="form-control input-sm" placeholder="enter city"
+                                                   ng-model="location_city" required />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>Enter Street:</h6>
+                                        </div>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="text" class="form-control input-sm" placeholder="Enter Street"
+                                                   ng-model="location_street" required />
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                            <span>
+                                <div class="row" style="margin-top:5px;">
+                                    <div class="col-sm-offset-4 colpadding col-sm-2 ">
+                                        <button ng-click="show_location = !show_location;updatechangelocation()" class="btn edit_location btn-xs btn-success">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
                         </div>
+                    </div>
                 </div>
 
 
@@ -421,341 +400,152 @@
                     Studies
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-                        <div class="row study_section">
-                            <div class="col-sm-9">
-                                <h5 style="opacity:0.90">
-                                    {{ user.study.intermediate }}, {{ user.study.graduate }}
-                                </h5>
-                            </div>
-                            <div class="col-sm-3">
-                                <button style="margin-top:7px" class="pull-right edit_study btn btn-xs btn-primary">
-                                    Edit
-                                </button>
-                            </div>
+                    <div class="row study_section">
+                        <div class="col-sm-9">
+                            <h5 style="opacity:0.90">
+                                {{ user.study.intermediate }}, {{ user.study.graduate }}
+                            </h5>
                         </div>
-                        <div class="row study_edit_section" style="margin-top:5px;">
-                            <div class="col-sm-12">
-                                <h6 style="opacity:0.60">
-                                    Enter your study
-                                </h6>
-                                <span>
-                                    <form name="myForm">
-                                        <div class="row">
-                                            <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                                <h6>Enter Intermediate:</h6>
-                                            </div>
-                                            <div class="col-sm-8 colpadding">
-                                                <input type="text" name="pw1" class="form-control input-sm" placeholder="enter Intermediate"
-                                                       ng-model="study_intermediate" required />
-                                            </div>
+                        <div class="col-sm-3">
+                            <button style="margin-top:7px" ng-click="show_studies = !show_studies" class="pull-right edit_study btn btn-xs btn-primary">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="show_studies" style="margin-top:5px;">
+                        <div class="col-sm-12">
+                            <span>
+                                <form name="myForm">
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>Intermediate:</h6>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                                <h6>Enter Graduation:</h6>
-                                            </div>
-                                            <div class="col-sm-8 colpadding">
-                                                <input type="text" class="form-control input-sm" placeholder="Enter Graduation"
-                                                       ng-model="study_graduate" required />
-                                            </div>
-                                        </div>
-                                    </form>
-                                </span>
-                                <span>
-                                    <div class="row" style="margin-top:5px;">
-                                        <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                            <button ng-click="updatechangestudy()" class="btn edit_study btn-xs btn-success">
-                                                Save
-                                            </button>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="text" name="pw1" class="form-control input-sm" placeholder="enter Intermediate"
+                                                   ng-model="study_intermediate" required />
                                         </div>
                                     </div>
-                                </span>
-                            </div>
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>Graduation:</h6>
+                                        </div>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="text" class="form-control input-sm" placeholder="Enter Graduation"
+                                                   ng-model="study_graduate" required />
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                            <span>
+                                <div class="row" style="margin-top:5px;">
+                                    <div class="col-sm-offset-4 colpadding col-sm-2 ">
+                                        <button ng-click="show_studies = !show_studies;updatechangestudy()" class="btn edit_study btn-xs btn-success">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
                         </div>
+                    </div>
                 </div>
 
                 <label style="opacity:0.70;margin-left:2px">
                     Phone Number
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-                        <div class="row phone_section">
-                            <div class="col-sm-9">
-                                <h5 style="opacity:0.90">
-                                    {{ user.phone }}
-                                </h5>
-                            </div>
-                            <div class="col-sm-3">
-                                <button style="margin-top:7px" class="pull-right edit_phone btn btn-xs btn-primary">
-                                    Edit
-                                </button>
-                            </div>
+                    <div class="row phone_section">
+                        <div class="col-sm-9">
+                            <h5 style="opacity:0.90">
+                                {{ user.phone }}
+                            </h5>
                         </div>
-                        <div class="row phone_edit_section" style="margin-top:5px;">
-                            <div class="col-sm-12">
-                                <h6 style="opacity:0.60">
-                                    Enter your Phone Number
-                                </h6>
-                                <span>
-                                    <form name="myForm">
-                                        <div class="row">
-                                            <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                                <h6>Phone:</h6>
-                                            </div>
-                                            <div class="col-sm-8 colpadding">
-                                                <input type="text" class="form-control input-sm" placeholder="Enter Phone Number"
-                                                       ng-model="phone_number" required />
-                                            </div>
+                        <div class="col-sm-3">
+                            <button style="margin-top:7px" ng-click="show_phone_number = !show_phone_number" class="pull-right edit_phone btn btn-xs btn-primary">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="show_phone_number" style="margin-top:5px;">
+                        <div class="col-sm-12">
+                            <h6 style="opacity:0.60">
+                                Enter your Phone Number
+                            </h6>
+                            <span>
+                                <form name="myForm">
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>Phone:</h6>
                                         </div>
-                                    </form>
-                                </span>
-                                <span>
-                                    <div class="row" style="margin-top:2px;">
-                                        <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                            <button ng-click="updatechangephone()" class="btn edit_phone btn-xs btn-success">
-                                                Save
-                                            </button>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="text" class="form-control input-sm" placeholder="Enter Phone Number"
+                                                   ng-model="phone_number" required />
                                         </div>
                                     </div>
-                                </span>
-                            </div>
+                                </form>
+                            </span>
+                            <span>
+                                <div class="row" style="margin-top:2px;">
+                                    <div class="col-sm-offset-4 colpadding col-sm-2 ">
+                                        <button ng-click="show_phone_number = !show_phone_number;updatechangephone()" class="btn edit_phone btn-xs btn-success">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
                         </div>
+                    </div>
                 </div>
 
                 <label style="opacity:0.70;margin-left:2px">
                     Movies
                 </label>
                 <div class="jumbotron" style="padding:15px;margin-bottom:10px;">
-                        <div class="row movies_section">
-                            <div class="col-sm-9">
-                                <h5 style="opacity:0.90">
-                                    <a style="color:#333;" ng-repeat="movie in user.movies">
-                                        {{ movie }}
-                                    </a>
-                                </h5>
-                            </div>
-                            <div class="col-sm-3">
-                                <button style="margin-top:7px" class="pull-right edit_movies btn btn-xs btn-primary">
-                                    Edit
-                                </button>
-                            </div>
+                    <div class="row movies_section">
+                        <div class="col-sm-9">
+                            <h5 style="opacity:0.90">
+                                <a style="color:#333;" ng-repeat="movie in user.movies">
+                                    {{ movie }}
+                                </a>
+                            </h5>
                         </div>
-                        <div class="row movies_edit_section" style="margin-top:5px;">
-                            <div class="col-sm-12">
-                                <h6 style="opacity:0.60">
-                                    Enter Movies List
-                                </h6>
-                                <span>
-                                    <form name="myForm">
-                                        <div class="row">
-                                            <div class="col-sm-3 colpadding text-right col-sm-offset-1">
-                                                <h6>Movies:</h6>
-                                            </div>
-                                            <div class="col-sm-8 colpadding">
-                                                <input type="text" class="form-control input-sm" placeholder="Enter Movies"
-                                                       ng-model="movies" required />
-                                            </div>
+                        <div class="col-sm-3">
+                            <button style="margin-top:7px" ng-click="show_movies = !show_movies" class="pull-right edit_movies btn btn-xs btn-primary">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="show_movies" style="margin-top:5px;">
+                        <div class="col-sm-12">
+                            <h6 style="opacity:0.60">
+                                Enter Movies List
+                            </h6>
+                            <span>
+                                <form name="myForm">
+                                    <div class="row">
+                                        <div class="col-sm-3 colpadding text-right col-sm-offset-1">
+                                            <h6>Movies:</h6>
                                         </div>
-                                    </form>
-                                </span>
-                                <span>
-                                    <div class="row" style="margin-top:2px;">
-                                        <div class="col-sm-offset-4 colpadding col-sm-2 ">
-                                            <button ng-click="updatechangemovies()" class="btn edit_movies btn-xs btn-success">
-                                                Save
-                                            </button>
+                                        <div class="col-sm-8 colpadding">
+                                            <input type="text" class="form-control input-sm" placeholder="Enter Movies"
+                                                   ng-model="movies" required />
                                         </div>
                                     </div>
-                                </span>
-                            </div>
+                                </form>
+                            </span>
+                            <span>
+                                <div class="row" style="margin-top:2px;">
+                                    <div class="col-sm-offset-4 colpadding col-sm-2 ">
+                                        <button ng-click="show_movies = !show_movies;updatechangemovies()" class="btn edit_movies btn-xs btn-success">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </span>
                         </div>
+                    </div>
                 </div>
-
-
-
 
             </div>
         </div>
     </div>
 </div>
-<div chatbar></div>
-
-
-<style>
-    .username_section .edit_name{
-        display:none;
-    }
-    .username_section:hover .edit_name{
-        display:block;
-    }
-    .name_edit_section{
-        display:none;
-    }
-    .password_section .edit_password{
-        display:none;
-    }
-    .password_section:hover .edit_password{
-        display:block;
-    }
-    .password_edit_section{
-        display:none;
-    }
-    .picture_edit_section{
-        display:none;
-    }
-    .first_last_name_section .edit_first_last_name{
-        display:none;
-    }
-    .first_last_name_section:hover .edit_first_last_name{
-        display:block;
-    }
-    .first_last_name_edit_section{
-        display:none;
-    }
-    .interests_section .edit_interests{
-        display:none;
-    }
-    .interests_section:hover .edit_interests{
-        display:block;
-    }
-    .interests_edit_section{
-        display:none;
-    }
-    .location_section .edit_location{
-        display:none;
-    }
-    .location_section:hover .edit_location{
-        display:block;
-    }
-    .location_edit_section{
-        display:none;
-    }
-    .study_section .edit_study{
-        display:none;
-    }
-    .study_section:hover .edit_study{
-        display:block;
-    }
-    .study_edit_section{
-        display:none;
-    }
-    .phone_section .edit_phone{
-        display:none;
-    }
-    .phone_section:hover .edit_phone{
-        display:block;
-    }
-    .phone_edit_section{
-        display:none;
-    }
-    .movies_section .edit_movies{
-        display:none;
-    }
-    .movies_section:hover .edit_movies{
-        display:block;
-    }
-    .movies_edit_section{
-        display:none;
-    }
-</style>
-
-<script>
-    // jQuery
-    $(document).ready(
-    function(){
-        $(".edit_name").click(function () {
-            if($('.name_edit_section').is(':visible')){
-               $('.name_edit_section').fadeOut('fast');
-            }
-            else{
-               $('.name_edit_section').fadeIn('slow');
-            }
-        });
-    });
-    $(document).ready(
-    function(){
-        $(".change_picture").click(function () {
-            if($('.picture_edit_section').is(':visible')){
-               $('.picture_edit_section').fadeOut('fast');
-            }
-            else{
-               $('.picture_edit_section').fadeIn('slow');
-            }
-        });
-    });
-    $(document).ready(
-    function(){
-        $(".edit_first_last_name").click(function () {
-            if($('.first_last_name_edit_section').is(':visible')){
-               $('.first_last_name_edit_section').fadeOut('fast');
-            }
-            else{
-               $('.first_last_name_edit_section').fadeIn('slow');
-            }
-        });
-    });
-    $(document).ready(
-    function(){
-        $(".edit_interests").click(function () {
-            if($('.interests_edit_section').is(':visible')){
-               $('.interests_edit_section').fadeOut('fast');
-            }
-            else{
-               $('.interests_edit_section').fadeIn('slow');
-            }
-        });
-    });
-    $(document).ready(
-    function(){
-        $(".edit_location").click(function () {
-            if($('.location_edit_section').is(':visible')){
-               $('.location_edit_section').fadeOut('fast');
-            }
-            else{
-               $('.location_edit_section').fadeIn('slow');
-            }
-        });
-    });
-    $(document).ready(
-    function(){
-        $(".edit_study").click(function () {
-            if($('.study_edit_section').is(':visible')){
-               $('.study_edit_section').fadeOut('fast');
-            }
-            else{
-               $('.study_edit_section').fadeIn('slow');
-            }
-        });
-    });
-    $(document).ready(
-    function(){
-        $(".edit_phone").click(function () {
-            if($('.phone_edit_section').is(':visible')){
-               $('.phone_edit_section').fadeOut('fast');
-            }
-            else{
-               $('.phone_edit_section').fadeIn('slow');
-            }
-        });
-    });
-    $(document).ready(
-    function(){
-        $(".edit_movies").click(function () {
-            if($('.movies_edit_section').is(':visible')){
-               $('.movies_edit_section').fadeOut('fast');
-            }
-            else{
-               $('.movies_edit_section').fadeIn('slow');
-            }
-        });
-    });
-    $(document).ready(
-    function(){
-        $(".edit_password").click(function () {
-            if($('.password_edit_section').is(':visible')){
-               $('.password_edit_section').fadeOut('fast');
-            }
-            else{
-               $('.password_edit_section').fadeIn('slow');
-            }
-        });
-    });
-</script>

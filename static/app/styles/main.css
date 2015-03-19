@@ -394,58 +394,16 @@ body {
 }
 
 
-
-.message_box {
-	position: relative;
-	background: #ffffff;
-	border: 4px solid #ffffff;
-
-	-webkit-box-shadow: 3px 6px 16px -6px rgba(28, 50, 50, 0.72);
-	-moz-box-shadow:    3px 6px 16px -6px rgba(28, 50, 50, 0.72);
-	box-shadow:         3px 6px 16px -6px rgba(28, 50, 50, 0.72);
-}
-.message_box:after, .message_box:before {
-	bottom: 100%;
-	right:1%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-}
-
-.message_box:after {
-	border-color: rgba(255, 255, 255, 0);
-	border-bottom-color: #ffffff;
-	border-width: 7px;
-	margin-left: -7px;
-}
-.message_box:before {
-	border-color: rgba(255, 255, 255, 0);
-	border-bottom-color: #ffffff;
-	border-width: 13px;
-	margin-left: -13px;
-}
-
-
-
-
-
-
+/* css for showing div arrow to box goes here */
 
 .arrow_box {
 	position: relative;
-	background: #ffffff;
-	border: 4px solid #ffffff;
-
-	-webkit-box-shadow: 3px 6px 16px -6px rgba(28, 50, 50, 0.72);
-	-moz-box-shadow:    3px 6px 16px -6px rgba(28, 50, 50, 0.72);
-	box-shadow:         3px 6px 16px -6px rgba(28, 50, 50, 0.72);
+	background: #fff;
+	border: 1px solid #dcdcdc;
 }
 .arrow_box:after, .arrow_box:before {
 	bottom: 100%;
-	right:1%;
+	right: 3%;
 	border: solid transparent;
 	content: " ";
 	height: 0;
@@ -456,16 +414,20 @@ body {
 
 .arrow_box:after {
 	border-color: rgba(255, 255, 255, 0);
-	border-bottom-color: #ffffff;
-	border-width: 7px;
-	margin-left: -7px;
+	border-bottom-color: #fff;
+	border-width: 8px;
+	margin-left: -8px;
 }
 .arrow_box:before {
-	border-color: rgba(255, 255, 255, 0);
-	border-bottom-color: #ffffff;
-	border-width: 13px;
-	margin-left: -13px;
+	border-color: rgba(220, 220, 220, 0);
+	border-bottom-color: #dcdcdc;
+	border-width: 9px;
+	margin-left: -9px;
 }
+
+/* end of css for showing div arrow */
+
+
 
 .search_a{
     cursor:pointer;
@@ -602,3 +564,128 @@ body {
 .input-box:-ms-input-placeholder { /* Internet Explorer 10+ */
    color:    #999;
 }
+
+
+/* image cropping and settings open div styles goes here */
+    .cropArea {
+      background: #E4E4E4;
+      margin: auto;
+      overflow: hidden;
+    }
+    .cropArea.big {
+      width:800px;
+      height:600px;
+    }
+    .cropArea.medium {
+      width:500px;
+      height:350px;
+    }
+    .cropArea.small {
+      width:300px;
+      height:200px;
+    }
+
+    .username_section .edit_name{
+        display:none;
+    }
+    .username_section:hover .edit_name{
+        display:block;
+    }
+    .name_edit_section{
+        display:none;
+    }
+    .password_section .edit_password{
+        display:none;
+    }
+    .password_section:hover .edit_password{
+        display:block;
+    }
+    .password_edit_section{
+        display:none;
+    }
+    .picture_edit_section{
+        display:none;
+    }
+    .first_last_name_section .edit_first_last_name{
+        display:none;
+    }
+    .first_last_name_section:hover .edit_first_last_name{
+        display:block;
+    }
+    .first_last_name_edit_section{
+        display:none;
+    }
+    .interests_section .edit_interests{
+        display:none;
+    }
+    .interests_section:hover .edit_interests{
+        display:block;
+    }
+    .interests_edit_section{
+        display:none;
+    }
+    .location_section .edit_location{
+        display:none;
+    }
+    .location_section:hover .edit_location{
+        display:block;
+    }
+    .location_edit_section{
+        display:none;
+    }
+    .study_section .edit_study{
+        display:none;
+    }
+    .study_section:hover .edit_study{
+        display:block;
+    }
+    .study_edit_section{
+        display:none;
+    }
+    .phone_section .edit_phone{
+        display:none;
+    }
+    .phone_section:hover .edit_phone{
+        display:block;
+    }
+    .phone_edit_section{
+        display:none;
+    }
+    .movies_section .edit_movies{
+        display:none;
+    }
+    .movies_section:hover .edit_movies{
+        display:block;
+    }
+    .movies_edit_section{
+        display:none;
+    }
+
+/* end of image cropping  and settings open div styles */
+
+
+
+
+/*file upload btn css goes here */
+
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;
+        background: white;
+        cursor: inherit;
+        display: block;
+    }
+
+/* end of file upload css content */

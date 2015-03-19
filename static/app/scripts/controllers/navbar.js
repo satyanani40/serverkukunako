@@ -18,12 +18,13 @@ angular.module('weberApp')
   }
 })
     .controller('navbarcontroller',function($scope, $auth, CurrentUser, $alert,$rootScope,$timeout,
-                                            $location,$http,Restangular,ChatActivity, $window,
+                                            $location,$http,Restangular,ChatActivity, $window,UserService,
                                             CurrentUser1,SearchActivity,FriendsNotific,friendsActivity,$socket) {
     //$scope.data = CurrentUser1;
     /*$timeout(function(){
         console.log($scope.data)
     }, 10000);*/
+    $scope.UserService = UserService
     $scope.dropdown = [{
         "text": "Settings",
         "href": "#/settings"
@@ -138,8 +139,26 @@ angular.module('weberApp')
             });
         }
 
+        function getMatchButtonNotific(currentuser){
+            //currentuser.MatchedPeopleNotificCount.length)
+            $scope.MatchButtonNotific = currentuser.MatchedPeopleNotificCount.length;
+
+            $scope.MatchButtonNotifications = currentuser.MatchedPeopleNotifications;
+
+            console.log('------------before sort')
+            console.log(currentuser.MatchedPeopleNotifications)
+
+            currentuser.MatchedPeopleNotifications.sort(function(a,b) {
+                return new Date(a.updated_one).getTime() - new Date(b.updated_one).getTime()
+            });
+
+            console.log('------------after sort-----')
+            console.log(currentuser.MatchedPeopleNotifications)
+        }
+
 
         get_friend_notifications(user);
+        getMatchButtonNotific(user);
 
           $socket.on('friendnotifications', function(data){
             console.log(data)
@@ -158,6 +177,7 @@ angular.module('weberApp')
                     Restangular.one('people',JSON.parse(user_id)).get({seed: Math.random()})
                     .then(function(user) {
                             get_friend_notifications(user);
+                            getMatchButtonNotific(user);
                     });
 
                 });
@@ -215,6 +235,11 @@ angular.module('weberApp')
 
                     });
                 });
+            }
+
+            $scope.SeenMatchButton = function(){
+                console.log('clicekd')
+
             }
 
 

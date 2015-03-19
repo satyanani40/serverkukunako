@@ -262,10 +262,18 @@ angular.module('weberApp')
             var self = this;
 
             if(this.profileuser.friends.indexOf(this.currentuser._id) == -1){
-                this.profileuser.friends.push(this.currentuser._id)
+
+                this.profileuser.friends.push(this.currentuser._id);
+
+                if(this.profileuser.conversations.indexOf(this.currentuser._id) != -1){
+                    this.profileuser.conversations.splice(this.profileuser.conversations.indexOf(this.currentuser._id),1);
+                    alert('conversations in profileuser deleted')
+                }
 
                 this.profileuser.patch({
-                   'friends': this.profileuser.friends
+                   'friends': this.profileuser.friends,
+                   'conversations': this.profileuser.conversations
+
                 }).then(function(response){
                         console.log('added to profile user friends')
                         var new_request = {'accepted_id':self.currentuser._id,'seen':false}
@@ -275,30 +283,39 @@ angular.module('weberApp')
                             'all_seen':false
                         },{},{'If-Match':response._etag});
 
-                })
+                });
             }
 
              if(self.currentuser.friends.indexOf(self.profileuser._id) == -1){
 
-                        self.currentuser.friends.push(self.profileuser._id)
-                        return self.currentuser.patch({
-                            'friends': self.currentuser.friends
-                        }).then(function(response){
-                            k = null;
 
-                            self.currentuser._etag = response._etag;
-                            for (k in self.currentuser.notifications){
-                                    if(self.currentuser.notifications[k].friend_id == (self.profileuser._id)){
-                                        self.currentuser.notifications.splice(self.currentuser.notifications.indexOf(self.profileuser._id),1)
-                                        console.log('----------accepting request-------------')
 
-                                        data = Restangular.one('people',self.currentuser._id).patch({
-                                           'notifications': self.currentuser.notifications
-                                        },{},{'If-Match':response._etag});
+                self.currentuser.friends.push(self.profileuser._id);
 
-                                    }
+                if(this.currentuser.conversations.indexOf(this.profileuser._id) != -1){
+                    this.currentuser.conversations.splice(this.currentuser.conversations.indexOf(this.profileuser._id),1);
+                    alert('current user conversations deleted')
+                }
+
+                return self.currentuser.patch({
+                    'friends': self.currentuser.friends,
+                    'conversations': this.currentuser.conversations
+
+                }).then(function(response){
+                    k = null;
+                    self.currentuser._etag = response._etag;
+                    for (k in self.currentuser.notifications){
+                            if(self.currentuser.notifications[k].friend_id == (self.profileuser._id)){
+                                self.currentuser.notifications.splice(self.currentuser.notifications.indexOf(self.profileuser._id),1)
+                                console.log('----------accepting request-------------')
+
+                                data = Restangular.one('people',self.currentuser._id).patch({
+                                   'notifications': self.currentuser.notifications
+                                },{},{'If-Match':response._etag});
+
                             }
-                        });
+                    }
+                });
 
              }
         }

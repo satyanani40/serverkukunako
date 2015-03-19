@@ -58,17 +58,9 @@ angular.module('weberApp')
 			var fd = new FormData();
 			fd.append('file', file);
 			this.path_name = "";
-			$http.post(uploadUrl, fd, {
+			return $http.post(uploadUrl, fd, {
 				transformRequest: angular.identity,
 				headers: {'Content-Type': undefined}
 			})
-			.then(function(data){
-				console.log("==========printing the path from server=========")
-				console.log(data)
-				return data;
-				this.path_name = data;
-
-			}.bind(this))
-			return data;
 		}
 	}]);/*====== end of file upload services ======*/

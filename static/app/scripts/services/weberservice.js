@@ -87,6 +87,7 @@ angular.module('weberApp')
 					return this.users[i];
 				}
 			}
+
 			var promise = Restangular.one('people',userId).get().$object;
 			promise._id = userId;
 			this.users.push(promise);
@@ -138,6 +139,145 @@ angular.module('weberApp')
 
             return CurrentUser;
     })
+
+    .factory('MatchButton', function($http,$auth,$q, Restangular) {
+
+        var MatchButton = function(user,profileuserid, postid) {
+           console.log('-- at match button-----')
+           console.log(postid)
+           this.profileuserid = profileuserid,
+           this.user = user,
+           this.postid = postid
+
+        }
+
+        MatchButton.prototype.addToInterested = function(){
+
+            var self = this;
+
+            Restangular.one('people', this.profileuserid).get({seed:Math.random()})
+            .then(function(profileuser){
+                 var checkvalue = false;
+                 var isPostCreated = false;
+
+                 if(profileuser.MatchedPeopleNotifications.length !== 0){
+
+                    for(var k in profileuser.MatchedPeopleNotifications){
+
+                        console.log(profileuser.MatchedPeopleNotifications[k].postid)
+                        console.log(self.postid)
+
+                        if(profileuser.MatchedPeopleNotifications[k].postid === self.postid){
+
+                            isPostCreated = true;
+
+                            if(profileuser.MatchedPeopleNotifications[k].interestedList.indexOf(self.user._id) === -1){
+                                checkvalue = true;
+                                profileuser.MatchedPeopleNotifications[k].interestedList.push(self.user._id)
+                                profileuser.MatchedPeopleNotifications[k].updated_one = new Date()
+                                profileuser.MatchedPeopleNotificCount.push({'postid':self.postid, 'authorid':self.user._id})
+                            }
+                        }
+                    }
+
+                    if(checkvalue){
+
+                        console.log(profileuser.MatchedPeopleNotifications)
+                        profileuser.patch({
+                            'MatchedPeopleNotifications': profileuser.MatchedPeopleNotifications,
+                            'MatchedPeopleNotificCount' : profileuser.MatchedPeopleNotificCount
+
+                        }).then(function(data){
+                            console.log(data)
+                        });
+                    }
+
+                    if(!(isPostCreated)){
+                         var newMatch = {
+                            'postid': self.postid,
+                            'interestedList': [self.user._id],
+                            'updated_one': new Date()
+                        }
+                         profileuser.MatchedPeopleNotifications.push(newMatch)
+                         profileuser.MatchedPeopleNotificCount.push({'postid':self.postid, 'authorid':self.user._id})
+
+                        profileuser.patch({
+                           'MatchedPeopleNotifications' : profileuser.MatchedPeopleNotifications,
+                           'MatchedPeopleNotificCount' : profileuser.MatchedPeopleNotificCount
+                        }).then(function(data){
+                            console.log(data)
+                        });
+
+                    }
+
+                }
+                else{
+
+                    var newMatch = {
+                        'postid': self.postid,
+                        'interestedList': [self.user._id],
+                        'updated_one': new Date()
+                    }
+
+                    profileuser.MatchedPeopleNotifications.push(newMatch)
+                    profileuser.MatchedPeopleNotificCount.push({'postid':self.postid, 'authorid':self.user._id})
+                    console.log(profileuser.MatchedPeopleNotifications)
+                    profileuser.patch({
+                       'MatchedPeopleNotifications' : profileuser.MatchedPeopleNotifications,
+                       'MatchedPeopleNotificCount' : profileuser.MatchedPeopleNotificCount
+                    }).then(function(data){
+                        console.log(data)
+                    });
+                }
+            });
+        };
+
+
+        MatchButton.prototype.DeleteFromInterested = function(){
+            var self = this;
+            // getting profile user details
+            Restangular.one('people', this.profileuserid).get({seed:Math.random()})
+            .then(function(profileuser){
+                 var checkvalue = false;
+
+                 if(profileuser.MatchedPeopleNotifications.length !== 0){
+
+                    // remove from MatchedPeopleNotifications list
+                    for(var k in profileuser.MatchedPeopleNotifications){
+                        if(profileuser.MatchedPeopleNotifications[k].postid === self.postid){
+                            console.log(profileuser.MatchedPeopleNotifications[k])
+                            if(profileuser.MatchedPeopleNotifications[k].interestedList.indexOf(self.user._id) !== -1){
+                                checkvalue = true;
+                                var indexvalue = profileuser.MatchedPeopleNotifications[k].interestedList.indexOf(self.user._id)
+                                profileuser.MatchedPeopleNotifications[k].interestedList.splice(indexvalue, 1)
+
+                            }else
+                                console.log('nothing to delete')
+                        }
+                    }
+
+                    for(var i in profileuser.MatchedPeopleNotificCount){
+                        if(profileuser.MatchedPeopleNotificCount[i].postid == self.postid &&
+                           profileuser.MatchedPeopleNotificCount[i].authorid == self.user._id){
+                               profileuser.MatchedPeopleNotificCount.splice(i,1)
+                           }
+                    }
+
+                    if(checkvalue){
+                        profileuser.patch({
+                            'MatchedPeopleNotifications': profileuser.MatchedPeopleNotifications,
+                            'MatchedPeopleNotificCount' : profileuser.MatchedPeopleNotificCount
+                        }).then(function(data){
+                            console.log(data)
+                        });
+                    }
+                }
+            });
+        };
+        return MatchButton;
+    })
+
+
     .service('ESClient', function(esFactory) {
 		return esFactory({
 			host: 'http://127.0.0.1:8000',
@@ -215,17 +355,19 @@ angular.module('weberApp')
 
 		}
 
-		InfinitePosts.prototype.addPost = function(content,similar_keywords) {
+		InfinitePosts.prototype.addPost = function(content, similar_keywords, imagePath) {
 
 			this.user_obj.all('posts').post({
 				author: this.user_obj._id,
 				content: content,
-				keywords: similar_keywords
+				keywords: similar_keywords,
+				post_image_path : imagePath
 			}).then(function(data) {
 
                 this.posts.unshift({
                     author: this.user_obj._id,
                     content: content,
+                    post_image_path : imagePath,
                     _created: new Date(),
                     _id:data._id,
                     _etag: data._etag
@@ -321,10 +463,11 @@ angular.module('weberApp')
             }.bind(this));
 		};
 
-		SearchActivity.prototype.addSearchText = function(content) {
+		SearchActivity.prototype.addSearchText = function(content, similarwords) {
 			this.user_obj.all('searchActivity').post({
 				author: this.user_obj._id,
 				content: content,
+				keywords: similarwords
 			}).then(function(data) {
                 this.searchResult.unshift({
                     author: this.user_obj._id,
@@ -333,6 +476,14 @@ angular.module('weberApp')
                 });
 			}.bind(this));
 		};
+
+		SearchActivity.prototype.getSimilarWords = function(sentence){
+            return $http({
+                       url: '/similarwords',
+                       method: "GET",
+                       params: {new_post: sentence }
+            });
+		}
 
 		function combine_ids(ids) {
    			return (ids.length ? "\"" + ids.join("\",\"") + "\"" : "");
@@ -348,7 +499,7 @@ angular.module('weberApp')
 
 		var  MatchMeResults = function(query) {
 
-			this.total_matches = '';
+			this.total_matches = 0;
 			this.mresults = [];
 			this.matchedids = [];
 			this.totalNames = '';
@@ -360,12 +511,16 @@ angular.module('weberApp')
             this.param1 = null;
             this.param2 = null;
             this.query = query
+            this.sPage = 1;
+            this.sEnd = false;
+            this.sBusy = true;
 
             if(this.query){
                 keywords = combine_ids(this.query.split(" "));
 
                 this.param1 = '{"$or":[{"keywords": {"$in":['+keywords+']}},{"content":{"$regex":".*'+this.query+'.*"}}]}';
 			    this.param2 = '{"author":1}';
+
                 Restangular.all('posts').getList({
 				where : this.param1,
 				seed: Math.random(),
@@ -381,6 +536,28 @@ angular.module('weberApp')
                    this.page = this.page + 1;
                    this.busy = false;
 				}.bind(this));
+
+				// also find in search activity
+				this.param1 = '{"$or":[{"keywords": {"$in":['+keywords+']}},{"content":{"$regex":".*'+this.query+'.*"}}]}';
+			    this.param2 = '{"author":1}';
+
+                Restangular.all('searchActivity').getList({
+				where : this.param1,
+				seed: Math.random(),
+				max_results: 10,
+				page: this.sPage,
+				embedded : this.param2
+				}).then(function(data) {
+                   if (data.length < 10) {
+                        this.sEnd = true;
+    			   }
+                   this.mresults.push.apply(this.mresults,data);
+                   this.total_matches = this.total_matches+data.length;
+                   this.sPage = this.sPage + 1;
+                   this.sBusy = false;
+				}.bind(this));
+
+
             }
 		};
 
@@ -423,9 +600,8 @@ angular.module('weberApp')
 		};
 
         MatchMeResults.prototype.nextPage = function() {
-            console.log("nextpage_this.end"+this.end)
 
-			if ((this.busy | this.end) && this.query) return;
+            if ((this.busy | this.end) && this.query) return;
 			this.busy = true;
 
 			Restangular.all('posts').getList({
@@ -444,7 +620,38 @@ angular.module('weberApp')
 				this.busy = false;
 
 			}.bind(this));
+
+
 		};
+
+
+		MatchMeResults.prototype.nextPageSearchResults = function() {
+            console.log("nextpage search resutls")
+
+			if ((this.sBusy | this.sEnd) && this.query) return;
+
+			this.sBusy = true;
+
+			Restangular.all('searchActivity').getList({
+			    where : this.param1,
+				max_results: 10,
+				page: this.sPage,
+				embedded : this.param2
+			}).then(function(data) {
+
+                if (data.length === 0) {
+					this.sEnd = true;
+				}
+
+				this.mresults.push.apply(this.mresults, data);
+				this.sPage = this.sPage + 1;
+				this.sBusy = false;
+
+			}.bind(this));
+
+
+		};
+
 
 		MatchMeResults.prototype.getMatchPeoples = function(searchText) {
 			var params = '{"$or":[{"name.first":{"$regex":".*'+searchText+'.*"}},{"name.last":{"$regex":".*'+searchText+'.*"}},'+
@@ -456,5 +663,6 @@ angular.module('weberApp')
 					this.searchNames.push.apply(this.searchNames,data);
 				}.bind(this));
 			};
+
 		return MatchMeResults;
 	});

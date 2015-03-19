@@ -10,7 +10,6 @@
                      style="padding:5px;font-size:20px;font-family: 'Open sans',Arial,sans-serif;">
 
               <h3 style="font-family: 'Open sans',Arial,sans-serif;font-weight:400;margin-top:5px;">
-                  <i class="glyphicon glyphicon-signal" style="font-size:17px;"></i>&nbsp;
                   <span style="margin-left: 0px;color:#fff;">Weber</span>
               </h3>
             </a>
@@ -18,7 +17,6 @@
                  style="padding:5px;font-size:20px;font-family: 'Open sans',Arial,sans-serif;">
 
               <h3 style="font-family: 'Open sans',Arial,sans-serif;font-weight:400;margin-top:5px;">
-                  <i class="glyphicon glyphicon-signal" style="font-size:17px;"></i>&nbsp;
                   <span style="margin-left: 0px;color:#fff;">Weber</span>
               </h3>
             </a>
@@ -82,159 +80,208 @@
 
                 <ul class="nav navbar-nav navbar-right" ng-if="isAuthenticated()" >
 
-                    <li><a href="#/matchme">Match Me</a></li>
+                    <li><a href="#/matchme" ng-click="SeenMatchButton()">Match Me [{{ MatchButtonNotific }}]</a></li>
                     <li><a href="#/friends">Friends</a></li>
 
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" style="cursor:pointer;" data-toggle="dropdown">Msgs <strong class="caret"></strong></a>
+                    <li class="dropdown" style="padding:3px 10px;">
+                        <a class="dropdown-toggle" style="cursor:pointer;padding:13px 2px;" data-toggle="dropdown"
+                           ng-click="loadLatestMessages()" style="cursor:pointer">
+                            <i class="glyphicon glyphicon-envelope"
+                               style="font-size:17px;opacity:0.55;">
+                            </i>
+                            {{ chatactivity.messageNotific.length }}
+                            <label class="label label-danger" ng-if="chatactivity.messageNotifc.length"
+                                   style="position:absolute;font-size:10px;top: 5px;right:-8px;">
+                                    {{ chatactivity.messageNotifc.length }}
+                            </label>
+                        </a>
                         <div class="dropdown-menu" style="padding:0px;width:350px;">
                             <form style="padding:0px;">
-                                <div class="panel-body" style="padding:0px;height:300px;">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <h5 style="padding:7px 10px;border-bottom:1px solid #dcdcdc;">Messages</h5>
+                                <div class="panel panel-default arrow_box" style="padding:0px;margin-bottom:0px;">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h5>Messages</h5>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="row" ng-if="!(chatactivity.latestMessages.length)">
-                                        <div class="col-sm-4 col-sm-offset-4">
-                                            <div class="">
-                                                <div class="thumbnail" style="border:0px solid;">
-                                                    <img src="https://pbs.twimg.com/profile_images/419852181869576193/yxaX7JJy_400x400.jpeg">
+                                    <div class="panel-body" style="min-height:400px;max-height:400px;">
+                                        <div class="row" ng-if="!(chatactivity.latestMessages.length)">
+                                            <div class="col-sm-6 col-sm-offset-3" style="padding-top:10px;">
+                                                <div class="">
+                                                    <div class="thumbnail" style="border:0px solid;">
+                                                        <img src="https://pbs.twimg.com/profile_images/419852181869576193/yxaX7JJy_400x400.jpeg">
+                                                    </div>
+                                                </div>
+                                                <h5>0 Unread Msgs</h5>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin-bottom:0px;"
+                                               ng-repeat="message in chatactivity.latestMessages  | limitTo : 5 ">
+
+                                            <div class="col-sm-12">
+                                                <div class="media" ng-click="openchatroom('{{ message.sender._id }}')"
+                                                     style="cursor:pointer;padding:10px;border-bottom:1px solid #F5F5F5;" >
+                                                  <div class="media-left">
+                                                    <a class="pull-left" style="padding: 0px 7px;">
+                                                      <img class="media-object" style="width:40px;border-radius:50%;"
+                                                           src="{{ message.sender.picture.large }}"
+                                                           alt="{{ message.sender.name.first }} {{ message.sender.name.last }}">
+                                                    </a>
+                                                  </div>
+                                                  <div class="media-body">
+                                                    <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;" >
+                                                        {{ message.sender.name.first }} {{ message.sender.name.last }}
+                                                        <span class="pull-right" style="opacity:0.40;font-size:9px;padding-top:3px;">
+                                                           11/11/11
+                                                        </span>
+                                                    </h5>
+                                                    <h6 style="font-family: 'Open sans',Arial,sans-serif;opacity:0.50;">
+                                                        {{ message.message }}
+                                                    </h6>
+                                                  </div>
                                                 </div>
                                             </div>
-                                            <h5>0 Unread Msgs</h5>
                                         </div>
                                     </div>
-                                    <div class="row" style="margin-bottom:0px;"
-                                           ng-repeat="message in chatactivity.latestMessages  | limitTo : 5 ">
-
-                                        <div class="col-sm-12">
-                                            <div class="media" ng-click="openchatroom('{{ message.sender._id }}')"
-                                                 style="cursor:pointer;padding:10px;border-bottom:1px solid #F5F5F5;" >
-                                              <div class="media-left">
-                                                <a class="pull-left" style="padding: 0px 7px;">
-                                                  <img class="media-object" style="width:40px;border-radius:50%;"
-                                                       src="{{ message.sender.picture.large }}"
-                                                       alt="{{ message.sender.name.first }} {{ message.sender.name.last }}">
-                                                </a>
-                                              </div>
-                                              <div class="media-body">
-                                                <h5 class="media-heading" style="font-family: 'Open sans',Arial,sans-serif;" >
-                                                    {{ message.sender.name.first }} {{ message.sender.name.last }}
-                                                    <span class="pull-right" style="opacity:0.40;font-size:9px;padding-top:3px;">
-                                                       11/11/11
-                                                    </span>
-                                                </h5>
-                                                <h6 style="font-family: 'Open sans',Arial,sans-serif;opacity:0.50;">
-                                                    {{ message.message }}
-                                                </h6>
-                                              </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel-footer" style="padding: 2px 15px;">
-                                    <a href="" class="">
-                                        <h6 class="text-center">Read more</h6>
-                                    </a>
                                 </div>
                             </form>
                         </div>
                     </li>
                     
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" style="cursor:pointer;" data-toggle="dropdown">Not's <strong class="caret"></strong></a>
+                    <li class="dropdown" style="padding:3px 10px">
+                        <a class="dropdown-toggle" style="cursor:pointer;padding:13px 2px;" data-toggle="dropdown"
+                           ng-click="getNewNotifcations()" style="cursor:pointer">
+                            <i class="glyphicon glyphicon-globe" style="font-size:17px;opacity:0.55;">
+
+                            </i>
+
+                                <label class="label label-danger" ng-if="newnotific"
+                                       style="position:absolute;font-size:10px;top: 5px;right: 0px;">
+                                        {{ newnotific }}
+                                </label>
+
+                        </a>
                         <div class="dropdown-menu" style="padding:0px;width:350px;">
                             <form style="padding:0px;">
-                                <div class="panel-body" style="padding-top:2px;height:300px;">
-                                    <div class="row"
+                                <div class="panel panel-default arrow_box" style="margin-bottom:0px;">
+                                    <div class="panel-heading"
                                          style="border-bottom:1px solid #E7E5E5;">
-                                        <div class="col-sm-12">
-                                            <h5>
-                                                <strong>
-                                                    Friends Requests
-                                                </strong>
-                                            </h5>
-                                        </div>
-                                    </div>
-                                    <div class="row" ng-if="!(rpeoples.length)">
-                                        <div class="col-sm-4 col-sm-offset-4">
-                                            <div class="">
-                                                <div class="thumbnail" style="border:0px solid;">
-                                                    <img src="https://pbs.twimg.com/profile_images/419852181869576193/yxaX7JJy_400x400.jpeg">
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <h5 class="text-center">
-                                                No new requests found
-                                            </h5>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top:7px" ng-repeat="requestedPeople in rpeoples">
-                                        <div class="col-sm-2">
-                                            <img src="{{ requestedPeople.picture.thumbnail }}"
-                                                 style="width:50px">
-                                        </div>
-                                        <div class="col-sm-5">
-                                            <a href="#/profile/{{ requestedPeople._id }}">
+                                        <div class="row">
+                                            <div class="col-sm-12">
                                                 <h5>
-                                                    {{ requestedPeople.name.first }}
+                                                    <strong>
+                                                        Friends Requests
+                                                    </strong>
                                                 </h5>
-                                            </a>
-                                            <!--<h6>
-                                                Friends with
-                                                <strong>
-                                                    <a href="" style="color:#444">
-                                                        Vegeshna Satyanarayana
-                                                    </a>
-                                                </strong>
-                                            </h6>-->
-                                        </div>
-                                        <div class="col-sm-5">
-                                            <acceptreject>
-                                                <button ng-click="acceptrequest('{{requestedPeople._id}}','navbarview')"
-                                                        class="btn btn-sm btn-primary">accept</button>
-                                                <button ng-click="rejectrequest('{{requestedPeople._id}}','navbarview')"
-                                                        class="btn btn-primary btn-sm pull-right">reject</button>
-                                            </acceptreject>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="panel-body" style="height:200px;">
+                                        <div class="row" ng-if="!(rpeoples.length)">
+                                            <div class="col-sm-4 col-sm-offset-4">
+                                                <div class="">
+                                                    <div class="thumbnail" style="border:0px solid;">
+                                                        <img src="https://pbs.twimg.com/profile_images/419852181869576193/yxaX7JJy_400x400.jpeg">
+                                                    </div>
+                                                </div>
 
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <h5 class="text-center">
+                                                    No new requests found
+                                                </h5>
+                                            </div>
+                                        </div>
 
-                                    <div class="row"
-                                         style="border-bottom:1px solid #E7E5E5;margin-top:10px">
-                                        <div class="col-sm-12">
-                                            <h5>
-                                                <strong>
-                                                    Notifications
-                                                </strong>
-                                            </h5>
-                                        </div>
-                                    </div>
-                                    <div class="row" ng-if="!apeoples.length">
-                                        <div class="col-sm-12">
-                                            <h5>No new notifications found</h5>
-                                        </div>
-                                    </div>
-
-                                    <div class="row" style="margin-top:7px;border-bottom:1px solid #f2f2f2;padding-bottom:5px;"
-                                         ng-repeat="accepted_people in apeoples">
-                                        <div class="col-sm-2">
-                                            <img src="{{ accepted_people.picture.thumbnail }}"
-                                                 style="width:50px">
-                                        </div>
-                                        <div class="col-sm-10">
-                                            <h5>
-                                                <a href="">
-                                                    {{ accepted_people.name.first }}
+                                        <div class="row" style="margin-top:7px" ng-repeat="requestedPeople in rpeoples">
+                                            <div class="col-sm-2">
+                                                <a href="#/profile/{{ requestedPeople.username }}">
+                                                    <img src="{{ requestedPeople.picture.thumbnail }}"
+                                                         style="width:50px">
                                                 </a>
-                                                Accepted your friend request
-                                            </h5>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <a href="#/profile/{{ requestedPeople.username }}">
+                                                    <h5>
+                                                        {{ requestedPeople.name.first }} {{ requestedPeople.name.last }}
+                                                    </h5>
+                                                </a>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <acceptreject>
+                                                    <button ng-click="acceptrequest('{{requestedPeople._id}}','navbarview')"
+                                                            class="btn btn-sm btn-primary">accept</button>
+                                                    <button ng-click="rejectrequest('{{requestedPeople._id}}','navbarview')"
+                                                            class="btn btn-primary btn-sm pull-right">reject</button>
+                                                </acceptreject>
+                                            </div>
                                         </div>
                                     </div>
+
+
+                                    <div class="panel-heading">
+                                        <div class="row"
+                                             style="">
+                                            <div class="col-sm-12">
+                                                <h5>
+                                                    <strong>
+                                                        Notifications
+                                                    </strong>
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel-body" style="height:200px;">
+                                        <div class="row" ng-if="!apeoples.length">
+                                            <div class="col-sm-12">
+                                                <h5>No new notifications found</h5>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="margin-top:7px;border-bottom:1px solid #f2f2f2;padding-bottom:5px;"
+                                             ng-repeat="accepted_people in apeoples">
+                                            <div class="col-sm-2">
+                                                <img src="{{ accepted_people.picture.thumbnail }}"
+                                                     style="width:50px">
+                                            </div>
+                                            <div class="col-sm-10">
+                                                <h5>
+                                                    <a href="">
+                                                        {{ accepted_people.name.first }}
+                                                    </a>
+                                                    Accepted your friend request
+                                                </h5>
+                                            </div>
+                                        </div>
+
+
+                                        <div ng-repeat="notification in MatchButtonNotifications
+                                         | orderBy:'-updated_one'"
+                                             ng-if="notification.interestedList.length"
+                                             class="row" style="margin-top:7px;border-bottom:1px solid #f2f2f2;padding-bottom:5px;" >
+                                            <div class="col-sm-2">
+                                                <img src=""
+                                                     style="width:50px">
+                                            </div>
+                                            <div class="col-sm-10" >
+                                                <h5>
+                                                    <a href="" ng-if="notification.interestedList.length == 1" >
+                                                        <img src="">
+                                                        {{UserService.get(notification.interestedList[notification.interestedList.length - 1]).name.first}}
+                                                        matched with your post
+                                                    </a>
+                                                    <a ng-if="notification.interestedList.length == 2" >
+                                                        {{UserService.get(notification.interestedList[notification.interestedList.length - 1]).name.first}}
+                                                        and {{ notification.interestedList.length - 1 }} others matched your post
+                                                    </a>
+
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </form>
                         </div>

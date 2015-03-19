@@ -2,7 +2,7 @@ import os
 
 
     # Running on local machine. Let's just use the local mongod instance.
-MONGO_HOST = '10.240.115.93'
+MONGO_HOST = '127.0.0.1'
 MONGO_PORT = 27017
 MONGO_USERNAME = 'test'
 MONGO_PASSWORD = 'test'
@@ -65,6 +65,10 @@ posts_schema = {
             'type': 'list',
         },
 
+        'post_image_path': {
+            'type' : 'string',
+        },
+
 
     }
 
@@ -72,6 +76,7 @@ searchActivity_schema = {
         'content': {
             'type': 'string',
             'required': True,
+            'unique':True
 
         },
         'keywords': {
@@ -331,6 +336,7 @@ people = {
 
             },
         },
+
         'friends': {
             'type': 'list',
             'schema': {
@@ -340,7 +346,50 @@ people = {
                     'embeddable': True
                 }
             }
+        },
+        'MatchedPeopleNotificCount':{
+            'type': 'list'
+        },
+
+
+         'MatchedPeopleNotifications': {
+            'type': 'list',
+            'schema': {
+
+                'postid': {
+                    'type': 'dict',
+                    'schema': {
+                        'type': 'objectid',
+                        #'unique': True,
+                        'data_relation': {
+                            'resource': 'posts',
+                            'embeddable': True
+                        },
+
+                    }
+                },
+
+                'interestedList': {
+                    'type': 'list',
+                    'schema': {
+                        'type': 'objectid',
+                        #'unique': True,
+                        'data_relation': {
+                            'resource': 'people',
+                            'embeddable': True
+                        },
+
+                    }
+                },
+
+                'updated_one': {
+                    'type': 'string',
+                }
+
+
+            },
         }
+
     }
 }
 

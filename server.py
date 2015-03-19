@@ -345,7 +345,7 @@ pipe = r.pipeline()
 friendsNotific = 0
 searchNotific = 0
 
-def check_updates(userid):
+"""def check_updates(userid):
 
     skey = 'search_'+userid
     if((r.get(skey)) == 'search_notific'):
@@ -355,7 +355,7 @@ def check_updates(userid):
     fkey = 'friend_'+userid
     if((r.get(fkey)) == 'friend_notific'):
         yield 'data: %s \n\n' % json.dumps({'userid':userid,'searchNotific': 0,'friendsnotifc':1 })
-        r.delete(fkey)
+        r.delete(fkey):"""
 
 
 @app.route('/stream/<userid>')
@@ -398,7 +398,7 @@ app.on_updated_people+= after_friend_notification_get
 from werkzeug import secure_filename
 
 UPLOAD_FOLDER = 'static/images'
-ALLOWED_EXTENSIONS = set(['png','jpg'])
+ALLOWED_EXTENSIONS = set(['png','jpg', 'jpeg', 'bmp'])
 
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -422,7 +422,7 @@ def fileupload():
 
 
             import os
-            renamed_filename = filename+dt
+            renamed_filename = dt+'_'+filename
 
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], renamed_filename))
             print os.path.join(app.config['UPLOAD_FOLDER'], renamed_filename)
@@ -496,7 +496,7 @@ def join_into_room(id):
 
 
 app.threaded=True
-socketio.run(app, host='10.240.200.70', port=8000)
+socketio.run(app, host='127.0.0.1', port=8000)
 
 # server sent events section
 """from redis import Redis

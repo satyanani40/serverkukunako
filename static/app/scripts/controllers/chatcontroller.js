@@ -3,6 +3,15 @@ angular.module('weberApp')
                                           $http,$rootScope,SearchActivity,FriendsNotific,
                                           $document, Restangular,ChatActivity){
 
+
+
+
+    //updating the chat div height using below code please put it
+    $scope.get_screen_height = window.innerHeight-52;
+    $scope.get_inner_div_height = (window.innerHeight-210)/2;
+    //console.log($scope.get_screen_height)
+    //console.log($scope.get_inner_div_height)
+
     // -----nav bar methods-----
     // nav search bar methods
      $http.get('/api/me', {

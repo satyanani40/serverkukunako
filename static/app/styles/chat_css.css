@@ -1,6 +1,6 @@
 .side_chat{
     position: fixed;
-    bottom: 0px;
+    top: 50px;
     right:0px;
     width:270px;
     padding-right: 0px !important;
