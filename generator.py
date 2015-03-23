@@ -4,13 +4,17 @@ from loremipsum import generate_paragraph
 import datetime
 import dateutil.parser
 from bson import json_util
-import json
+#import json
 import time
 
 print '---------------------------------fetching users-----------------------'
-url = 'http://127.0.0.1:8000/api/people'
+url = 'http://127.0.0.1/api/people'
 randomuser = urllib2.urlopen('http://api.randomuser.me/?results=10&seed='+str(random.randrange(0, 101, 2)))
-results = json.loads(randomuser.read())
+user_data = randomuser.read()
+results = json.loads(user_data)
+file('userdata.json','w').write(user_data)
+#results = randomuser.read()
+
 users=results['results']
 processed_users = []
 headers = {'content-type': 'application/json'}
@@ -47,6 +51,7 @@ for raw_user in users:
     user['password'] = generate_password_hash(user['password'])
     user['role'] = 'test'
     r = requests.post(url, data=json.dumps(user, default=json_util.default), headers=headers)
+    file('userdata.json','w').write(r.content)
     resp = json.loads(r.content)
     print resp
     processed_users.append({'id': resp['_id'], 'etag': resp['_etag']})
