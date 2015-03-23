@@ -319,14 +319,11 @@ people = {
                             'resource': 'people',
                             'embeddable': True
                         },
-
-                        'seen': {
+                    },
+                    'seen': {
                             'type': 'boolean',
                             'default': False
-                        }
-
                     }
-
                 }
             }
         },

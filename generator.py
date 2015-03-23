@@ -8,7 +8,7 @@ from bson import json_util
 import time
 
 print '---------------------------------fetching users-----------------------'
-url = 'http://127.0.0.1/api/people'
+url = 'http://www.weber.ooo/api/people'
 randomuser = urllib2.urlopen('http://api.randomuser.me/?results=10&seed='+str(random.randrange(0, 101, 2)))
 user_data = randomuser.read()
 results = json.loads(user_data)
@@ -44,14 +44,15 @@ for raw_user in users:
     #user['testing_doc'] = []
     user['movies'] = []
     user['notifications'] = []
-    user['accept_notifications'] = []
+    user['acceptnotifications'] = []
     user['conversations'] = []
-    user['MatchedPeopleNotifications'] = []
-    user['MatchedPeopleNotificCount'] = []
+    user['matchedpeoplenotifications'] = []
+    user['matchedpeoplenotificcount'] = []
     user['password'] = generate_password_hash(user['password'])
     user['role'] = 'test'
     r = requests.post(url, data=json.dumps(user, default=json_util.default), headers=headers)
     file('userdata.json','w').write(r.content)
+    print r.content
     resp = json.loads(r.content)
     print resp
     processed_users.append({'id': resp['_id'], 'etag': resp['_etag']})
