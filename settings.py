@@ -307,24 +307,28 @@ people = {
 
         'notifications': {
             'type': 'list',
+
             'schema': {
-                'friend_requests': {
-                    'type': 'dict',
-                    'schema': {
+                'type':'dict',
+                'schema':{
+                    'friend_requests': {
                         'type': 'objectid',
-                        #'unique': True,
+
+                         #'unique': True,
                         'data_relation': {
                             'resource': 'people',
                             'embeddable': True
                         },
+
                         'seen': {
                             'type': 'boolean',
                             'default': False
                         }
-                    }
-                },
 
-            },
+                    }
+
+                }
+            }
         },
 
         'acceptnotifications': {
